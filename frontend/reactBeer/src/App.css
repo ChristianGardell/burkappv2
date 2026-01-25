@@ -1,0 +1,13 @@
+#root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.topbar {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  padding: 1rem 2rem;
+  background-color: #333;
+}

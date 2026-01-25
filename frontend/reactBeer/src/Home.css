@@ -1,0 +1,38 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  min-height: calc(100vh - 20vh);
+  
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.button-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.beer-button {
+  width: 200px;
+  padding: 1rem;
+  color: white;
+  background-color: #916EEB;
+  border: 1px solid #834BF6;
+  outline: none;
+  font-size: 1.5rem;
+}
+
+.clicked {
+  background-color: #d6abe7;
+}
