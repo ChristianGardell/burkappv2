@@ -1,24 +1,66 @@
 import { Button } from "@/components/ui/button";
 import { Minus, ShoppingCart } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import type { UserResponse }  from "../types";
+import { Link } from "react-router-dom";
+import type { UserResponse } from "../types";
+import { useAuth } from "../context/AuthContext";
+import decrementBeer from "../api/decrement-beer";
+import { set } from "react-hook-form";
 
 export default function Home() {
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [disableDrinkButton, setDisableDrinkButton] = useState<boolean>(false);
+  const [flashCardGreen, setFlashCardGreen] = useState<boolean>(false);
+  const { user, setUser } = useAuth();
 
+  const disableButton = () => {
+    if (user.admin) {
+      return;
+    }
+    setDisableDrinkButton(true);
+    setTimeout(() => {
+      setDisableDrinkButton(false);
+    }, 1000);
+  };
+  const sucessFlash = () => {
+    setFlashCardGreen(true);
+    setTimeout(() => {
+      setFlashCardGreen(false);
+    }, 1000);
+  };
 
-  const location = useLocation();
- 
-  const loggedInUser = location.state?.user as UserResponse;
-
+  const handleDrinkOnePress = async () => {
+    try {
+      const data: UserResponse = await decrementBeer();
+      if (data) {
+        setUser({ ...user, beers: data.beers });
+        disableButton();
+        sucessFlash();
+      }
+    } catch {
+      setErrorMessage("Failed to drink a beer. Please try again."); // TODO: lägg till flera felmeddelanden
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 3000);
+    }
+  };
   return (
     <div className="flex flex-col items-center justify-center max-w-md mx-auto w-full gap-8 py-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       {/* Main Status Card */}
-      <div className="bg-slate-900 rounded-3xl p-8 shadow-xl shadow-slate-900/50 w-full border border-slate-800 flex flex-col items-center text-center">
+      <div
+        className={`rounded-3xl p-8 shadow-xl w-full border flex flex-col items-center text-center transition-all duration-300 ${
+          flashCardGreen
+            ? "bg-emerald-950 border-emerald-500 shadow-emerald-500/50 scale-105"
+            : "bg-slate-900 border-slate-800 shadow-slate-900/50"
+        }`}
+      >
         <div className="relative group cursor-default pt-4">
-          <div className="absolute inset-0 bg-primary/20 blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          <div className="absolute inset-0 bg-primary/20 blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 active:bg-green-300" />
+          <div className="min-h-10 text-sm text-rose-400">
+            {errorMessage && <p>{errorMessage}</p>}
+          </div>
           <h1 className="relative text-9xl font-black text-white tracking-tighter tabular-nums mb-2">
-            24
+            {user?.beers}
           </h1>
         </div>
 
@@ -27,7 +69,11 @@ export default function Home() {
 
       {/* Action Buttons */}
       <div className="grid grid-cols-2 gap-4 w-full">
-        <Button className="h-24 rounded-2xl bg-white/5 border border-slate-800 hover:bg-red-500/10 hover:border-red-500/50 hover:text-red-500 text-slate-400 flex flex-col items-center justify-center gap-2 transition-all group">
+        <Button
+          onClick={handleDrinkOnePress}
+          disabled={disableDrinkButton}
+          className="h-24 rounded-2xl bg-white/5 border border-slate-800 hover:bg-red-500/10 hover:border-red-500/50 hover:text-red-500 text-slate-400 flex flex-col items-center justify-center gap-2 transition-all group"
+        >
           <div className="p-3 rounded-full bg-slate-800 group-hover:bg-red-500/20 transition-colors">
             <Minus className="w-6 h-6" />
           </div>

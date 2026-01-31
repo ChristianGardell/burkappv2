@@ -15,29 +15,14 @@ from app.core.security import (
 router = APIRouter(prefix="/users", tags=["users"])
 
 
-# @router.get("/", response_model=list[UserResponse])
-# def read_users(db: Session = Depends(get_db)):
-#     """Get all users in db"""
-#     return crud.get_users(db)
-
-
-# @router.get("/{id}", response_model=UserResponse)
-# def read_user_from_id(data: GetUserById, db: Session = Depends(get_db)):
-#     """Get a user by their ID."""
-#     user = crud.get_user_by_id(db, data)
-#     if not user:
-#         raise HTTPException(status_code=404, detail="User not found")
-#     return user
-
-
 @router.get("/me", response_model=UserResponse)
 def read_current_user(
-    user_id: str = Depends(get_current_user), db: Session = Depends(get_db)
+    current_user: UserResponse = Depends(get_current_user), db: Session = Depends(get_db)
 ):
     """Get the current logged-in user."""
-    if user_id is None:
+    if current_user.id is None:
         raise HTTPException(status_code=401, detail="Invalid token payload")
-    return crud.get_user_by_id(db, GetUserById(id=user_id))
+    return crud.get_user_by_id(db, UserUpdate(id=current_user.id, phone_number="", pin=""))
 
 
 @router.post("/check", response_model=bool)
@@ -67,10 +52,13 @@ def create_user(data: UserCreate, db: Session = Depends(get_db)):
     return LoginResponse(user=UserResponse.model_validate(user), access_token=token)
 
 
-@router.put("/decrement-beer", response_model=UserResponse)
-def decrement_user_beer(data: UserDecrementBeer, db: Session = Depends(get_db)):
+@router.put("/decrement", response_model=UserResponse)
+def decrement_user_beer(current_user: UserResponse = Depends(get_current_user), db: Session = Depends(get_db)):
     """Decrement a user's beer count by one."""
-    user = crud.decrement_user_beer_one(db, data)
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found")
-    return user
+    if current_user.beers <= 0:
+        raise HTTPException(status_code=400, detail="No beers left to decrement")
+    current_user = crud.decrement_user_beer_one(db, UserUpdate(id=current_user.id, phone_number="", pin=""))
+    if not current_user:
+        raise HTTPException(status_code=404, detail="Something failed in decrement")
+    return current_user
+    

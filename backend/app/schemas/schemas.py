@@ -1,6 +1,13 @@
 from pydantic import BaseModel, Field
 
 
+class UserLogin(BaseModel):
+    phone_number: str = Field(
+        ..., pattern=r"^\d{10}$", description="Must be exactly 10 digits"
+    )
+    pin: str = Field(..., pattern=r"^\d{6}$", description="Must be exactly 6 digits")
+
+
 class UserCreate(BaseModel):  # for POST / create
     name: str = Field(
         ..., min_length=3, description="Name must be at least 3 characters"
@@ -21,7 +28,7 @@ class UserResponse(BaseModel):  # for GET / response
     admin: bool
 
     class Config:
-        from_attributes = True  #för att fungera med SQLAlchemy modeller
+        from_attributes = True  # för att fungera med SQLAlchemy modeller
 
 
 class LoginResponse(BaseModel):
@@ -30,21 +37,7 @@ class LoginResponse(BaseModel):
     token_type: str = "bearer"
 
 
-class UserUpdateAdmin(BaseModel):  # for PUT / update
+class UserUpdate(BaseModel):
     id: str
-    beers: int
-
-
-class UserDecrementBeer(BaseModel):  # for PUT / decrement beer
-    id: str
-
-
-class GetUserById(BaseModel):  # for GET / by id
-    id: str
-
-
-class UserLogin(BaseModel):
-    phone_number: str = Field(
-        ..., pattern=r"^\d{10}$", description="Must be exactly 10 digits"
-    )
-    pin: str = Field(..., pattern=r"^\d{6}$", description="Must be exactly 6 digits")
+    phone_number: str
+    pin: str 

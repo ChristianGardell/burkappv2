@@ -1,6 +1,8 @@
 import type { LoginResponse, UserLogin, UserResponse } from "../types";
+import { useAuth } from"../context/AuthContext";
 
 const loginUser = async (user: UserLogin): Promise<LoginResponse> => {
+
   try {
     const response = await fetch(`http://localhost:8000/users/login`, {
       method: "POST",
@@ -16,8 +18,7 @@ const loginUser = async (user: UserLogin): Promise<LoginResponse> => {
 
     const data = await response.json() 
     console.log("Server response:", data);
-    localStorage.setItem("access_token", data.access_token);
-    localStorage.setItem("user", JSON.stringify(data.user));
+
     return data;
   } catch (err) {
     console.error(err);

@@ -1,7 +1,10 @@
 {
-    "files.exclude": {
-        "**/__init__.py": true,
-        "**/__pycache__": true
-
-    }
+  "files.exclude": {
+    "**/__init__.py": true,
+    "**/__pycache__": true,
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/.git": true,
+    "**/.DS_Store": true
+  }
 }

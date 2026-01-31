@@ -2,9 +2,11 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 import swishLogo from "@/assets/swish.svg"; // Import the local SVG
-
+import { useState } from "react";
 
 export default function Buy() {
+  const [buyBeersAmount, setBuyBeersAmount] = useState<number>(0);
+
   return (
     <div className="flex flex-col items-center justify-center max-w-md mx-auto w-full gap-8 py-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       {/* Header */}
@@ -20,9 +22,16 @@ export default function Buy() {
           <input
             type="text"
             maxLength={2}
+            minLength={1}
             pattern="\d*"
             inputMode="numeric"
-            placeholder="0"
+            placeholder={"0"}
+            onChange={(e) => {
+              const value = e.target.value;
+              const numericValue = parseInt(value, 10);
+              if (!isNaN(numericValue)) {
+                setBuyBeersAmount(numericValue);
+              }}}
             className="w-full bg-transparent text-center text-7xl font-black text-white placeholder:text-slate-800 focus:outline-none focus:ring-0 border-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
           />
         </div>
@@ -37,7 +46,7 @@ export default function Buy() {
           Open Swish
         </Button>
 
-        <Link to="/" className="w-full block">
+        <Link to="/home" className="w-full block">
           <Button className="w-full h-12 rounded-xl text-slate-500  bg-white/5 gap-2">
             <ArrowLeft className="w-4 h-4" />
             Return Home

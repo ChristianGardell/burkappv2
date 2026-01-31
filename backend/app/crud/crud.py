@@ -6,26 +6,33 @@ from app.schemas.schemas import *
 from app.models.models import Users
 from app.core.security import get_pin_hash
 
+# def get_users(db: Session) -> list[Users]:
+#     """Get all users from db."""
+#     return db.query(Users).all()
 
-def get_users(db: Session) -> list[Users]:
-    """Get all users from db."""
-    return db.query(Users).all()
+
+def check_if_user_exists(db: Session, user: UserLogin) -> bool:
+    user = db.query(Users).filter_by(phone_number=user.phone_number).first()
+    return user is not None
 
 
-def get_user_by_id(db: Session, getUserById: GetUserById) -> Users | None:
+def get_user_by_id(db: Session, getUserById: UserUpdate) -> Users | None:
     """Get a user by their ID."""
     return db.query(Users).filter_by(id=getUserById.id).first()
 
-def get_user_by_phone(db: Session, userLogin: UserLogin) -> Users | None:
+
+def get_user_by_phone(db: Session, userLogin: UserUpdate) -> Users | None:
     """Get a user by their phone number."""
     return db.query(Users).filter_by(phone_number=userLogin.phone_number).first()
-
 
 
 def create_user(db: Session, userCreate: UserCreate) -> Users:
     """Create a new user in the database."""
     entry = Users(
-        name=userCreate.name, phone_number=userCreate.phone_number, hashed_pin=get_pin_hash(userCreate.pin), admin=False
+        name=userCreate.name,
+        phone_number=userCreate.phone_number,
+        hashed_pin=get_pin_hash(userCreate.pin),
+        admin=False,
     )
     db.add(entry)
     db.commit()
@@ -34,16 +41,7 @@ def create_user(db: Session, userCreate: UserCreate) -> Users:
     return entry
 
 
-
-
-def check_if_user_exists(db: Session, user: UserLogin) -> bool:
-    user = db.query(Users).filter_by(phone_number=user.phone_number).first()
-    return user is not None
-
-
-def decrement_user_beer_one(
-    db: Session, userDecrementBeer: UserDecrementBeer
-) -> Users | None:
+def decrement_user_beer_one(db: Session, userDecrementBeer: UserUpdate) -> Users | None:
     """Decrement a user's beer count by one."""
     user = db.query(Users).filter_by(id=userDecrementBeer.id).first()
     if not user:

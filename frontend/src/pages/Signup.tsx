@@ -2,17 +2,22 @@ import { Button } from "@/components/ui/button";
 import { LogIn, Smartphone, Lock, User } from "lucide-react";
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-
-import type { UserResponse, UserCreate, UserLogin } from "../types";
+import type {
+  UserResponse,
+  UserCreate,
+  UserLogin,
+  LoginResponse,
+} from "../types";
 import { useForm } from "react-hook-form";
 import createUser from "../api/create-user";
+import { useAuth } from "../context/AuthContext";
 
 export default function Signup() {
-
+  const { login } = useAuth();
   const [apiError, setApiError] = useState<string | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
-   const formData = location.state?.formData as UserLogin | undefined;
+  const formData = location.state?.formData as UserLogin | undefined;
 
   const {
     register,
@@ -27,9 +32,12 @@ export default function Signup() {
   });
   const onSubmit = async (data: UserCreate) => {
     try {
-      const user: UserResponse = await createUser(data);
-      console.log("User created successfully:", user);
-      navigate("/");
+      const user: LoginResponse = await createUser(data);
+      console.log(localStorage.getItem("user"));
+      login(user.access_token, user.user);
+      console.log("User created and logged in:", localStorage.getItem("user"));
+      navigate("/home");
+
     } catch (error: any) {
       if (error.status === 400) {
         setApiError("User already exists. Please log in.");
@@ -49,7 +57,9 @@ export default function Signup() {
               BurkApp{" "}
             </h1>
             <div className="min-h-10 text-sm text-rose-400">
-              {errors.phone_number?.message && (<p>{errors.phone_number.message}</p>)}
+              {errors.phone_number?.message && (
+                <p>{errors.phone_number.message}</p>
+              )}
               {errors.pin?.message && <p>{errors.pin.message}</p>}
               {errors.name?.message && <p>{errors.name.message}</p>}
               <p>{apiError}</p>

@@ -16,8 +16,6 @@ const createUser = async (user: UserCreate): Promise<LoginResponse> => {
     }
 
     const data = await response.json();
-    localStorage.setItem("access_token", data.access_token);
-    localStorage.setItem("user", JSON.stringify(data.user));
     console.log("Server response:", data);
     return data;
   } catch (err) {

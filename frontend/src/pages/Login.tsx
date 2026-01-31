@@ -1,12 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { LogIn, Smartphone, Lock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import type { UserResponse, UserLogin } from "../types";
+import type { UserLogin, LoginResponse } from "../types";
 import checkUser from "../api/check-user-exist";
 import loginUser from "../api/log-in";
 import { useForm } from "react-hook-form";
+import { useAuth } from "../context/AuthContext";
 
 export default function Login() {
+  const { login } = useAuth();
+
   const navigate = useNavigate();
   const {
     register: register,
@@ -19,13 +22,12 @@ export default function Login() {
       const userExists = await checkUser(data);
       if (userExists) {
         try {
-        const loggedInUser: UserResponse = await loginUser(data);
-        navigate("/", { state: { user: loggedInUser } });
-
+          const loggedInUser: LoginResponse = await loginUser(data);
+          login(loggedInUser.access_token, loggedInUser.user);
+          navigate("/home", { state: { user: loggedInUser } });
         } catch (error) {
           console.error("Login failed. Please check your PIN and try again.");
         }
-
       } else {
         navigate("/signup", { state: { formData: data } });
       }
