@@ -1,9 +1,19 @@
 from passlib.context import CryptContext
 from datetime import datetime, timedelta, timezone
-from jose import jwt
+from jose import jwt, JWTError
 from app.core.config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_DAYS
+from fastapi import HTTPException, status, Depends  
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from sqlalchemy.orm import Session  
+from app.db.database import get_db
+from app.models.models import Users
+from app.crud import crud
+
 
 pwd_context = CryptContext(schemes=["bcrypt_sha256"], deprecated="auto")
+
+
+security = HTTPBearer()
 
 
 def get_pin_hash(plain_pin: str) -> str:
@@ -28,10 +38,31 @@ def create_access_token(data: dict, expires_delta: int | None = None) -> str:
     return encoded_jwt
 
 
-def validate_token(token: str) -> dict:
-    """Validate a JWT token and return the decoded data."""
+def get_current_user(
+    credentials: HTTPAuthorizationCredentials = Depends(security), db: Session = Depends(get_db)
+) -> str:
+    """Decode and validate a JWT token."""
+
+    token = credentials.credentials
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        return payload
-    except jwt.JWTError:
-        return {}
+        user_id: str = payload.get("sub")
+        
+        if user_id is None:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid token payload"
+            )
+    except JWTError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Could not validate credentials"
+        )
+    
+    # user = crud.get_user_by_id(db, user_id)
+    # if user is None:
+    #     raise HTTPException(
+    #         status_code=status.HTTP_404_NOT_FOUND,
+    #         detail="User not found"
+    #     )
+    return user_id
