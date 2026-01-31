@@ -1,9 +1,16 @@
 import { Button } from "@/components/ui/button";
 import { Minus, ShoppingCart } from "lucide-react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import type { UserResponse }  from "../types";
 
 export default function Home() {
-  // Main dashboard component
+
+
+  const location = useLocation();
+ 
+  const loggedInUser = location.state?.user as UserResponse;
+
   return (
     <div className="flex flex-col items-center justify-center max-w-md mx-auto w-full gap-8 py-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       {/* Main Status Card */}

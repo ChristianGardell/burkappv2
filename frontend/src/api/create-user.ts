@@ -1,15 +1,21 @@
+import type { UserCreate, UserResponse } from "../types";
 
-  const newUser = async (start_number: string, name: string) => {
+
+  const createUser = async (user: UserCreate): Promise<UserResponse> => {
     try {
-      const response = await fetch("http://localhost:8000/admin/drivers", {
+      const response = await fetch(`http://localhost:8000/users/create`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ start_number, name }), 
+        body: JSON.stringify(user), 
       });
 
-      if (!response.ok) throw new Error("Failed to add single competitor to db");
+      if (!response.ok){
+        const error = new Error("Failed to create user") as any;
+        error.status = response.status;
+        throw error;
+      }
 
-      const data = await response.json();
+      const data = await response.json(); 
       console.log("Server response:", data);
       return data;
     } catch (err) {
@@ -18,4 +24,4 @@
     }
   };
 
-  export default newUser;
+  export default createUser;

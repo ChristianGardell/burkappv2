@@ -1,17 +1,17 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class UserCreate(BaseModel):  # for POST / create
-    name: str
-    phone_number: str
-    admin: bool = False
+    name: str = Field(..., min_length=3, description="Name must be at least 3 characters")
+    phone_number: str = Field(..., pattern=r"^\d{10}$", description="Must be exactly 10 digits")
+    pin: str = Field(..., pattern=r"^\d{6}$", description="Must be exactly 6 digits")
 
 
 class UserResponse(BaseModel):  # for GET / response
     id: str
     beers: int
-    name: str
-    phone_number: str
+    name: str = Field(..., min_length=3)
+    phone_number: str = Field(..., pattern=r"^\d{10}$", description="Must be exactly 10 digits")
     admin: bool
 
 
@@ -26,3 +26,7 @@ class UserDecrementBeer(BaseModel):  # for PUT / decrement beer
 
 class GetUserById(BaseModel):  # for GET / by id
     id: str
+
+class UserLogin(BaseModel):
+    phone_number: str = Field(..., pattern=r"^\d{10}$", description="Must be exactly 10 digits")
+    pin: str = Field(..., pattern=r"^\d{6}$", description="Must be exactly 6 digits")
