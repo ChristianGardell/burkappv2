@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from app.db.database import get_db
 from typing import Union
 from app.schemas.schemas import *
-from app.core.security import get_pin_hash, verify_pin
+from app.core.security import get_pin_hash, verify_pin, create_access_token
 
 router = APIRouter(prefix="/users", tags=["users"])
 
@@ -31,27 +31,31 @@ def read_user_check_phone_number(data: UserLogin, db: Session = Depends(get_db))
     return crud.check_if_user_exists(db, data)
 
 
-@router.post(
-    "/login", response_model=UserResponse
-)  # TODO completly unprotected endpoint
+@router.post("/login", response_model=LoginResponse)
 def login_user(data: UserLogin, db: Session = Depends(get_db)):
     """Login a user by their phone number and pin."""
-
     user = crud.get_user_by_phone(db, data)
     if not user or not verify_pin(data.pin, user.hashed_pin):
         raise HTTPException(status_code=404, detail="Invalid phone number or pin")
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found")
-    return user
+    token = create_access_token({"sub": user.id}) 
+    return LoginResponse(
+        user=UserResponse.model_validate(user),
+        access_token=token
+    )
 
 
-@router.post("/create", response_model=UserResponse)
+@router.post("/create", response_model=LoginResponse)
 def create_user(data: UserCreate, db: Session = Depends(get_db)):
     """Create a new user in the database."""
     userCheck = UserLogin(phone_number=data.phone_number, pin=data.pin)
     if crud.check_if_user_exists(db, userCheck):
         raise HTTPException(status_code=400, detail="User already exists")
-    return crud.create_user(db, data)
+    user = crud.create_user(db, data)
+    token = create_access_token({"sub": user.id})
+    return LoginResponse(
+        user=UserResponse.model_validate(user),
+        access_token=token
+    )
 
 
 @router.put("/decrement-beer", response_model=UserResponse)

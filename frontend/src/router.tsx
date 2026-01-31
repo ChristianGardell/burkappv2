@@ -5,7 +5,7 @@ import Home from "@pages/Home";
 import Buy from "@pages/Buy";
 import Login from "@pages/Login";
 import Signup from "@pages/Signup";
-
+import ProtectedRoute from "./lib/protectedRoute";
 const router = createBrowserRouter([
   {
     path: "/login",
@@ -17,7 +17,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/",
-    element: <Layout />,
+    element: (
+      <ProtectedRoute>
+        <Layout />
+      </ProtectedRoute>
+    ),
     children: [
       { path: "/", element: <Home /> },
       { path: "/buy", element: <Buy /> },

@@ -13,6 +13,14 @@ export interface UserResponse {
   phone_number: string;
   pin: string;
   admin: boolean;
+  accessed_token?: string;
+
+}
+
+export interface LoginResponse {
+  user: UserResponse;
+  access_token: string;
+  token_type: string;
 }
 
 // for PUT / update
