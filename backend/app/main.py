@@ -12,10 +12,7 @@ models.Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
 # Configure CORS
-origins = [
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-]
+origins = ["*"]
 
 app.add_middleware(
     CORSMiddleware,
@@ -27,6 +24,7 @@ app.add_middleware(
 
 # Include Routers
 app.include_router(users.router)
+
 
 @app.get("/")
 def read_root():

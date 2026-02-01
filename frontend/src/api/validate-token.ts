@@ -1,11 +1,12 @@
 import type { UserResponse } from "../types";
 
-
 const valditateToken = async (): Promise<UserResponse> => {
   try {
-    const response = await fetch(`http://localhost:8000/users/me`, {
+    const response = await fetch(`http://192.168.0.208:8000/users/me`, {
       method: "Get",
-      headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` },
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      },
     });
 
     if (!response.ok) {

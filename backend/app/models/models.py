@@ -16,4 +16,5 @@ class Users(Base):
     name = Column(String)
     phone_number = Column(String, unique=True, index=True)
     admin = Column(Boolean, default=False)
-    hashed_pin = Column(String, nullable=False) 
+    hashed_pin = Column(String, nullable=False)
+    total_beers = Column(Integer, default=0)  

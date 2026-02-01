@@ -6,9 +6,11 @@ import checkUser from "../api/check-user-exist";
 import loginUser from "../api/log-in";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../context/AuthContext";
+import { useState } from "react";
 
 export default function Login() {
   const { login } = useAuth();
+  const [wrongCredentials, setWrongCredentials] = useState<string | null>(null);
 
   const navigate = useNavigate();
   const {
@@ -27,6 +29,7 @@ export default function Login() {
           navigate("/home", { state: { user: loggedInUser } });
         } catch (error) {
           console.error("Login failed. Please check your PIN and try again.");
+          setWrongCredentials("Login failed. Please check your PIN and try again.");
         }
       } else {
         navigate("/signup", { state: { formData: data } });
@@ -58,6 +61,7 @@ export default function Login() {
             <div className="bg-slate-900 rounded-3xl p-8 shadow-xl shadow-slate-900/50 w-full border border-slate-800 space-y-6">
               <div className="space-y-4">
                 <div className="space-y-2">
+                  {wrongCredentials && <p>{wrongCredentials}</p>}
                   <label className="text-xs font-semibold uppercase tracking-wider text-slate-500 ml-1">
                     Phone Number
                   </label>

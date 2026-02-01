@@ -14,7 +14,7 @@ export default function Home() {
   const { user, setUser } = useAuth();
 
   const disableButton = () => {
-    if (user.admin) {
+    if (user?.admin) {
       return;
     }
     setDisableDrinkButton(true);
@@ -56,7 +56,7 @@ export default function Home() {
     <div className="flex flex-col items-center justify-center max-w-md mx-auto w-full gap-8 py-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       {/* Main Status Card */}
       <div
-        className={`rounded-3xl p-6 shadow-xl w-full border flex flex-col items-center text-center transition-all duration-300 ${
+        className={`rounded-3xl p-6 shadow-xl w-full aspect-square justify-center border flex flex-col items-center text-center transition-all duration-300 ${
           flashCardGreen
             ? "bg-emerald-950 border-emerald-500 shadow-emerald-500/50 scale-105"
             : "bg-slate-900 border-slate-800 shadow-slate-900/50"

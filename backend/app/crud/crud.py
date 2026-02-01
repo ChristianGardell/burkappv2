@@ -58,6 +58,7 @@ def decrement_user_beer_one(db: Session, userDecrementBeer: UserUpdate) -> Users
         return None
     if user.beers > 0:
         user.beers -= 1
+        user.total_beers += 1
 
     db.commit()
     db.refresh(user)

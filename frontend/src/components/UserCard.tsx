@@ -94,7 +94,7 @@ export default function UserCard({ user }: { user: UserResponse }) {
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleSave()}
-                className="w-20 h-10 text-center text-xl font-bold bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 tabular-nums placeholder:text-slate-600 transition-all p-0"
+                className="w-30 h-10 text-center text-3xl font-bold bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 tabular-nums placeholder:text-slate-600 transition-all p-0"
               />
               <Button
                 onClick={handleSave}

@@ -34,7 +34,12 @@ export default function Admin() {
     try {
       const dbUsers = await getAllUsers();
       setAllUsers(dbUsers);
-      const filtered = dbUsers.filter((u) => u.admin === false || u.id === user?.id).sort((a, b) => a.name.localeCompare(b.name));
+      const nonAdminOrCurrentUser = dbUsers.filter(
+        (u) => u.admin === false || u.id === user?.id,
+      );
+      const filtered = nonAdminOrCurrentUser.sort((a, b) =>
+        a.name.localeCompare(b.name),
+      );
       setAdminFilteredUsers(filtered);
       setSearchedUsers(filtered);
     } catch (err) {

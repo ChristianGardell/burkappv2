@@ -3,7 +3,7 @@ import type { LoginResponse, UserCreate, UserResponse } from "../types";
 
 const createUser = async (user: UserCreate): Promise<LoginResponse> => {
   try {
-    const response = await fetch(`http://localhost:8000/users/create`, {
+    const response = await fetch(`http://192.168.0.208:8000/users/create`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(user),
