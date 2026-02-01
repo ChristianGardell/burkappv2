@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from app.crud import crud
 from sqlalchemy.orm import Session
 from app.db.database import get_db
-from typing import Union
+from typing import List, Union
 from app.schemas.schemas import *
 from app.core.security import (
     get_pin_hash,
@@ -15,14 +15,52 @@ from app.core.security import (
 router = APIRouter(prefix="/users", tags=["users"])
 
 
+@router.get(
+    "/admin/getall", response_model=List[UserResponse]
+)  # TODO: Restrict to admin users only
+def get_all_users(
+    current_user: UserUpdate = Depends(get_current_user), db: Session = Depends(get_db)
+):
+    user = crud.get_user_by_id(
+        db, UserUpdate(id=current_user.id, phone_number="", pin="")
+    )
+    if not user or not user.admin:
+        raise HTTPException(
+            status_code=403, detail="Not authorized to access this resource"
+        )
+    return crud.get_all_users(db)
+
+
+@router.put("/admin/setbeers", response_model=bool)
+def update_user_beers(
+    data: UserUpdateAdmin,
+    current_user: UserUpdate = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    user = crud.get_user_by_id(
+        db, UserUpdate(id=current_user.id, phone_number="", pin="")
+    )
+    if not user or not user.admin:
+        raise HTTPException(
+            status_code=403, detail="Not authorized to access this resource"
+        )
+    success = crud.update_user_beers(db, data)
+    if not success:
+        raise HTTPException(status_code=400, detail="Failed to update user beers")
+    return success
+
+
 @router.get("/me", response_model=UserResponse)
 def read_current_user(
-    current_user: UserResponse = Depends(get_current_user), db: Session = Depends(get_db)
+    current_user: UserResponse = Depends(get_current_user),
+    db: Session = Depends(get_db),
 ):
     """Get the current logged-in user."""
     if current_user.id is None:
         raise HTTPException(status_code=401, detail="Invalid token payload")
-    return crud.get_user_by_id(db, UserUpdate(id=current_user.id, phone_number="", pin=""))
+    return crud.get_user_by_id(
+        db, UserUpdate(id=current_user.id, phone_number="", pin="")
+    )
 
 
 @router.post("/check", response_model=bool)
@@ -53,12 +91,16 @@ def create_user(data: UserCreate, db: Session = Depends(get_db)):
 
 
 @router.put("/decrement", response_model=UserResponse)
-def decrement_user_beer(current_user: UserResponse = Depends(get_current_user), db: Session = Depends(get_db)):
+def decrement_user_beer(
+    current_user: UserResponse = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
     """Decrement a user's beer count by one."""
     if current_user.beers <= 0:
         raise HTTPException(status_code=400, detail="No beers left to decrement")
-    current_user = crud.decrement_user_beer_one(db, UserUpdate(id=current_user.id, phone_number="", pin=""))
+    current_user = crud.decrement_user_beer_one(
+        db, UserUpdate(id=current_user.id, phone_number="", pin="")
+    )
     if not current_user:
         raise HTTPException(status_code=404, detail="Something failed in decrement")
     return current_user
-    

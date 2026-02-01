@@ -41,3 +41,7 @@ class UserUpdate(BaseModel):
     id: str
     phone_number: str
     pin: str 
+
+class UserUpdateAdmin(BaseModel):
+    id: str 
+    beers: int = Field(..., ge=0, description="Number of beers must be non-negative")

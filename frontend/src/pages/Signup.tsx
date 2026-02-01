@@ -33,7 +33,6 @@ export default function Signup() {
   const onSubmit = async (data: UserCreate) => {
     try {
       const user: LoginResponse = await createUser(data);
-      console.log(localStorage.getItem("user"));
       login(user.access_token, user.user);
       console.log("User created and logged in:", localStorage.getItem("user"));
       navigate("/home");

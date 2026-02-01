@@ -27,7 +27,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   );
   const [isLoading, setIsLoading] = useState(true);
 
-  const isAuthenticated = !!token && !!user;
+  const isAuthenticated: boolean = !!token && !!user;
 
   const login = (newToken: string, userData?: UserResponse) => {
     localStorage.setItem("access_token", newToken);

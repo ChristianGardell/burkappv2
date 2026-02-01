@@ -6,9 +6,19 @@ from app.schemas.schemas import *
 from app.models.models import Users
 from app.core.security import get_pin_hash
 
-# def get_users(db: Session) -> list[Users]:
-#     """Get all users from db."""
-#     return db.query(Users).all()
+def get_all_users(db: Session) -> list[Users]:
+    """Get all users from db."""
+    return db.query(Users).all()
+
+def update_user_beers(db: Session, userUpdate: UserUpdateAdmin) -> bool:
+    """Update a user's beer count."""
+    user = db.query(Users).filter_by(id=userUpdate.id).first()
+    if not user:
+        return False
+    user.beers = userUpdate.beers
+    db.commit()
+    db.refresh(user)
+    return True 
 
 
 def check_if_user_exists(db: Session, user: UserLogin) -> bool:

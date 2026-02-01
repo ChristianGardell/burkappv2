@@ -1,7 +1,7 @@
-import type { UserLogin } from "../types";
+import type { UserUpdate } from "../types";
 
 
-  const checkUser = async (user: UserLogin): Promise<boolean> => {
+  const checkUser = async (user: UserUpdate): Promise<boolean> => {
     try {
       const response = await fetch(`http://localhost:8000/users/check`, {
         method: "POST",

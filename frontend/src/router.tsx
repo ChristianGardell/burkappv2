@@ -5,6 +5,7 @@ import Home from "@pages/Home";
 import Buy from "@pages/Buy";
 import Login from "@pages/Login";
 import Signup from "@pages/Signup";
+import Admin from "@pages/Admin";
 import ProtectedRoute from "./lib/protectedRoute";
 import RedirectHome from "./lib/redirectHome";
 const router = createBrowserRouter([
@@ -35,6 +36,7 @@ const router = createBrowserRouter([
       { path: "/", element: <Navigate to="/home" replace /> },
       { path: "/home", element: <Home /> },
       { path: "/buy", element: <Buy /> },
+      { path: "/admin", element: <Admin /> },
     ],
   },
 ]);

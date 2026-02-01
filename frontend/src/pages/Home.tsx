@@ -29,8 +29,19 @@ export default function Home() {
     }, 1000);
   };
 
+  const setMsgTimer = (msg: string, duration: number) => {
+    setErrorMessage(msg);
+    setTimeout(() => {
+      setErrorMessage(null);
+    }, duration);
+  };
+
   const handleDrinkOnePress = async () => {
     try {
+      if (user?.beers === 0) {
+        setMsgTimer("No beers left! Please buy more.", 3000);
+        return;
+      }
       const data: UserResponse = await decrementBeer();
       if (data) {
         setUser({ ...user, beers: data.beers });
@@ -38,33 +49,30 @@ export default function Home() {
         sucessFlash();
       }
     } catch {
-      setErrorMessage("Failed to drink a beer. Please try again."); // TODO: lägg till flera felmeddelanden
-      setTimeout(() => {
-        setErrorMessage(null);
-      }, 3000);
+      setMsgTimer("Failed to drink beer. Please try again.", 3000);
     }
   };
   return (
     <div className="flex flex-col items-center justify-center max-w-md mx-auto w-full gap-8 py-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       {/* Main Status Card */}
       <div
-        className={`rounded-3xl p-8 shadow-xl w-full border flex flex-col items-center text-center transition-all duration-300 ${
+        className={`rounded-3xl p-6 shadow-xl w-full border flex flex-col items-center text-center transition-all duration-300 ${
           flashCardGreen
             ? "bg-emerald-950 border-emerald-500 shadow-emerald-500/50 scale-105"
             : "bg-slate-900 border-slate-800 shadow-slate-900/50"
         }`}
       >
-        <div className="relative group cursor-default pt-4">
+        <div className="relative group cursor-default pt-2">
           <div className="absolute inset-0 bg-primary/20 blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 active:bg-green-300" />
-          <div className="min-h-10 text-sm text-rose-400">
+          <div className="min-h-8 text-sm text-rose-400">
             {errorMessage && <p>{errorMessage}</p>}
           </div>
-          <h1 className="relative text-9xl font-black text-white tracking-tighter tabular-nums mb-2">
+          <h1 className="relative text-8xl font-black text-white tracking-tighter tabular-nums mb-1">
             {user?.beers}
           </h1>
         </div>
 
-        <p className="text-slate-500 font-medium text-lg">Beers Remaining</p>
+        <p className="text-slate-500 font-medium text-base">Beers Remaining</p>
       </div>
 
       {/* Action Buttons */}
