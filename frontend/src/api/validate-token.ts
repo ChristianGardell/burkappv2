@@ -1,8 +1,10 @@
 import type { UserResponse } from "../types";
 
+const apiUrl = import.meta.env.VITE_BACKEND_SERVER_URL || 'http://localhost:8000';
+
 const valditateToken = async (): Promise<UserResponse> => {
   try {
-    const response = await fetch(`http://192.168.0.208:8000/users/me`, {
+    const response = await fetch(`${apiUrl}/users/me`, {
       method: "Get",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("access_token")}`,

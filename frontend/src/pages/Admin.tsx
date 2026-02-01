@@ -75,10 +75,10 @@ export default function Admin() {
 
   return (
     <div className="flex flex-col gap-6 pb-8">
-      <div className="flex items-center justify-between">
+      {/* <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold text-white">Admin Panel</h1>
         <Button onClick={loadUsers}>Refresh</Button>
-      </div>
+      </div> */}
       <input
         type="text"
         placeholder="Search users..."

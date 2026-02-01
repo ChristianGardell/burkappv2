@@ -10,6 +10,8 @@ def get_all_users(db: Session) -> list[Users]:
     """Get all users from db."""
     return db.query(Users).all()
 
+
+
 def update_user_beers(db: Session, userUpdate: UserUpdateAdmin) -> bool:
     """Update a user's beer count."""
     user = db.query(Users).filter_by(id=userUpdate.id).first()

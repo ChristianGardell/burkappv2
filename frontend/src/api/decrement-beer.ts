@@ -1,8 +1,10 @@
 import type { UserLogin, UserResponse } from "../types";
 
+const apiUrl = import.meta.env.VITE_BACKEND_SERVER_URL || 'http://localhost:8000';
+
 const decrementBeer = async (): Promise<UserResponse> => {
   try {
-    const response = await fetch(`http://192.168.0.208:8000/users/decrement`, {
+    const response = await fetch(`${apiUrl}/users/decrement`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

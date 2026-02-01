@@ -30,6 +30,14 @@ class UserResponse(BaseModel):  # for GET / response
     class Config:
         from_attributes = True  # för att fungera med SQLAlchemy modeller
 
+class AdminStats(BaseModel):  # for GET / response
+    name: str = Field(..., min_length=3)
+    phone_number: str = Field(
+        ..., pattern=r"^\d{10}$", description="Must be exactly 10 digits"
+    )
+    admin: bool
+    total_beers: int
+
 
 class LoginResponse(BaseModel):
     user: UserResponse
@@ -40,8 +48,9 @@ class LoginResponse(BaseModel):
 class UserUpdate(BaseModel):
     id: str
     phone_number: str
-    pin: str 
+    pin: str
+
 
 class UserUpdateAdmin(BaseModel):
-    id: str 
+    id: str
     beers: int = Field(..., ge=0, description="Number of beers must be non-negative")

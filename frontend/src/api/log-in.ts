@@ -1,9 +1,11 @@
 import type { LoginResponse, UserLogin, UserResponse } from "../types";
+const apiUrl = import.meta.env.VITE_BACKEND_SERVER_URL || 'http://localhost:8000';
+
 import { useAuth } from "../context/AuthContext";
 
 const loginUser = async (user: UserLogin): Promise<LoginResponse> => {
   try {
-    const response = await fetch(`http://192.168.0.208:8000/users/login`, {
+    const response = await fetch(`${apiUrl}/users/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(user),

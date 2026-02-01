@@ -9,6 +9,7 @@ export interface UserCreate {
 export interface UserResponse {
   id: string;
   beers: number;
+  total_beers: number;
   name: string;
   phone_number: string;
   pin: string;
@@ -36,4 +37,10 @@ export interface UserUpdate {
 export interface UserUpdateAdmin {
   id: string;
   beers: number;
+}
+export interface AdminStats {
+  id: string;
+  name: string;
+  admin: boolean;
+  total_beers: number;
 }

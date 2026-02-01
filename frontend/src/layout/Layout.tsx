@@ -1,8 +1,14 @@
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
-import { LogOut } from "lucide-react";
+import {
+  LogOut,
+  BarChart3,
+  Shield,
+  MoreHorizontal,
+  Home as HomeIcon,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export default function Layout() {
   const { user, logout } = useAuth();
@@ -37,25 +43,91 @@ export default function Layout() {
             <span>{user?.phone_number}</span>
           </div>
 
-          {/* Right: Admin Button */}
-          <div className="flex items-center">
+          {/* Right: Empty for balance */}
+            <div className="w-10">
             {user?.admin && (
-              <Button
-                onClick={() => navigate(isAdminPage ? "/home" : "/admin")}
-                className="bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 hover:text-emerald-300 px-4 py-2 rounded-lg font-semibold"
-              >
-                {isAdminPage ? "Home" : "Admin"}
-              </Button>
+              <div className="flex items-center justify-center bg-emerald-500/20 border border-emerald-500/50 rounded px-2 py-1">
+              <Shield className="w-4 h-4 text-emerald-400" />
+              </div>
             )}
-          </div>
+            </div>
         </div>
       </nav>
 
-      <main className="flex-1 overflow-y-auto pt-24 pb-12 px-4">
-        <div className="max-w-md mx-auto">
+      <main
+        className={cn(
+          "flex-1 overflow-y-auto pt-24 px-4 transition-all duration-300",
+          user?.admin ? "pb-24" : "pb-12",
+        )}
+      >
+        <div className="max-w-md mx-auto h-full">
           <Outlet />
         </div>
       </main>
+
+      {/* Admin Bottom Navigation */}
+      {user?.admin && (
+        <div className="fixed bottom-0 left-0 right-0 bg-slate-900/80 backdrop-blur-md border-t border-white/5 pb-safe z-50">
+          <div className="max-w-md mx-auto flex items-center justify-around h-16 px-2">
+            <Button
+              variant="ghost"
+              className={cn(
+                "flex flex-col items-center gap-1 h-auto py-2 hover:bg-transparent",
+                location.pathname === "/stats"
+                  ? "text-emerald-400"
+                  : "text-slate-400",
+              )}
+              onClick={() => navigate("/stats")}
+            >
+              <BarChart3 className="w-6 h-6" />
+              <span className="text-[10px] font-medium">Stats</span>
+            </Button>
+
+            <Button
+              variant="ghost"
+              className={cn(
+                "flex flex-col items-center gap-1 h-auto py-2 hover:bg-transparent",
+                location.pathname === "/admin"
+                  ? "text-emerald-400"
+                  : "text-slate-400",
+              )}
+              onClick={() => navigate("/admin")}
+            >
+              <Shield className="w-6 h-6" />
+              <span className="text-[10px] font-medium">Admin</span>
+            </Button>
+
+            <Button
+              variant="ghost"
+              className={cn(
+                "flex flex-col items-center gap-1 h-auto py-2 hover:bg-transparent",
+                location.pathname === "/placeholder"
+                  ? "text-emerald-400"
+                  : "text-slate-400",
+              )}
+              onClick={() => navigate("/placeholder")}
+            >
+              <MoreHorizontal className="w-6 h-6" />
+              <span className="text-[10px] font-medium">More</span>
+            </Button>
+
+            {/* Also keeping Home accessible for admins */}
+            <Button
+              variant="ghost"
+              className={cn(
+                "flex flex-col items-center gap-1 h-auto py-2 hover:bg-transparent",
+                location.pathname === "/home"
+                  ? "text-emerald-400"
+                  : "text-slate-400",
+              )}
+              onClick={() => navigate("/home")}
+            >
+              <HomeIcon className="w-6 h-6" />
+              <span className="text-[10px] font-medium">Home</span>
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

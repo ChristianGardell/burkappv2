@@ -1,9 +1,10 @@
 import type { LogOptions } from "vite";
 import type { LoginResponse, UserCreate, UserResponse } from "../types";
+const apiUrl = import.meta.env.VITE_BACKEND_SERVER_URL || 'http://localhost:8000';
 
 const createUser = async (user: UserCreate): Promise<LoginResponse> => {
   try {
-    const response = await fetch(`http://192.168.0.208:8000/users/create`, {
+    const response = await fetch(`${apiUrl}/users/create`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(user),

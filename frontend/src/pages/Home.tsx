@@ -20,7 +20,7 @@ export default function Home() {
     setDisableDrinkButton(true);
     setTimeout(() => {
       setDisableDrinkButton(false);
-    }, 1000);
+    }, 1500);
   };
   const sucessFlash = () => {
     setFlashCardGreen(true);

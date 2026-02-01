@@ -31,6 +31,19 @@ def get_all_users(
     return crud.get_all_users(db)
 
 
+@router.get("/admin/stats", response_model=List[AdminStats])
+def get_all_users_stats(
+    db: Session = Depends(get_db), current_user: UserUpdate = Depends(get_current_user)
+):
+    """
+    Get all users for the stats page.
+    Visible to all validated users (admins and regular users).
+    """
+    # Verify the user exists (authentication check from get_current_user is sufficient)
+    # If you want to restrict to only admins, check current_user.admin here.
+    return crud.get_all_users(db)
+
+
 @router.put("/admin/setbeers", response_model=bool)
 def update_user_beers(
     data: UserUpdateAdmin,

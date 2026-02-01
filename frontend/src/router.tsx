@@ -6,6 +6,8 @@ import Buy from "@pages/Buy";
 import Login from "@pages/Login";
 import Signup from "@pages/Signup";
 import Admin from "@pages/Admin";
+import Stats from "@pages/Stats";
+import Placeholder from "@pages/Placeholder";
 import ProtectedRoute from "./lib/protectedRoute";
 import RedirectHome from "./lib/redirectHome";
 const router = createBrowserRouter([
@@ -37,6 +39,8 @@ const router = createBrowserRouter([
       { path: "/home", element: <Home /> },
       { path: "/buy", element: <Buy /> },
       { path: "/admin", element: <Admin /> },
+      { path: "/stats", element: <Stats /> },
+      { path: "/placeholder", element: <Placeholder /> },
     ],
   },
 ]);

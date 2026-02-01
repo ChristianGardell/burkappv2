@@ -1,31 +1,30 @@
-import type { UserUpdateAdmin } from "../types";
+import type { AdminStats } from "../types";
 const apiUrl = import.meta.env.VITE_BACKEND_SERVER_URL || 'http://localhost:8000';
 
-const updateUserBeers = async (
-  userUpdateAdmin: UserUpdateAdmin,
-): Promise<boolean> => {
+const getAllStats = async (): Promise<AdminStats[]> => {
   try {
     const response = await fetch(
-      `${apiUrl}/users/admin/setbeers`,
+      `${apiUrl}/users/admin/stats`,
       {
-        method: "PUT",
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
-        body: JSON.stringify(userUpdateAdmin),
       },
     );
 
     if (!response.ok) {
-      throw new Error("Failed to update user beers");
+      throw new Error("Failed to fetch users");
     }
 
-    return true;
+    const data = await response.json();
+
+    return data;
   } catch (err) {
     console.error(err);
     throw err;
   }
 };
 
-export default updateUserBeers;
+export default getAllStats;
