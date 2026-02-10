@@ -8,27 +8,29 @@ import {
   Tooltip,
 } from "recharts";
 import type { AdminStats } from "../types";
-import getAllStats from "../api/get-all-stats-admin";
+import getAllStats from "../api/admin/get-all-stats-admin";
+import useApiCall from "@/hooks/useApiCall";
 
 export default function Stats() {
   const [users, setUsers] = useState<AdminStats[]>([]);
-  const [loading, setLoading] = useState(true);
+
+  const {
+    error: errorStats,
+    loading: loadingStats,
+    execute: executeGetStats,
+  } = useApiCall(3000);
 
   useEffect(() => {
     loadUsers();
   }, []);
 
   const loadUsers = async () => {
-    try {
-      const userStats = await getAllStats();
+    const userStats = await executeGetStats(() => getAllStats());
+    if (userStats) {
       const sortedStats = userStats.sort(
         (a, b) => b.total_beers - a.total_beers,
       );
       setUsers(sortedStats);
-    } catch {
-      console.log("Failed to fetch stats");
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -46,7 +48,7 @@ export default function Stats() {
 
   const COLORS = ["#10b981", "#3b82f6"]; // Emerald (Admin) & Blue (User)
 
-  if (loading)
+  if (loadingStats)
     return (
       <div className="p-8 text-center text-slate-400">Loading stats...</div>
     );
@@ -60,7 +62,6 @@ export default function Stats() {
 
       {/* Pie Chart Section */}
       <div className="w-full h-full bg-slate-900/50 border border-slate-800 rounded-3xl p-6 shadow-xl">
-
         <div className="h-64 w-full">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
@@ -73,7 +74,6 @@ export default function Stats() {
                 paddingAngle={2}
                 dataKey="value"
                 animationDuration={400}
-                
               >
                 {pieData.map((_, index) => (
                   <Cell

@@ -4,19 +4,22 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import type { UserResponse } from "../types";
 import { useAuth } from "../context/AuthContext";
-import decrementBeer from "../api/decrement-beer";
+import decrementBeer from "../api/user/decrement-beer";
 import { set } from "react-hook-form";
+import useApiCall from "@/hooks/useApiCall";
 
 export default function Home() {
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [disableDrinkButton, setDisableDrinkButton] = useState<boolean>(false);
   const [flashCardGreen, setFlashCardGreen] = useState<boolean>(false);
   const { user, setUser } = useAuth();
 
+  const {
+    loading: buyBeerData,
+    error: buyBeerError,
+    execute: executeBuyBeer,
+  } = useApiCall(3000);
+
   const disableButton = () => {
-    if (user?.admin) {
-      return;
-    }
     setDisableDrinkButton(true);
     setTimeout(() => {
       setDisableDrinkButton(false);
@@ -29,27 +32,17 @@ export default function Home() {
     }, 1000);
   };
 
-  const setMsgTimer = (msg: string, duration: number) => {
-    setErrorMessage(msg);
-    setTimeout(() => {
-      setErrorMessage(null);
-    }, duration);
-  };
-
   const handleDrinkOnePress = async () => {
-    try {
-      if (user?.beers === 0) {
-        setMsgTimer("No beers left! Please buy more.", 3000);
-        return;
-      }
-      const data: UserResponse = await decrementBeer();
-      if (data) {
-        setUser({ ...user, beers: data.beers });
+    if (user?.beers === 0) {
+      return;
+    }
+    const data: UserResponse = await executeBuyBeer(() => decrementBeer());
+    if (data) {
+      setUser({ ...user, beers: data.beers });
+      if (!user?.admin) {
         disableButton();
-        sucessFlash();
       }
-    } catch {
-      setMsgTimer("Failed to drink beer. Please try again.", 3000);
+      sucessFlash();
     }
   };
   return (
@@ -65,7 +58,7 @@ export default function Home() {
         <div className="relative group cursor-default pt-2">
           <div className="absolute inset-0 bg-primary/20 blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 active:bg-green-300" />
           <div className="min-h-8 text-sm text-rose-400">
-            {errorMessage && <p>{errorMessage}</p>}
+            {buyBeerError && <p>{buyBeerError}</p>}
           </div>
           <h1 className="relative text-8xl font-black text-white tracking-tighter tabular-nums mb-1">
             {user?.beers}
@@ -79,7 +72,7 @@ export default function Home() {
       <div className="grid grid-cols-2 gap-4 w-full">
         <Button
           onClick={handleDrinkOnePress}
-          disabled={disableDrinkButton}
+          disabled={disableDrinkButton || user?.beers === 0}
           className="h-24 rounded-2xl bg-white/5 border border-slate-800 hover:bg-red-500/10 hover:border-red-500/50 hover:text-red-500 text-slate-400 flex flex-col items-center justify-center gap-2 transition-all group"
         >
           <div className="p-3 rounded-full bg-slate-800 group-hover:bg-red-500/20 transition-colors">

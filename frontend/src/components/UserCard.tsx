@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import updateUserBeers from "@/api/update-user-beers";
+import updateUserBeers from "@/api/admin/update-user-beers";
 import type { UserResponse } from "@/types";
 import { Loader2, Save } from "lucide-react";
 import { useState } from "react";

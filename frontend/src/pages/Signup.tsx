@@ -1,23 +1,27 @@
 import { Button } from "@/components/ui/button";
 import { LogIn, Smartphone, Lock, User } from "lucide-react";
-import { useState } from "react";
+import { Loading } from "@/components/Loading";
+
 import { useLocation, useNavigate } from "react-router-dom";
-import type {
-  UserResponse,
-  UserCreate,
-  UserLogin,
-  LoginResponse,
-} from "../types";
 import { useForm } from "react-hook-form";
-import createUser from "../api/create-user";
+import type { UserCreate, UserLogin, LoginResponse } from "../types";
+
+import createUser from "../api/unprotected/create-user";
 import { useAuth } from "../context/AuthContext";
+import useApiCall from "../hooks/useApiCall";
 
 export default function Signup() {
   const { login } = useAuth();
-  const [apiError, setApiError] = useState<string | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
+
   const formData = location.state?.formData as UserLogin | undefined;
+
+  const {
+    error: signUpError,
+    loading: signUpLoading,
+    execute: executeSignUp,
+  } = useApiCall(3000);
 
   const {
     register,
@@ -31,20 +35,15 @@ export default function Signup() {
     },
   });
   const onSubmit = async (data: UserCreate) => {
-    try {
-      const user: LoginResponse = await createUser(data);
+    const user: LoginResponse = await executeSignUp(() => createUser(data));
+    if (user) {
       login(user.access_token, user.user);
-      console.log("User created and logged in:", localStorage.getItem("user"));
       navigate("/home");
-
-    } catch (error: any) {
-      if (error.status === 400) {
-        setApiError("User already exists. Please log in.");
-      } else {
-        setApiError("Failed to create user. Please try again.");
-      }
     }
   };
+  if (signUpLoading) {
+    return <Loading />;
+  }
 
   return (
     <div className="flex flex-col h-dvh overflow-hidden bg-slate-950 font-libre text-slate-200">
@@ -61,7 +60,7 @@ export default function Signup() {
               )}
               {errors.pin?.message && <p>{errors.pin.message}</p>}
               {errors.name?.message && <p>{errors.name.message}</p>}
-              <p>{apiError}</p>
+              <p>{signUpError}</p>
               <p></p>
             </div>
           </div>

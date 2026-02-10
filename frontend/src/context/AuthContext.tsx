@@ -8,6 +8,7 @@ import type { UserResponse } from "@/types";
 
 type AuthContextValue = { // just a type
   user: UserResponse | null;
+  setUser: React.Dispatch<React.SetStateAction<UserResponse | null>>;
   token: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;

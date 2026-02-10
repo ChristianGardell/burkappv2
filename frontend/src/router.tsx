@@ -9,6 +9,7 @@ import Admin from "@pages/Admin";
 import Stats from "@pages/Stats";
 import Placeholder from "@pages/Placeholder";
 import ProtectedRoute from "./lib/protectedRoute";
+import AdminRoute from "./lib/adminRoute";
 import RedirectHome from "./lib/redirectHome";
 const router = createBrowserRouter([
   {
@@ -38,6 +39,17 @@ const router = createBrowserRouter([
       { path: "/", element: <Navigate to="/home" replace /> },
       { path: "/home", element: <Home /> },
       { path: "/buy", element: <Buy /> },
+    ],
+  },
+  {
+    path: "/",
+    element: (
+      <AdminRoute>
+        <Layout />
+      </AdminRoute>
+    ),
+    children: [
+      { path: "/", element: <Navigate to="/home" replace /> },
       { path: "/admin", element: <Admin /> },
       { path: "/stats", element: <Stats /> },
       { path: "/placeholder", element: <Placeholder /> },

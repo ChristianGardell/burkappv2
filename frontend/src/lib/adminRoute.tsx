@@ -3,22 +3,22 @@ import { Navigate } from "react-router-dom";
 
 import { useAuth } from "@/context/AuthContext";
 
-interface ProtectedRouteProps {
+interface AdminRouteProps {
   children: React.ReactNode;
 }
 
-const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-  const { isAuthenticated, isLoading } = useAuth();
+const AdminRoute = ({ children }: AdminRouteProps) => {
+  const { isAuthenticated, isLoading, user } = useAuth();
 
   if (isLoading) {
     return <div>Loading...</div>;
   }
 
-  if (!isAuthenticated ) {
+  if (!isAuthenticated || !user?.admin) {
     return <Navigate to="/login" replace />;
   }
 
   return <>{children}</>;
 };
 
-export default ProtectedRoute;
+export default AdminRoute;

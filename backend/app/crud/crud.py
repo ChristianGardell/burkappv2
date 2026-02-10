@@ -2,9 +2,10 @@
 # funktioner för att interagera med databasen, som anropas från routrar.
 
 from sqlalchemy.orm import Session
-from app.schemas.schemas import *
-from app.models.models import Users
-from app.core.security import get_pin_hash
+
+from ..schemas.schemas import *
+from ..models.models import Users
+from ..core.security import get_pin_hash
 
 def get_all_users(db: Session) -> list[Users]:
     """Get all users from db."""
@@ -28,14 +29,14 @@ def check_if_user_exists(db: Session, user: UserLogin) -> bool:
     return user is not None
 
 
-def get_user_by_id(db: Session, getUserById: UserUpdate) -> Users | None:
+def get_user_by_id(db: Session, user_id: str) -> Users | None:
     """Get a user by their ID."""
-    return db.query(Users).filter_by(id=getUserById.id).first()
+    return db.query(Users).filter_by(id=user_id).first()
 
 
-def get_user_by_phone(db: Session, userLogin: UserUpdate) -> Users | None:
+def get_user_by_phone(db: Session, phone_number: str) -> Users | None:
     """Get a user by their phone number."""
-    return db.query(Users).filter_by(phone_number=userLogin.phone_number).first()
+    return db.query(Users).filter_by(phone_number=phone_number).first()
 
 
 def create_user(db: Session, userCreate: UserCreate) -> Users:
@@ -53,9 +54,9 @@ def create_user(db: Session, userCreate: UserCreate) -> Users:
     return entry
 
 
-def decrement_user_beer_one(db: Session, userDecrementBeer: UserUpdate) -> Users | None:
+def decrement_user_beer_one(db: Session, user_id: str) -> Users | None:
     """Decrement a user's beer count by one."""
-    user = db.query(Users).filter_by(id=userDecrementBeer.id).first()
+    user = db.query(Users).filter_by(id=user_id).first()
     if not user:
         return None
     if user.beers > 0:

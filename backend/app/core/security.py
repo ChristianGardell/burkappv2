@@ -1,14 +1,10 @@
 from passlib.context import CryptContext
 from datetime import datetime, timedelta, timezone
 from jose import jwt, JWTError
-from app.core.config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_DAYS
 from fastapi import HTTPException, status, Depends
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from sqlalchemy.orm import Session
-from app.db.database import get_db
-from app.models.models import Users
-from app.crud import crud
-from app.schemas.schemas import UserUpdate
+
+from ..core.config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_DAYS
 
 pwd_context = CryptContext(schemes=["bcrypt_sha256"], deprecated="auto")
 
@@ -38,11 +34,10 @@ def create_access_token(data: dict, expires_delta: int | None = None) -> str:
     return encoded_jwt
 
 
-def get_current_user(
+def extract_user_from_token(
     credentials: HTTPAuthorizationCredentials = Depends(security),
-    db: Session = Depends(get_db),
-):
-    """Decode token and load the specific User from the DB."""
+) -> str:
+    """Decode token."""
     token = credentials.credentials
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
@@ -56,8 +51,5 @@ def get_current_user(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Could not validate credentials",
         )
-    user = crud.get_user_by_id(db, UserUpdate(id=user_id, phone_number="", pin=""))
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found")
 
-    return user
+    return user_id

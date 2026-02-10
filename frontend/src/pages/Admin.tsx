@@ -1,71 +1,56 @@
 import { useAuth } from "@/context/AuthContext";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import getAllUsers from "@/api/get-all-users-admin";
+import getAllUsers from "@/api/admin/get-all-users-admin";
 import type { UserResponse } from "@/types";
 import { Loader2 } from "lucide-react";
 import UserCard from "@/components/UserCard";
-import { Button } from "@/components/ui/button";
+import useApiCall from "@/hooks/useApiCall";
 
 export default function Admin() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [allUsers, setAllUsers] = useState<UserResponse[]>([]);
-  const [adminFilteredUsers, setAdminFilteredUsers] = useState<UserResponse[]>(
-    [],
-  );
   const [searchedUsers, setSearchedUsers] = useState<UserResponse[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (!user?.admin) {
-      navigate("/home", { replace: true });
-    }
-  }, [user, navigate]);
+  const {
+    error: getAllUsersError,
+    loading: loadingAllUsers,
+    execute: executeGetAllUsers,
+  } = useApiCall(3000);
 
   useEffect(() => {
     loadUsers();
   }, [user]);
 
   const loadUsers = async () => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const dbUsers = await getAllUsers();
-      setAllUsers(dbUsers);
-      const nonAdminOrCurrentUser = dbUsers.filter(
-        (u) => u.admin === false || u.id === user?.id,
-      );
-      const filtered = nonAdminOrCurrentUser.sort((a, b) =>
-        a.name.localeCompare(b.name),
-      );
-      setAdminFilteredUsers(filtered);
-      setSearchedUsers(filtered);
-    } catch (err) {
-      setError("Failed to load users. Please try again.");
-    } finally {
-      setIsLoading(false);
+    const dbUsers: UserResponse[] = await executeGetAllUsers(() =>
+      getAllUsers(),
+    );
+    if (dbUsers) {
+      const nonAdminOrCurrentUserSorted = dbUsers
+        .filter((u) => u.admin === false || u.id === user?.id)
+        .sort((a, b) => a.name.localeCompare(b.name));
+      setSearchedUsers(nonAdminOrCurrentUserSorted);
+      setAllUsers(nonAdminOrCurrentUserSorted);
     }
   };
 
   const filterUsersOnSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const searchTerm = e.target.value.toLowerCase();
-    const filtered = adminFilteredUsers.filter(
+    const filtered = searchedUsers.filter(
       (u) =>
         u.name.toLowerCase().includes(searchTerm) ||
         u.phone_number.includes(searchTerm),
     );
     if (searchTerm === "") {
-      setSearchedUsers(adminFilteredUsers);
+      setSearchedUsers(allUsers);
       return;
     }
     setSearchedUsers(filtered);
   };
 
-  if (!user?.admin) return null;
-
-  if (isLoading) {
+  if (loadingAllUsers) {
     return (
       <div className="flex items-center justify-center h-64">
         <Loader2 className="w-8 h-8 animate-spin text-slate-400" />
@@ -87,9 +72,9 @@ export default function Admin() {
         onChange={filterUsersOnSearch}
       />
 
-      {error && (
+      {getAllUsersError && (
         <div className="bg-red-500/10 border border-red-500/50 text-red-400 p-4 rounded-lg">
-          {error}
+          {getAllUsersError}
         </div>
       )}
 

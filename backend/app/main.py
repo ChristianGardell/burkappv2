@@ -1,14 +1,15 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.core.config import FRONTEND_SERVER_IP
-
 import os
 
-from app.models import models
-from app.db.database import SessionLocal, engine
-from app.api.routers import users
-from app.crud import crud
-from app.core.security import get_pin_hash
+from .core.config import FRONTEND_SERVER_IP
+from .core.security import get_pin_hash
+from .models import models
+from .db.database import SessionLocal, engine
+from .api.routers import users
+from .api.routers import admin
+from .crud import crud
+
 
 # Create database tables
 models.Base.metadata.create_all(bind=engine)
@@ -32,6 +33,8 @@ app.add_middleware(
 
 # Include Routers
 app.include_router(users.router)
+
+app.include_router(admin.router)
 
 if os.getenv("ENV") == "dev":
     db = SessionLocal()

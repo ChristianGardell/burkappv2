@@ -1,18 +1,33 @@
 import { Button } from "@/components/ui/button";
 import { LogIn, Smartphone, Lock } from "lucide-react";
+import { Loading } from "@/components/Loading";
+
 import { useNavigate } from "react-router-dom";
-import type { UserLogin, LoginResponse } from "../types";
-import checkUser from "../api/check-user-exist";
-import loginUser from "../api/log-in";
 import { useForm } from "react-hook-form";
+
+import type { UserLogin, LoginResponse } from "../types";
+
+import checkUser from "../api/unprotected/check-user-exist";
+import loginUser from "../api/user/log-in";
 import { useAuth } from "../context/AuthContext";
-import { useState } from "react";
+import useApiCall from "../hooks/useApiCall";
 
 export default function Login() {
   const { login } = useAuth();
-  const [wrongCredentials, setWrongCredentials] = useState<string | null>(null);
-
   const navigate = useNavigate();
+
+  const {
+    error: userExistsError,
+    loading: userExistsLoading,
+    execute: executeUserExists,
+  } = useApiCall(3000);
+
+  const {
+    loading: loginLoading,
+    error: loginError,
+    execute: executeLogin,
+  } = useApiCall(3000);
+
   const {
     register: register,
     handleSubmit: handleSubmit,
@@ -20,25 +35,23 @@ export default function Login() {
   } = useForm<UserLogin>();
 
   const onSubmit = async (data: UserLogin) => {
-    try {
-      const userExists = await checkUser(data);
-      if (userExists) {
-        try {
-          const loggedInUser: LoginResponse = await loginUser(data);
-          login(loggedInUser.access_token, loggedInUser.user);
-          navigate("/home", { state: { user: loggedInUser } });
-        } catch (error) {
-          console.error("Login failed. Please check your PIN and try again.");
-          setWrongCredentials("Login failed. Please check your PIN and try again.");
-        }
-      } else {
-        navigate("/signup", { state: { formData: data } });
+    const exists = await executeUserExists(() => checkUser(data));
+    if (exists) {
+      const loginData: LoginResponse = await executeLogin(() =>
+        loginUser(data),
+      );
+      if (loginData) {
+        login(loginData.access_token, loginData.user);
+        navigate("/home", { state: { user: loginData.user } });
       }
-    } catch (error) {
-      console.error("API failed. Please try again.");
+    } else {
+      navigate("/signup", { state: { formData: data } });
     }
   };
 
+  if (userExistsLoading || loginLoading) {
+    return <Loading />;
+  }
   return (
     <div className="flex flex-col h-dvh overflow-hidden bg-slate-950 font-libre text-slate-200">
       <main className="flex-1 flex flex-col items-center justify-center p-4">
@@ -61,7 +74,8 @@ export default function Login() {
             <div className="bg-slate-900 rounded-3xl p-8 shadow-xl shadow-slate-900/50 w-full border border-slate-800 space-y-6">
               <div className="space-y-4">
                 <div className="space-y-2">
-                  {wrongCredentials && <p>{wrongCredentials}</p>}
+                  {loginError && <p>{loginError}</p>}
+                  {userExistsError && <p>{userExistsError}</p>}
                   <label className="text-xs font-semibold uppercase tracking-wider text-slate-500 ml-1">
                     Phone Number
                   </label>
