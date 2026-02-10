@@ -3,7 +3,7 @@ const apiUrl =
   import.meta.env.VITE_BACKEND_SERVER_URL || "http://localhost:8000";
 
 const getAllStats = async (): Promise<AdminStats[]> => {
-  const response = await fetch(`${apiUrl}/users/admin/stats`, {
+  const response = await fetch(`${apiUrl}/admin/stats`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

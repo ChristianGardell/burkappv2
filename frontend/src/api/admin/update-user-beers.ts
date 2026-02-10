@@ -6,7 +6,7 @@ const updateUserBeers = async (
   userUpdateAdmin: UserUpdateAdmin,
 ): Promise<boolean> => {
   try {
-    const response = await fetch(`${apiUrl}/users/admin/setbeers`, {
+    const response = await fetch(`${apiUrl}/admin/setbeers`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
