@@ -1,6 +1,7 @@
-import type { UserResponse } from "../types";
+import type { UserResponse } from "../../types";
 
-const apiUrl = import.meta.env.VITE_BACKEND_SERVER_URL || 'http://localhost:8000';
+const apiUrl =
+  import.meta.env.VITE_BACKEND_SERVER_URL || "http://localhost:8000";
 
 const valditateToken = async (): Promise<UserResponse> => {
   try {

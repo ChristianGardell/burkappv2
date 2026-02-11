@@ -9,7 +9,7 @@ from app.core.security import (
     get_pin_hash,
     verify_pin,
     create_access_token,
-    extract_user_from_token,
+    extract_userid_from_token,
 )
 
 router = APIRouter(prefix="/admin", tags=["admin"])
@@ -17,7 +17,7 @@ router = APIRouter(prefix="/admin", tags=["admin"])
 
 @router.get("/getall", response_model=List[UserResponse])
 def get_all_users(
-    user_id: str = Depends(extract_user_from_token),
+    user_id: str = Depends(extract_userid_from_token),
     db: Session = Depends(get_db),
 ):
     if user_id is None:
@@ -33,7 +33,7 @@ def get_all_users(
 @router.get("/stats", response_model=List[AdminStats])
 def get_all_users_stats(
     db: Session = Depends(get_db),
-    user_id: str = Depends(extract_user_from_token),
+    user_id: str = Depends(extract_userid_from_token),
 ):
     """
     Get all users for the stats page.
@@ -52,7 +52,7 @@ def get_all_users_stats(
 @router.put("/setbeers", response_model=bool)
 def update_user_beers(
     data: UserUpdateAdmin,
-    user_id: str = Depends(extract_user_from_token),
+    user_id: str = Depends(extract_userid_from_token),
     db: Session = Depends(get_db),
 ):
     current_user = crud.get_user_by_id(db, user_id=user_id)

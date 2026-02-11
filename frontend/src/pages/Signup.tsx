@@ -21,7 +21,7 @@ export default function Signup() {
     error: signUpError,
     loading: signUpLoading,
     execute: executeSignUp,
-  } = useApiCall(3000);
+  } = useApiCall<LoginResponse>(3000);
 
   const {
     register,
@@ -35,7 +35,7 @@ export default function Signup() {
     },
   });
   const onSubmit = async (data: UserCreate) => {
-    const user: LoginResponse = await executeSignUp(() => createUser(data));
+    const user = await executeSignUp(() => createUser(data));
     if (user) {
       login(user.access_token, user.user);
       navigate("/home");

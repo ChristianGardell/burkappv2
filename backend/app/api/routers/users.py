@@ -11,7 +11,7 @@ from ...core.security import (
     get_pin_hash,
     verify_pin,
     create_access_token,
-    extract_user_from_token,
+    extract_userid_from_token,
 )
 
 router = APIRouter(prefix="/users", tags=["users"])
@@ -19,7 +19,7 @@ router = APIRouter(prefix="/users", tags=["users"])
 
 @router.get("/me", response_model=UserResponse)
 def read_current_user(
-    user_id: str = Depends(extract_user_from_token),
+    user_id: str = Depends(extract_userid_from_token),
     db: Session = Depends(get_db),
 ):
     """Get the current logged-in user."""
@@ -59,18 +59,14 @@ def create_user(data: UserCreate, db: Session = Depends(get_db)):
 
 @router.put("/decrement", response_model=UserResponse)
 def decrement_user_beer(
-    user_id: str = Depends(extract_user_from_token),
+    user_id: str = Depends(extract_userid_from_token),
     db: Session = Depends(get_db),
 ):
     """Decrement a user's beer count by one."""
-    current_user = crud.get_user_by_id(
-        db, user_id=user_id
-    )
+    current_user = crud.get_user_by_id(db, user_id=user_id)
     if not current_user:
         raise HTTPException(status_code=404, detail="User not found")
     if current_user.beers <= 0:
         raise HTTPException(status_code=400, detail="No beers left to decrement")
-    current_user = crud.decrement_user_beer_one(
-        db, user_id=current_user.id
-    )
+    current_user = crud.decrement_user_beer_one(db, user_id=current_user.id)
     return current_user

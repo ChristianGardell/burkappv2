@@ -5,10 +5,10 @@ import { Loading } from "@/components/Loading";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
-import type { UserLogin, LoginResponse } from "../types";
+import type { UserLogin, LoginResponse, UserCheck} from "../types";
 
 import checkUser from "../api/unprotected/check-user-exist";
-import loginUser from "../api/user/log-in";
+import loginUser from "../api/unprotected/log-in";
 import { useAuth } from "../context/AuthContext";
 import useApiCall from "../hooks/useApiCall";
 
@@ -20,13 +20,13 @@ export default function Login() {
     error: userExistsError,
     loading: userExistsLoading,
     execute: executeUserExists,
-  } = useApiCall(3000);
+  } = useApiCall<boolean>(3000);
 
   const {
     loading: loginLoading,
     error: loginError,
     execute: executeLogin,
-  } = useApiCall(3000);
+  } = useApiCall<LoginResponse>(3000);
 
   const {
     register: register,
@@ -35,9 +35,10 @@ export default function Login() {
   } = useForm<UserLogin>();
 
   const onSubmit = async (data: UserLogin) => {
+    const checkUser: UserCheck = UserCheck(data.phone_number, data.pin);
     const exists = await executeUserExists(() => checkUser(data));
     if (exists) {
-      const loginData: LoginResponse = await executeLogin(() =>
+      const loginData = await executeLogin(() =>
         loginUser(data),
       );
       if (loginData) {

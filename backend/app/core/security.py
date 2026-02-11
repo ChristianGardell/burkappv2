@@ -34,7 +34,7 @@ def create_access_token(data: dict, expires_delta: int | None = None) -> str:
     return encoded_jwt
 
 
-def extract_user_from_token(
+def extract_userid_from_token(
     credentials: HTTPAuthorizationCredentials = Depends(security),
 ) -> str:
     """Decode token."""

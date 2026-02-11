@@ -7,10 +7,10 @@ from ..schemas.schemas import *
 from ..models.models import Users
 from ..core.security import get_pin_hash
 
+
 def get_all_users(db: Session) -> list[Users]:
     """Get all users from db."""
     return db.query(Users).all()
-
 
 
 def update_user_beers(db: Session, userUpdate: UserUpdateAdmin) -> bool:
@@ -21,7 +21,7 @@ def update_user_beers(db: Session, userUpdate: UserUpdateAdmin) -> bool:
     user.beers = userUpdate.beers
     db.commit()
     db.refresh(user)
-    return True 
+    return True
 
 
 def check_if_user_exists(db: Session, user: UserLogin) -> bool:
