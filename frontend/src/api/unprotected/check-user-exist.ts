@@ -1,8 +1,8 @@
-import type { UserUpdate } from "../../types";
+import type { UserCheck } from "../../types";
 const apiUrl =
   import.meta.env.VITE_BACKEND_SERVER_URL || "http://localhost:8000";
 
-const checkUser = async (user: UserUpdate): Promise<boolean> => {
+const checkUser = async (user: UserCheck): Promise<boolean> => {
   const response = await fetch(`${apiUrl}/users/check`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },

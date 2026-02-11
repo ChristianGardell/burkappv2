@@ -5,12 +5,14 @@ import { Loader2, Save } from "lucide-react";
 import { useState } from "react";
 
 import type { UserUpdateAdmin } from "@/types";
+import useApiCall from "@/hooks/useApiCall";
 
 export default function UserCard({ user }: { user: UserResponse }) {
   const [currBeers, setCurrBeers] = useState<number>(user.beers);
   const [inputValue, setInputValue] = useState<string>("");
-  const [isSaving, setIsSaving] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const { error: updateError, loading: updateLoading, execute: executeUpdateBeers } =
+    useApiCall<boolean>(3000);
 
   // We compare against the current display value to determine if there are changes
   const oldValue: number = currBeers;
@@ -23,23 +25,14 @@ export default function UserCard({ user }: { user: UserResponse }) {
 
   const handleSave = async () => {
     if (!hasChanges) return;
-    setIsSaving(true);
-    try {
-      const toUpdate: UserUpdateAdmin = {
-        id: user.id,
-        beers: inputValueAsNumber,
-      };
-      const success: boolean = await updateUserBeers(toUpdate);
-      if (success) {
-        setCurrBeers(inputValueAsNumber);
-        setInputValue("");
-      } else {
-        setErrorMessage("Failed to update beers. Please try again.");
-      }
-    } catch {
-      setErrorMessage("Failed to update beers. Please try again.");
-    } finally {
-      setIsSaving(false);
+    const toUpdate: UserUpdateAdmin = {
+      id: user.id,
+      beers: inputValueAsNumber,
+    };
+    const success = await executeUpdateBeers(() => updateUserBeers(toUpdate));
+    if (success) {
+      setCurrBeers(inputValueAsNumber);
+      setInputValue("");
     }
   };
 
@@ -55,6 +48,7 @@ export default function UserCard({ user }: { user: UserResponse }) {
         {/* Top Row: User Info & Admin Badge */}
         <div className="flex items-start justify-between">
           <div>
+            {updateError && <p>{updateError}</p>}
             <h3 className="text-xl font-bold text-white leading-tight">
               {user.name}
             </h3>
@@ -98,7 +92,7 @@ export default function UserCard({ user }: { user: UserResponse }) {
               />
               <Button
                 onClick={handleSave}
-                disabled={!hasChanges || isSaving}
+                disabled={!hasChanges || updateLoading}
                 size="icon"
                 className={`h-10 w-10 shrink-0 transition-all duration-200 ${
                   hasChanges
@@ -106,7 +100,7 @@ export default function UserCard({ user }: { user: UserResponse }) {
                     : "bg-slate-800 text-slate-500 hover:bg-slate-700 hover:text-slate-300"
                 }`}
               >
-                {isSaving ? (
+                {updateLoading ? (
                   <Loader2 className="w-5 h-5 animate-spin" />
                 ) : (
                   <Save className="w-5 h-5" />

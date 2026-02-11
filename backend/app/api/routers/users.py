@@ -29,7 +29,7 @@ def read_current_user(
 
 
 @router.post("/check", response_model=bool)
-def read_user_check_phone_number(data: UserLogin, db: Session = Depends(get_db)):
+def read_user_check_phone_number(data: UserCheck, db: Session = Depends(get_db)):
     """Check if a user exists by their phone number."""
     return crud.check_if_user_exists(db, data)
 

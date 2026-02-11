@@ -28,7 +28,7 @@ export default function Stats() {
     const userStats = await executeGetStats(() => getAllStats());
     if (userStats) {
       const sortedStats = userStats.sort(
-        (a, b) => b.total_beers - a.total_beers,
+        (a: AdminStats, b: AdminStats) => b.total_beers - a.total_beers,
       );
       setUsers(sortedStats);
     }
@@ -64,6 +64,7 @@ export default function Stats() {
       <div className="w-full h-full bg-slate-900/50 border border-slate-800 rounded-3xl p-6 shadow-xl">
         <div className="h-64 w-full">
           <ResponsiveContainer width="100%" height="100%">
+            {errorStats && <p> {errorStats}</p>}
             <PieChart>
               <Pie
                 data={pieData}

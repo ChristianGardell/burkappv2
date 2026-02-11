@@ -4,11 +4,11 @@ This return both data and error, making this not have to declared as states in e
 import { useState } from "react";
 
 function useApiCall<T>(clearErrorAfterMs?: number) {
-  const [data, setData] = useState<T | null>(null);
+  const [data, setData] = useState<T | undefined>(undefined);
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState(false);
 
-  const execute = async (apiCall: () => Promise<T> | undefined) => {
+  const execute = async (apiCall: () => Promise<T>): Promise<T | undefined> => {
     setLoading(true);
     setError("");
     try {
@@ -22,6 +22,7 @@ function useApiCall<T>(clearErrorAfterMs?: number) {
         setTimeout(() => setError(""), clearErrorAfterMs);
       }
       console.error(err);
+      return undefined;
     } finally {
       setLoading(false);
     }

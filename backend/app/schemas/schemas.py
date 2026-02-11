@@ -1,6 +1,12 @@
 from pydantic import BaseModel, Field
 
 
+class UserCheck(BaseModel):
+    phone_number: str = Field(
+        ..., pattern=r"^\d{10}$", description="Must be exactly 10 digits"
+    )
+
+
 class UserLogin(BaseModel):
     phone_number: str = Field(
         ..., pattern=r"^\d{10}$", description="Must be exactly 10 digits"

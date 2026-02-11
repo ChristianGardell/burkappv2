@@ -15,8 +15,6 @@ export default function Layout() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const isAdminPage = location.pathname === "/admin";
-
   const handleLogout = () => {
     logout();
     navigate("/login", { replace: true });
@@ -44,13 +42,13 @@ export default function Layout() {
           </div>
 
           {/* Right: Empty for balance */}
-            <div className="w-10">
+          <div className="w-10">
             {user?.admin && (
               <div className="flex items-center justify-center bg-emerald-500/20 border border-emerald-500/50 rounded px-2 py-1">
-              <Shield className="w-4 h-4 text-emerald-400" />
+                <Shield className="w-4 h-4 text-emerald-400" />
               </div>
             )}
-            </div>
+          </div>
         </div>
       </nav>
 

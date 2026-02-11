@@ -27,12 +27,10 @@ export interface UserLogin {
   phone_number: string;
   pin: string;
 }
-
-export interface UserUpdate {
-  id: string;
+export interface UserCheck {
   phone_number: string;
-  pin: string;
 }
+
 // for PUT / update
 export interface UserUpdateAdmin {
   id: string;

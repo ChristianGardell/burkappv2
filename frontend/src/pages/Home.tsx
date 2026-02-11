@@ -1,11 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Minus, ShoppingCart } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import type { UserResponse } from "../types";
 import { useAuth } from "../context/AuthContext";
 import decrementBeer from "../api/user/decrement-beer";
-import { set } from "react-hook-form";
 import useApiCall from "@/hooks/useApiCall";
 
 export default function Home() {
@@ -14,7 +12,7 @@ export default function Home() {
   const { user, setUser } = useAuth();
 
   const {
-    loading: buyBeerData,
+    // loading: buyBeerLoading,
     error: buyBeerError,
     execute: executeBuyBeer,
   } = useApiCall(3000);
@@ -33,13 +31,14 @@ export default function Home() {
   };
 
   const handleDrinkOnePress = async () => {
-    if (user?.beers === 0) {
+    if (user === null || user.beers === 0) {
       return;
     }
-    const data: UserResponse = await executeBuyBeer(() => decrementBeer());
+    const data = await executeBuyBeer(() => decrementBeer());
+    if (!data) return;
     if (data) {
       setUser({ ...user, beers: data.beers });
-      if (!user?.admin) {
+      if (!user.admin) {
         disableButton();
       }
       sucessFlash();

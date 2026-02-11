@@ -1,6 +1,5 @@
 import { useAuth } from "@/context/AuthContext";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import getAllUsers from "@/api/admin/get-all-users-admin";
 import type { UserResponse } from "@/types";
 import { Loader2 } from "lucide-react";
@@ -9,7 +8,7 @@ import useApiCall from "@/hooks/useApiCall";
 
 export default function Admin() {
   const { user } = useAuth();
-  const navigate = useNavigate();
+
   const [allUsers, setAllUsers] = useState<UserResponse[]>([]);
   const [searchedUsers, setSearchedUsers] = useState<UserResponse[]>([]);
 
@@ -24,13 +23,13 @@ export default function Admin() {
   }, [user]);
 
   const loadUsers = async () => {
-    const dbUsers: UserResponse[] = await executeGetAllUsers(() =>
-      getAllUsers(),
-    );
+    const dbUsers = await executeGetAllUsers(() => getAllUsers());
     if (dbUsers) {
       const nonAdminOrCurrentUserSorted = dbUsers
-        .filter((u) => u.admin === false || u.id === user?.id)
-        .sort((a, b) => a.name.localeCompare(b.name));
+        .filter((u: UserResponse) => u.admin === false || u.id === user?.id)
+        .sort((a: UserResponse, b: UserResponse) =>
+          a.name.localeCompare(b.name),
+        );
       setSearchedUsers(nonAdminOrCurrentUserSorted);
       setAllUsers(nonAdminOrCurrentUserSorted);
     }

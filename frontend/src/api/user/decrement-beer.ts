@@ -1,4 +1,4 @@
-import type { UserLogin, UserResponse } from "../../types";
+import type { UserResponse } from "../../types";
 
 const apiUrl =
   import.meta.env.VITE_BACKEND_SERVER_URL || "http://localhost:8000";

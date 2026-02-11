@@ -5,7 +5,7 @@ import { Loading } from "@/components/Loading";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
-import type { UserLogin, LoginResponse, UserCheck} from "../types";
+import type { UserLogin, LoginResponse, UserCheck } from "../types";
 
 import checkUser from "../api/unprotected/check-user-exist";
 import loginUser from "../api/unprotected/log-in";
@@ -35,15 +35,17 @@ export default function Login() {
   } = useForm<UserLogin>();
 
   const onSubmit = async (data: UserLogin) => {
-    const checkUser: UserCheck = UserCheck(data.phone_number, data.pin);
-    const exists = await executeUserExists(() => checkUser(data));
+    const checkData: UserCheck = { phone_number: data.phone_number };
+    const exists = await executeUserExists(() => checkUser(checkData));
     if (exists) {
-      const loginData = await executeLogin(() =>
-        loginUser(data),
-      );
-      if (loginData) {
-        login(loginData.access_token, loginData.user);
-        navigate("/home", { state: { user: loginData.user } });
+      const loginData: UserLogin = {
+        phone_number: data.phone_number,
+        pin: data.pin,
+      };
+      const user = await executeLogin(() => loginUser(loginData));
+      if (user) {
+        login(user.access_token, user.user);
+        navigate("/home", { state: { user: user.user } });
       }
     } else {
       navigate("/signup", { state: { formData: data } });
