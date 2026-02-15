@@ -16,7 +16,7 @@ export default function Admin() {
     error: getAllUsersError,
     loading: loadingAllUsers,
     execute: executeGetAllUsers,
-  } = useApiCall(3000);
+  } = useApiCall<UserResponse[]>(3000);
 
   useEffect(() => {
     loadUsers();
@@ -37,7 +37,7 @@ export default function Admin() {
 
   const filterUsersOnSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const searchTerm = e.target.value.toLowerCase();
-    const filtered = searchedUsers.filter(
+    const filtered = allUsers.filter(
       (u) =>
         u.name.toLowerCase().includes(searchTerm) ||
         u.phone_number.includes(searchTerm),

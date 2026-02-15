@@ -18,7 +18,7 @@ export default function Stats() {
     error: errorStats,
     loading: loadingStats,
     execute: executeGetStats,
-  } = useApiCall(3000);
+  } = useApiCall<AdminStats[]>(3000);
 
   useEffect(() => {
     loadUsers();
