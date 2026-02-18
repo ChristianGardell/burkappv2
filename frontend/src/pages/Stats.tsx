@@ -1,3 +1,4 @@
+import { StatsCard } from "./../components/StatsCard";
 import { useEffect, useState } from "react";
 import {
   PieChart,
@@ -103,35 +104,7 @@ export default function Stats() {
         <h2 className="text-xl font-bold text-white px-2">Top</h2>
         <div className="space-y-3">
           {users.map((user, index) => (
-            <div
-              key={user.id}
-              className={`flex items-center justify-between p-4 rounded-2xl border border-slate-800 bg-slate-900`}
-              onClick={() => console.log(user)}
-            >
-              <div className="flex items-center gap-4">
-                <div className="w-8 flex justify-center text-lg font-bold text-slate-400">
-                  <span>#{index + 1}</span>
-                </div>
-                <div>
-                  <p className="font-semibold text-white text-lg">
-                    {user.name}
-                  </p>
-                  <span
-                    className={`text-xs px-2 py-0.5 rounded-full ${user.admin ? "bg-emerald-500/20 text-emerald-400" : "bg-blue-500/20 text-blue-400"}`}
-                  >
-                    {user.admin ? "Admin" : "User"}
-                  </span>
-                </div>
-              </div>
-              <div className="text-right">
-                <p className="text-xl font-bold text-white">
-                  {user.total_beers}
-                </p>
-                <p className="text-xs text-slate-500 uppercase font-bold tracking-wider">
-                  Beers
-                </p>
-              </div>
-            </div>
+            <StatsCard key={user.id} index={index} user={user} />
           ))}
         </div>
       </div>

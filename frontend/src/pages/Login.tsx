@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { LogIn, Smartphone, Lock } from "lucide-react";
 import { Loading } from "@/components/Loading";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 import type { UserLogin, LoginResponse, UserCheck } from "../types";
@@ -135,10 +135,22 @@ export default function Login() {
                 className="w-full h-14 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-900/20 text-lg font-bold gap-2"
               >
                 <LogIn className="w-5 h-5" />
-                Sign In
+                Log In
               </Button>
             </div>
           </form>
+
+          <div className="pt-24 flex justify-center">
+            <Link to="/create-group" className="btn-style">
+              <Button
+                className="bg-transparent hover:bg-transparent text-slate-600 hover:text-slate-400 text-sm font-medium underline underline-offset-4 shadow-none border-none h-auto w-auto"
+                variant="ghost"
+                type="button"
+              >
+                Start a new group
+              </Button>
+            </Link>
+          </div>
         </div>
       </main>
     </div>

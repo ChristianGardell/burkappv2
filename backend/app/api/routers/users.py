@@ -11,11 +11,10 @@ from ...crud import crud
 from ...db.database import get_db
 from ...schemas.schemas import *
 from ...core.security import (
-    get_pin_hash,
     verify_pin,
     create_access_token,
-    extract_userid_from_token,
 )
+from ...services import user_service
 
 router = APIRouter(prefix="/users", tags=["users"])
 
@@ -31,13 +30,14 @@ def read_current_user(
 @router.post("/check", response_model=bool)
 def read_user_check_phone_number(data: UserCheck, db: Session = Depends(get_db)):
     """Check if a user exists by their phone number."""
-    return crud.check_if_user_exists(db, data)
+    entry = crud.get_user_by_phone_number(db, data.phone_number)
+    return entry is not None
 
 
 @router.post("/login", response_model=LoginResponse)
 def login_user(data: UserLogin, db: Session = Depends(get_db)):
     """Login a user by their phone number and pin."""
-    user = crud.get_user_by_phone(db, phone_number=data.phone_number)
+    user = crud.get_user_by_phone_number(db, phone_number=data.phone_number)
     if not user:
         raise HTTPException(status_code=404, detail="User does not exist")
     if not verify_pin(data.pin, user.hashed_pin):
@@ -46,13 +46,28 @@ def login_user(data: UserLogin, db: Session = Depends(get_db)):
     return LoginResponse(user=UserResponse.model_validate(user), access_token=token)
 
 
-@router.post("/create", response_model=LoginResponse)
+@router.post("/create-user", response_model=LoginResponse)
 def create_user(data: UserCreate, db: Session = Depends(get_db)):
     """Create a new user in the database."""
-    userCheck = UserLogin(phone_number=data.phone_number, pin=data.pin)
-    if crud.check_if_user_exists(db, userCheck):
-        raise HTTPException(status_code=400, detail="User already exists")
-    user = crud.create_user(db, data)
+
+    if crud.get_user_by_phone_number(db, phone_number=data.phone_number):
+        raise HTTPException(status_code=409, detail="User already exists")
+    group = crud.get_group_by_invite_code(db, invite_code=data.invite_code)
+    if group is None:
+        raise HTTPException(
+            status_code=404, detail="Group with invite code does not exist"
+        )
+
+    user = crud.create_user(db, data, group_id=group.id)
+    token = create_access_token({"sub": user.id})
+    return LoginResponse(user=UserResponse.model_validate(user), access_token=token)
+
+
+@router.post("/create-group", response_model=LoginResponse)
+def create_group(data: GroupCreate, db: Session = Depends(get_db)):
+    """Create a new group in the database, add User and make user admin and owner."""
+    invite_code = user_service.generate_and_check_invite_code_is_unique(db)
+    user = crud.create_user_and_new_group(db, data, invite_code = invite_code)
     token = create_access_token({"sub": user.id})
     return LoginResponse(user=UserResponse.model_validate(user), access_token=token)
 

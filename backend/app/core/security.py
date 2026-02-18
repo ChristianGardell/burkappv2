@@ -1,3 +1,4 @@
+
 from passlib.context import CryptContext
 from datetime import datetime, timedelta, timezone
 from jose import jwt, JWTError
@@ -5,6 +6,8 @@ from fastapi import HTTPException, status, Depends
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
 from ..core.config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_DAYS
+
+
 
 pwd_context = CryptContext(schemes=["bcrypt_sha256"], deprecated="auto")
 

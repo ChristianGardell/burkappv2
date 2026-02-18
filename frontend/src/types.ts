@@ -1,10 +1,19 @@
 // for GET / response
+export interface GroupResponse {
+  id: string;
+  name: string;
+}
+
+
 export interface UserResponse {
   id: string;
+  group_id: string;
   beers: number;
   name: string;
   phone_number: string;
   admin: boolean;
+  group: GroupResponse;
+  
 }
 
 export interface UserBeersResponse {
@@ -33,8 +42,18 @@ export interface AdminStatsResponse {
 }
 
 // for POST / create
+
+export interface GroupCreate {
+  name: string;
+  group_name: string;
+  phone_number: string;
+  pin: string;
+
+}
+
 export interface UserCreate {
   name: string;
+  invite_code: string;
   phone_number: string;
   pin: string;
 }

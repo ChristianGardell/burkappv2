@@ -11,6 +11,8 @@ export default function UserCard({ user }: { user: UserResponse }) {
   const [currBeers, setCurrBeers] = useState<number>(user.beers);
   const [inputValue, setInputValue] = useState<string>("");
 
+
+
   const {
     error: updateError,
     loading: updateLoading,
@@ -90,6 +92,7 @@ export default function UserCard({ user }: { user: UserResponse }) {
                 }}
               >
                 <input
+
                   inputMode="numeric"
                   pattern="[0-9]*"
                   min="0"

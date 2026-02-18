@@ -22,7 +22,7 @@ export default function Layout() {
   };
   const handleRefresh = () => {
     navigate(0);
-  }
+  };
 
   return (
     <div className="flex flex-col h-dvh overflow-hidden bg-slate-950 font-libre text-slate-200">
@@ -41,10 +41,14 @@ export default function Layout() {
           </div>
 
           {/* Center: Phone Number */}
-          <div className="flex items-center gap-2 text-white font-bold text-xl tracking-tight">
-            <span>{user?.phone_number}</span>
+          <div className="flex flex-col items-center tracking-tight">
+            <span className="text-white font-bold text-xl leading-none">
+              {user?.phone_number}
+            </span>
+            <span className="text-xs font-normal text-white-400">
+              {user?.group?.name}
+            </span>
           </div>
-
           {/* Right: Empty for balance */}
           <div className="flex items-center">
             <Button

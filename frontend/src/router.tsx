@@ -5,6 +5,7 @@ import Home from "@pages/Home";
 import Buy from "@pages/Buy";
 import Login from "@pages/Login";
 import Signup from "@pages/Signup";
+import CreateGroup from "@pages/CreateGroup";
 import Admin from "@pages/Admin";
 import Stats from "@pages/Stats";
 import Placeholder from "@pages/Placeholder";
@@ -25,6 +26,14 @@ const router = createBrowserRouter([
     element: (
       <RedirectHome>
         <Signup />
+      </RedirectHome>
+    ),
+  },
+  {
+    path: "/create-group",
+    element: (
+      <RedirectHome>
+        <CreateGroup />
       </RedirectHome>
     ),
   },

@@ -35,6 +35,7 @@ def get_all_users_stats(
     entries =  crud.get_all_users(db)
     for entry in entries:
         entry.beer_log = [log for log in entry.beer_log if log.timestamp > str(datetime.now() - timedelta(days=1))]
+        entry.beer_log.sort(key=lambda log: log.timestamp, reverse=True)
     return entries
 
 
