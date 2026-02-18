@@ -57,7 +57,7 @@ def create_user(data: UserCreate, db: Session = Depends(get_db)):
     return LoginResponse(user=UserResponse.model_validate(user), access_token=token)
 
 
-@router.put("/decrement", response_model=UserResponse)
+@router.put("/decrement", response_model=UserBeerResponse)
 def decrement_user_beer(
     current_user: models.Users = Depends(get_current_user),
     db: Session = Depends(get_db),

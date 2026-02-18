@@ -1,9 +1,9 @@
-import type { AdminStatsResponse } from "../../types";
+import type { UserResponse } from "../../types";
 const apiUrl =
   import.meta.env.VITE_BACKEND_SERVER_URL || "http://localhost:8000";
 
-const getAllStats = async (): Promise<AdminStatsResponse[]> => {
-  const response = await fetch(`${apiUrl}/admin/stats`, {
+const getUserBeerlog = async (): Promise<UserResponse[]> => {
+  const response = await fetch(`${apiUrl}/admin/getall`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -12,7 +12,7 @@ const getAllStats = async (): Promise<AdminStatsResponse[]> => {
   });
 
   if (!response.ok) {
-    throw new Error("Failed to fetch users");
+    throw new Error("Failed to fetch users. Server error");
   }
 
   const data = await response.json();
@@ -20,4 +20,4 @@ const getAllStats = async (): Promise<AdminStatsResponse[]> => {
   return data;
 };
 
-export default getAllStats;
+export default getUserBeerlog;

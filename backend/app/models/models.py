@@ -6,7 +6,7 @@ from ..db.database import Base
 
 
 class BeerLog(Base):
-    __tablename__ = "beer_logs"
+    __tablename__ = "beer_log"
     id = Column(
         String,
         primary_key=True,
@@ -16,12 +16,12 @@ class BeerLog(Base):
     )
     user_id = Column(String, ForeignKey("users.id"), index=True, nullable=False)
     timestamp = Column(String)
-    user = relationship("Users", foreign_keys=[user_id], back_populates="beer_logs")
+    user = relationship("Users", foreign_keys=[user_id], back_populates="beer_log")
 
 
 
 class Users(Base):
-    __tablename__ = "users"  # Table name in SQLite
+    __tablename__ = "users"  
     id = Column(
         String,
         primary_key=True,
@@ -36,4 +36,4 @@ class Users(Base):
     hashed_pin = Column(String, nullable=False)
     total_beers = Column(Integer, default=0)
 
-    beer_logs = relationship("BeerLog", back_populates="user")
+    beer_log = relationship("BeerLog", back_populates="user")

@@ -1,9 +1,9 @@
-import type { UserResponse } from "../../types";
+import type { UserBeersResponse } from "../../types";
 
 const apiUrl =
   import.meta.env.VITE_BACKEND_SERVER_URL || "http://localhost:8000";
 
-const decrementBeer = async (): Promise<UserResponse> => {
+const decrementBeer = async (): Promise<UserBeersResponse> => {
   const response = await fetch(`${apiUrl}/users/decrement`, {
     method: "PUT",
     headers: {
@@ -15,7 +15,7 @@ const decrementBeer = async (): Promise<UserResponse> => {
   if (!response.ok) throw new Error("Failed to decrement beer");
 
   const data = await response.json();
-  return data;
+  return data as UserBeersResponse;
 };
 
 export default decrementBeer;

@@ -1,3 +1,4 @@
+from datetime import datetime
 from pydantic import BaseModel, Field
 
 
@@ -24,12 +25,10 @@ class UserCreate(BaseModel):  # for POST / create
     pin: str = Field(..., pattern=r"^\d{6}$", description="Must be exactly 6 digits")
 
 
-class UserUpdate(BaseModel):
+
+class UserUpdateAdmin(BaseModel):
     id: str
-    phone_number: str = Field(
-        ..., pattern=r"^\d{10}$", description="Must be exactly 10 digits"
-    )
-    pin: str = Field(..., pattern=r"^\d{6}$", description="Must be exactly 6 digits")
+    beers: int = Field(..., ge=0, description="Number of beers must be non-negative")
 
 
 class UserResponse(BaseModel):  # for GET / response
@@ -45,13 +44,13 @@ class UserResponse(BaseModel):  # for GET / response
         from_attributes = True  # för att fungera med SQLAlchemy modeller
 
 
-class AdminStats(BaseModel):  # for GET / response
-    name: str = Field(..., min_length=3)
-    phone_number: str = Field(
-        ..., pattern=r"^\d{10}$", description="Must be exactly 10 digits"
-    )
-    admin: bool
-    total_beers: int
+
+class UserBeerResponse(BaseModel):  # for GET / response
+    id: str
+    beers: int
+
+    class Config:
+        from_attributes = True  # för att fungera med SQLAlchemy modeller
 
 
 class LoginResponse(BaseModel):
@@ -59,7 +58,27 @@ class LoginResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"
 
+    class Config:
+        from_attributes = True
 
-class UserUpdateAdmin(BaseModel):
+
+class BeerLogResponse(BaseModel):
     id: str
-    beers: int = Field(..., ge=0, description="Number of beers must be non-negative")
+    timestamp: str
+    user_id: str
+
+    class Config:
+        from_attributes = True
+
+
+class AdminStatsResponse(BaseModel):  # for GET / response
+    name: str = Field(..., min_length=3)
+    phone_number: str = Field(
+        ..., pattern=r"^\d{10}$", description="Must be exactly 10 digits"
+    )
+    admin: bool
+    total_beers: int
+    beer_log: list[BeerLogResponse] = []
+
+    class Config:
+        from_attributes = True

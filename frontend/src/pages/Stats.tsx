@@ -7,18 +7,18 @@ import {
   Legend,
   Tooltip,
 } from "recharts";
-import type { AdminStats } from "../types";
+import type { AdminStatsResponse } from "../types";
 import getAllStats from "../api/admin/get-all-stats-admin";
 import useApiCall from "@/hooks/useApiCall";
 
 export default function Stats() {
-  const [users, setUsers] = useState<AdminStats[]>([]);
+  const [users, setUsers] = useState<AdminStatsResponse[]>([]);
 
   const {
     error: errorStats,
     loading: loadingStats,
     execute: executeGetStats,
-  } = useApiCall<AdminStats[]>(3000);
+  } = useApiCall<AdminStatsResponse[]>(3000);
 
   useEffect(() => {
     loadUsers();
@@ -28,7 +28,8 @@ export default function Stats() {
     const userStats = await executeGetStats(() => getAllStats());
     if (userStats) {
       const sortedStats = userStats.sort(
-        (a: AdminStats, b: AdminStats) => b.total_beers - a.total_beers,
+        (a: AdminStatsResponse, b: AdminStatsResponse) =>
+          b.total_beers - a.total_beers,
       );
       setUsers(sortedStats);
     }
@@ -104,15 +105,8 @@ export default function Stats() {
           {users.map((user, index) => (
             <div
               key={user.id}
-              className={`flex items-center justify-between p-4 rounded-2xl border ${
-                index === 0
-                  ? "bg-amber-500/10 border-amber-500/50"
-                  : index === 1
-                    ? "bg-slate-300/10 border-slate-400/50"
-                    : index === 2
-                      ? "bg-orange-700/10 border-orange-700/50"
-                      : "bg-slate-900 border-slate-800"
-              }`}
+              className={`flex items-center justify-between p-4 rounded-2xl border border-slate-800 bg-slate-900`}
+              onClick={() => console.log(user)}
             >
               <div className="flex items-center gap-4">
                 <div className="w-8 flex justify-center text-lg font-bold text-slate-400">

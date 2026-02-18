@@ -1,4 +1,5 @@
 # backend/app/routers/competitors.py
+from datetime import timedelta
 from fastapi import APIRouter, Depends, HTTPException
 from app.crud import crud
 from sqlalchemy.orm import Session
@@ -22,7 +23,7 @@ def get_all_users(
     return crud.get_all_users(db)
 
 
-@router.get("/stats", response_model=List[AdminStats])
+@router.get("/stats", response_model=List[AdminStatsResponse])
 def get_all_users_stats(
     current_admin: models.Users = Depends(get_current_admin),
     db: Session = Depends(get_db),
@@ -31,7 +32,11 @@ def get_all_users_stats(
     Get all users for the stats page.
     Visible to all validated users (admins and regular users).
     """
-    return crud.get_all_users(db)
+    entries =  crud.get_all_users(db)
+    for entry in entries:
+        entry.beer_log = [log for log in entry.beer_log if log.timestamp > str(datetime.now() - timedelta(days=1))]
+    return entries
+
 
 
 @router.put("/setbeers", response_model=bool)

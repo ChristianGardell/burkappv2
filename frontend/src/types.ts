@@ -1,26 +1,42 @@
-// for POST / create
-export interface UserCreate {
-  name: string;
-  phone_number: string;
-  pin: string;
-}
-
 // for GET / response
 export interface UserResponse {
   id: string;
   beers: number;
-  total_beers: number;
   name: string;
   phone_number: string;
-  pin: string;
   admin: boolean;
-  accessed_token?: string;
+}
+
+export interface UserBeersResponse {
+  id: string;
+  beers: number;
 }
 
 export interface LoginResponse {
   user: UserResponse;
   access_token: string;
   token_type: string;
+}
+export interface BeerLogResponse {
+  id: string;
+  timestamp: string;
+  user_id: string;
+}
+
+export interface AdminStatsResponse {
+  id: string;
+  name: string;
+  admin: boolean;
+  total_beers: number;
+  beer_log: BeerLogResponse[];
+  
+}
+
+// for POST / create
+export interface UserCreate {
+  name: string;
+  phone_number: string;
+  pin: string;
 }
 
 export interface UserLogin {
@@ -35,10 +51,4 @@ export interface UserCheck {
 export interface UserUpdateAdmin {
   id: string;
   beers: number;
-}
-export interface AdminStats {
-  id: string;
-  name: string;
-  admin: boolean;
-  total_beers: number;
 }

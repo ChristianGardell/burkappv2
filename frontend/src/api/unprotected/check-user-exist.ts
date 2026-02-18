@@ -13,6 +13,7 @@ const checkUser = async (user: UserCheck): Promise<boolean> => {
     throw new Error("Server error while checking user existence");
 
   const data = await response.json();
+  console.log("User existence check result:", data);
   return data;
 };
 

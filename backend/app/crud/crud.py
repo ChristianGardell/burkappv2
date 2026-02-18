@@ -3,7 +3,7 @@
 
 import datetime
 from sqlalchemy.orm import Session
-
+from datetime import datetime
 from ..schemas.schemas import *
 from ..models.models import BeerLog, Users
 from ..core.security import get_pin_hash
@@ -63,7 +63,7 @@ def decrement_user_beer_one(db: Session, user_id: str) -> Users | None:
     if user.beers > 0:
         user.beers -= 1
         user.total_beers += 1
-        user.beer_logs.append(BeerLog(timestamp=str(datetime.datetime.now())))
+        user.beer_log.append(BeerLog(timestamp=str(datetime.now())))
 
     db.commit()
     db.refresh(user)
