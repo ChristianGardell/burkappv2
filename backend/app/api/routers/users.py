@@ -3,6 +3,9 @@ from fastapi import APIRouter, Depends, HTTPException
 from typing import List, Union
 from sqlalchemy.orm import Session
 
+from ...models import models
+from ..deps import get_current_user
+
 
 from ...crud import crud
 from ...db.database import get_db
@@ -19,13 +22,10 @@ router = APIRouter(prefix="/users", tags=["users"])
 
 @router.get("/me", response_model=UserResponse)
 def read_current_user(
-    user_id: str = Depends(extract_userid_from_token),
-    db: Session = Depends(get_db),
+    current_user: models.Users = Depends(get_current_user),
 ):
     """Get the current logged-in user."""
-    if user_id is None:
-        raise HTTPException(status_code=401, detail="Invalid token payload")
-    return crud.get_user_by_id(db, user_id=user_id)
+    return current_user
 
 
 @router.post("/check", response_model=bool)
@@ -59,13 +59,10 @@ def create_user(data: UserCreate, db: Session = Depends(get_db)):
 
 @router.put("/decrement", response_model=UserResponse)
 def decrement_user_beer(
-    user_id: str = Depends(extract_userid_from_token),
+    current_user: models.Users = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
     """Decrement a user's beer count by one."""
-    current_user = crud.get_user_by_id(db, user_id=user_id)
-    if not current_user:
-        raise HTTPException(status_code=404, detail="User not found")
     if current_user.beers <= 0:
         raise HTTPException(status_code=400, detail="No beers left to decrement")
     current_user = crud.decrement_user_beer_one(db, user_id=current_user.id)

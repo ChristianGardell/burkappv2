@@ -32,11 +32,3 @@ function useApiCall<T>(clearErrorAfterMs?: number) {
 }
 
 export default useApiCall;
-
-/* Usage example: Import and use the hook in a component 
-
-const { data: competitorData, error, loading, execute } = useApiCall<CompetitorOut[]>();
-
-Then call execute with the API function when needed:
-execute(() => fetchCompetitors());
-*/

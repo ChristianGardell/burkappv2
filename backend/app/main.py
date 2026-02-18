@@ -20,6 +20,7 @@ app = FastAPI()
 origins = [
     "http://localhost",
     "http://localhost:5173",
+    "http://192.168.0.208:5173",
     FRONTEND_SERVER_IP,
 ]
 

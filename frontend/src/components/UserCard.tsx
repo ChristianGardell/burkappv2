@@ -11,8 +11,11 @@ export default function UserCard({ user }: { user: UserResponse }) {
   const [currBeers, setCurrBeers] = useState<number>(user.beers);
   const [inputValue, setInputValue] = useState<string>("");
 
-  const { error: updateError, loading: updateLoading, execute: executeUpdateBeers } =
-    useApiCall<boolean>(3000);
+  const {
+    error: updateError,
+    loading: updateLoading,
+    execute: executeUpdateBeers,
+  } = useApiCall<boolean>(3000);
 
   // We compare against the current display value to determine if there are changes
   const oldValue: number = currBeers;
@@ -80,32 +83,40 @@ export default function UserCard({ user }: { user: UserResponse }) {
           {/* Edit Input Area */}
           <div className="flex flex-col items-end relative">
             <div className="flex items-center gap-3">
-              <input
-                inputMode="numeric"
-                pattern="[0-9]*"
-                min="0"
-                placeholder="Set"
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && handleSave()}
-                className="w-30 h-10 text-center text-3xl font-bold bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 tabular-nums placeholder:text-slate-600 transition-all p-0"
-              />
-              <Button
-                onClick={handleSave}
-                disabled={!hasChanges || updateLoading}
-                size="icon"
-                className={`h-10 w-10 shrink-0 transition-all duration-200 ${
-                  hasChanges
-                    ? "bg-emerald-500 text-white hover:bg-emerald-600 shadow-[0_0_15px_-3px_rgba(16,185,129,0.4)]"
-                    : "bg-slate-800 text-slate-500 hover:bg-slate-700 hover:text-slate-300"
-                }`}
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  handleSave();
+                }}
               >
-                {updateLoading ? (
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                ) : (
-                  <Save className="w-5 h-5" />
-                )}
-              </Button>
+                <input
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  min="0"
+                  placeholder="Set"
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && handleSave()}
+                  className="w-30 h-10 text-center text-3xl font-bold bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 tabular-nums placeholder:text-slate-600 transition-all p-0"
+                />
+                <Button
+                  type="submit"
+                  onClick={handleSave}
+                  disabled={!hasChanges || updateLoading}
+                  size="icon"
+                  className={`h-10 w-10 shrink-0 transition-all duration-200 ${
+                    hasChanges
+                      ? "bg-emerald-500 text-white hover:bg-emerald-600 shadow-[0_0_15px_-3px_rgba(16,185,129,0.4)]"
+                      : "bg-slate-800 text-slate-500 hover:bg-slate-700 hover:text-slate-300"
+                  }`}
+                >
+                  {updateLoading ? (
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                  ) : (
+                    <Save className="w-5 h-5" />
+                  )}
+                </Button>
+              </form>
             </div>
           </div>
         </div>

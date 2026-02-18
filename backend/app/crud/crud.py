@@ -1,10 +1,11 @@
 # Kommentar: CRUD står för Create, Read, Update, Delete och innehåller
 # funktioner för att interagera med databasen, som anropas från routrar.
 
+import datetime
 from sqlalchemy.orm import Session
 
 from ..schemas.schemas import *
-from ..models.models import Users
+from ..models.models import BeerLog, Users
 from ..core.security import get_pin_hash
 
 
@@ -62,6 +63,7 @@ def decrement_user_beer_one(db: Session, user_id: str) -> Users | None:
     if user.beers > 0:
         user.beers -= 1
         user.total_beers += 1
+        user.beer_logs.append(BeerLog(timestamp=str(datetime.datetime.now())))
 
     db.commit()
     db.refresh(user)

@@ -24,6 +24,14 @@ class UserCreate(BaseModel):  # for POST / create
     pin: str = Field(..., pattern=r"^\d{6}$", description="Must be exactly 6 digits")
 
 
+class UserUpdate(BaseModel):
+    id: str
+    phone_number: str = Field(
+        ..., pattern=r"^\d{10}$", description="Must be exactly 10 digits"
+    )
+    pin: str = Field(..., pattern=r"^\d{6}$", description="Must be exactly 6 digits")
+
+
 class UserResponse(BaseModel):  # for GET / response
     id: str
     beers: int
@@ -35,6 +43,7 @@ class UserResponse(BaseModel):  # for GET / response
 
     class Config:
         from_attributes = True  # för att fungera med SQLAlchemy modeller
+
 
 class AdminStats(BaseModel):  # for GET / response
     name: str = Field(..., min_length=3)
@@ -49,12 +58,6 @@ class LoginResponse(BaseModel):
     user: UserResponse
     access_token: str
     token_type: str = "bearer"
-
-
-class UserUpdate(BaseModel):
-    id: str
-    phone_number: str
-    pin: str
 
 
 class UserUpdateAdmin(BaseModel):

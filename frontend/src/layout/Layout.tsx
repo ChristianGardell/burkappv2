@@ -7,6 +7,7 @@ import {
   Shield,
   MoreHorizontal,
   Home as HomeIcon,
+  RefreshCcw,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -19,6 +20,9 @@ export default function Layout() {
     logout();
     navigate("/login", { replace: true });
   };
+  const handleRefresh = () => {
+    navigate(0);
+  }
 
   return (
     <div className="flex flex-col h-dvh overflow-hidden bg-slate-950 font-libre text-slate-200">
@@ -42,12 +46,15 @@ export default function Layout() {
           </div>
 
           {/* Right: Empty for balance */}
-          <div className="w-10">
-            {user?.admin && (
-              <div className="flex items-center justify-center bg-emerald-500/20 border border-emerald-500/50 rounded px-2 py-1">
-                <Shield className="w-4 h-4 text-emerald-400" />
-              </div>
-            )}
+          <div className="flex items-center">
+            <Button
+              onClick={handleRefresh}
+              variant="ghost"
+              size="icon"
+              className="text-slate-400 hover:text-white hover:bg-white/10"
+            >
+              <RefreshCcw className="w-5 h-5" />
+            </Button>
           </div>
         </div>
       </nav>
