@@ -5,10 +5,9 @@ import {
   LogOut,
   BarChart3,
   Shield,
-  MoreHorizontal,
   Home as HomeIcon,
   RefreshCcw,
-  Settings
+  Settings,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -82,7 +81,7 @@ export default function Layout() {
             <Button
               variant="ghost"
               className={cn(
-                "flex flex-col items-center gap-1 h-auto py-2 hover:bg-transparent",
+                "flex flex-col items-center gap-1 h-auto py-2 hover:bg-transparent flex-1",
                 location.pathname === "/stats"
                   ? "text-emerald-400"
                   : "text-slate-400",
@@ -96,7 +95,7 @@ export default function Layout() {
             <Button
               variant="ghost"
               className={cn(
-                "flex flex-col items-center gap-1 h-auto py-2 hover:bg-transparent",
+                "flex flex-col items-center gap-1 h-auto py-2 hover:bg-transparent flex-1",
                 location.pathname === "/admin"
                   ? "text-emerald-400"
                   : "text-slate-400",
@@ -107,25 +106,27 @@ export default function Layout() {
               <span className="text-[10px] font-medium">Admin</span>
             </Button>
 
-            <Button
-              variant="ghost"
-              className={cn(
-                "flex flex-col items-center gap-1 h-auto py-2 hover:bg-transparent",
-                location.pathname === "/settings"
-                  ? "text-emerald-400"
-                  : "text-slate-400",
-              )}
-              onClick={() => navigate("/settings")}
-            >
-              <Settings className="w-6 h-6" />
-              <span className="text-[10px] font-medium">Settings</span>
-            </Button>
+            {user?.owner && (
+              <Button
+                variant="ghost"
+                className={cn(
+                  "flex flex-col items-center gap-1 h-auto py-2 hover:bg-transparent flex-1",
+                  location.pathname === "/settings"
+                    ? "text-emerald-400"
+                    : "text-slate-400",
+                )}
+                onClick={() => navigate("/settings")}
+              >
+                <Settings className="w-6 h-6" />
+                <span className="text-[10px] font-medium">Settings</span>
+              </Button>
+            )}
 
             {/* Also keeping Home accessible for admins */}
             <Button
               variant="ghost"
               className={cn(
-                "flex flex-col items-center gap-1 h-auto py-2 hover:bg-transparent",
+                "flex flex-col items-center gap-1 h-auto py-2 hover:bg-transparent flex-1",
                 location.pathname === "/home"
                   ? "text-emerald-400"
                   : "text-slate-400",

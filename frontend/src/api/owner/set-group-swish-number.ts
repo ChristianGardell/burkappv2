@@ -1,9 +1,9 @@
-import type { SwishSetRequest, SwishSetResponse, UserUpdateAdmin } from "../../types";
+import type { SwishSetRequest, SwishSetResponse } from "../../types";
 const apiUrl =
   import.meta.env.VITE_BACKEND_SERVER_URL || "http://localhost:8000";
 
 const setGroupSwishNumber = async (
-  userUpdateAdmin: SwishSetRequest,
+  swishSetRequest: SwishSetRequest,
 ): Promise<SwishSetResponse> => {
 
     const response = await fetch(`${apiUrl}/owner/set-group-swish-number`, {
@@ -12,7 +12,7 @@ const setGroupSwishNumber = async (
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("access_token")}`,
       },
-      body: JSON.stringify(userUpdateAdmin),
+      body: JSON.stringify(swishSetRequest),
     });
     if (response.status === 422) {
       throw new Error("Invalid swish number");

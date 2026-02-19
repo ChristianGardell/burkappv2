@@ -1,15 +1,18 @@
-import type { LoginResponse, UserCreate } from "../../types";
+import type { LoginResponse, UserCreateRequest } from "../../types";
 const apiUrl =
   import.meta.env.VITE_BACKEND_SERVER_URL || "http://localhost:8000";
 
-const createUser = async (user: UserCreate): Promise<LoginResponse> => {
+const createUser = async (user: UserCreateRequest): Promise<LoginResponse> => {
   const response = await fetch(`${apiUrl}/users/create-user`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(user),
   });
-  if (response.status === 400) {
+  if (response.status === 409) {
     throw new Error("User already exists. Please log in.");
+  }
+    if (response.status === 404) {
+    throw new Error("Group with invite code does not exist. ");
   }
 
   if (!response.ok) {

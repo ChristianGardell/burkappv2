@@ -46,7 +46,7 @@ export default function Home() {
     }
   };
   return (
-    <div className="flex flex-col items-center justify-center max-w-md mx-auto w-full gap-8 py-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div className="flex flex-col items-center justify-center max-w-md mx-auto w-full gap-8 py-8 animate-in fade-in slide-in-from-bottom-4 duration-300">
       {/* Main Status Card */}
       <div
         className={`rounded-3xl p-6 shadow-xl w-full aspect-square justify-center border flex flex-col items-center text-center transition-all duration-300 ${

@@ -4,7 +4,11 @@ import { Loading } from "@/components/Loading";
 
 import { useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import type { UserCreate, UserLogin, LoginResponse } from "../types";
+import type {
+  UserCreateRequest,
+  UserLoginRequest,
+  LoginResponse,
+} from "../types";
 
 import createUser from "../api/unprotected/create-user";
 import { useAuth } from "../context/AuthContext";
@@ -15,7 +19,7 @@ export default function Signup() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const formData = location.state?.formData as UserLogin | undefined;
+  const formData = location.state?.formData as UserLoginRequest | undefined;
 
   const {
     error: signUpError,
@@ -27,7 +31,7 @@ export default function Signup() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<UserCreate>({
+  } = useForm<UserCreateRequest>({
     defaultValues: {
       invite_code: "",
       name: "",
@@ -35,7 +39,7 @@ export default function Signup() {
       pin: formData?.pin || "",
     },
   });
-  const onSubmit = async (data: UserCreate) => {
+  const onSubmit = async (data: UserCreateRequest) => {
     const user = await executeSignUp(() => createUser(data));
     if (user) {
       login(user.access_token, user.user);
@@ -61,7 +65,9 @@ export default function Signup() {
               )}
               {errors.pin?.message && <p>{errors.pin.message}</p>}
               {errors.name?.message && <p>{errors.name.message}</p>}
-              {errors.invite_code?.message && <p>{errors.invite_code.message}</p>}
+              {errors.invite_code?.message && (
+                <p>{errors.invite_code.message}</p>
+              )}
               <p>{signUpError}</p>
               <p></p>
             </div>

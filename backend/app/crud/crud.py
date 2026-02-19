@@ -15,7 +15,7 @@ def get_all_users(db: Session, group_id: str) -> list[Users]:
     return db.query(Users).filter_by(group_id=group_id).all()
 
 
-def update_user_beers(db: Session, userUpdate: UserUpdateAdmin) -> bool:
+def update_user_beers(db: Session, userUpdate: UserUpdateAdminRequest) -> bool:
     """Update a user's beer count."""
     user = db.query(Users).filter_by(id=userUpdate.id).first()
     if not user:
@@ -40,7 +40,16 @@ def get_user_by_phone_number(db: Session, phone_number: str) -> Users | None:
     return db.query(Users).filter_by(phone_number=phone_number).first()
 
 
-def create_user(db: Session, userCreate: UserCreate, group_id: str) -> Users:
+def get_user_by_phone_number_and_group_id(
+    db: Session, phone_number: str, group_id: str
+) -> Users | None:
+    """Get a user by their phone number."""
+    return (
+        db.query(Users).filter_by(phone_number=phone_number, group_id=group_id).first()
+    )
+
+
+def create_user(db: Session, userCreate: UserCreateRequest, group_id: str) -> Users:
     """Create a new user in the database."""
     entry = Users(
         name=userCreate.name,
@@ -68,7 +77,7 @@ def create_group(db: Session, group_name: str, invite_code: str) -> Groups:
 
 
 def create_user_and_new_group(
-    db: Session, groupCreate: GroupCreate, invite_code: str
+    db: Session, groupCreate: GroupCreateRequest, invite_code: str
 ) -> Users:
     """Create a new user and group in the database."""
     group = create_group(db, groupCreate.group_name, invite_code)
@@ -87,7 +96,6 @@ def create_user_and_new_group(
     return user_entry
 
 
-
 def decrement_user_beer_one(db: Session, user_id: str) -> Users | None:
     """Decrement a user's beer count by one."""
     user = db.query(Users).filter_by(id=user_id).first()
@@ -103,7 +111,9 @@ def decrement_user_beer_one(db: Session, user_id: str) -> Users | None:
     return user
 
 
-def set_group_swish_number(db: Session, group_id: str, swish_number: str) -> SwishSetResponse | None:
+def set_group_swish_number(
+    db: Session, group_id: str, swish_number: str
+) -> SwishSetResponse | None:
     """Set a group's swish number."""
     group = db.query(Groups).filter_by(id=group_id).first()
     if not group:
@@ -112,3 +122,25 @@ def set_group_swish_number(db: Session, group_id: str, swish_number: str) -> Swi
     db.commit()
     db.refresh(group)
     return SwishSetResponse(swish_number=group.swish_number)
+
+
+def make_user_admin(db: Session, user_id: str, group_id: str) -> Users | None:
+    """Set a user's admin status."""
+    user = db.query(Users).filter_by(id=user_id, group_id=group_id).first()
+    if not user:
+        return None
+    user.admin = True
+    db.commit()
+    db.refresh(user)
+    return user
+
+
+def remove_user_admin(db: Session, user_id: str, group_id: str) -> Users | None:
+    """Remove a user's admin status."""
+    user = db.query(Users).filter_by(id=user_id, group_id=group_id).first()
+    if not user:
+        return None
+    user.admin = False
+    db.commit()
+    db.refresh(user)
+    return user

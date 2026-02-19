@@ -58,7 +58,7 @@ export default function Admin() {
   }
 
   return (
-    <div className="flex flex-col gap-6 pb-24">
+    <div className="flex flex-col gap-6 pb-24 animate-in fade-in slide-in-from-bottom-4 duration-300">
       {/* <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold text-white">Admin Panel</h1>
         <Button onClick={loadUsers}>Refresh</Button>

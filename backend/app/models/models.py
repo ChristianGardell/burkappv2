@@ -43,7 +43,7 @@ class Users(Base):
     )
     beers = Column(Integer, default=0, nullable=False)
     name = Column(String, nullable=False)
-    phone_number = Column(String, index=True, nullable=False)
+    phone_number = Column(String, unique=True, index=True, nullable=False)
     admin = Column(Boolean, default=False, nullable=False)
     owner = Column(Boolean, default=False, nullable=False)
     group_id = Column(String, ForeignKey("groups.id"), index=True, nullable=False)

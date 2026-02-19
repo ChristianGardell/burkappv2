@@ -19,6 +19,7 @@ from ...services import user_service
 router = APIRouter(prefix="/users", tags=["users"])
 
 
+
 @router.get("/me", response_model=UserResponse)
 def read_current_user(
     current_user: models.Users = Depends(get_current_user),
@@ -28,7 +29,7 @@ def read_current_user(
 
 
 @router.post("/login", response_model=LoginResponse)
-def login_user(data: UserLogin, db: Session = Depends(get_db)):
+def login_user(data: UserLoginRequest, db: Session = Depends(get_db)):
     """Login a user by their phone number and pin."""
     user = crud.get_user_by_phone_number(db, phone_number=data.phone_number)
     if not user:
@@ -40,7 +41,7 @@ def login_user(data: UserLogin, db: Session = Depends(get_db)):
 
 
 @router.post("/create-user", response_model=LoginResponse)
-def create_user(data: UserCreate, db: Session = Depends(get_db)):
+def create_user(data: UserCreateRequest, db: Session = Depends(get_db)):
     """Create a new user in the database."""
 
     if crud.get_user_by_phone_number(db, phone_number=data.phone_number):
@@ -57,10 +58,13 @@ def create_user(data: UserCreate, db: Session = Depends(get_db)):
 
 
 @router.post("/create-group", response_model=LoginResponse)
-def create_group(data: GroupCreate, db: Session = Depends(get_db)):
+def create_group(data: GroupCreateRequest, db: Session = Depends(get_db)):
     """Create a new group in the database, add User and make user admin and owner."""
+    if crud.get_user_by_phone_number(db, phone_number=data.phone_number):
+        raise HTTPException(status_code=409, detail="User already exists")
     invite_code = user_service.generate_and_check_invite_code_is_unique(db)
-    user = crud.create_user_and_new_group(db, data, invite_code = invite_code)
+    print(invite_code)
+    user = crud.create_user_and_new_group(db, data, invite_code=invite_code)
     token = create_access_token({"sub": user.id, "group_id": user.group_id})
     return LoginResponse(user=UserResponse.model_validate(user), access_token=token)
 

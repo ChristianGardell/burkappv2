@@ -5,10 +5,10 @@ import { Loading } from "@/components/Loading";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import type {
-  UserCreate,
-  UserLogin,
+  UserCreateRequest,
+  UserLoginRequest,
   LoginResponse,
-  GroupCreate,
+  GroupCreateRequest,
 } from "../types";
 
 import createGroup from "../api/unprotected/create-group";
@@ -20,7 +20,7 @@ export default function CreateGroup() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const formData = location.state?.formData as UserLogin | undefined;
+  const formData = location.state?.formData as UserLoginRequest | undefined;
 
   const {
     error: createGroupError,
@@ -32,7 +32,7 @@ export default function CreateGroup() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<GroupCreate>({
+  } = useForm<GroupCreateRequest>({
     defaultValues: {
       phone_number: formData?.phone_number || "",
       pin: formData?.pin || "",
@@ -40,7 +40,7 @@ export default function CreateGroup() {
       group_name: "",
     },
   });
-  const onSubmit = async (data: GroupCreate) => {
+  const onSubmit = async (data: GroupCreateRequest) => {
     const user = await executeCreateGroup(() => createGroup(data));
     if (user) {
       login(user.access_token, user.user);

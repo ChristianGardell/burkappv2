@@ -10,6 +10,7 @@ from app.schemas.schemas import *
 
 router = APIRouter(prefix="/owner", tags=["owner"])
 
+
 @router.put("/set-group-swish-number", response_model=SwishSetResponse)
 def set_swish_number(
     data: SwishSetRequest,
@@ -22,17 +23,43 @@ def set_swish_number(
         raise HTTPException(status_code=400, detail="Failed to set swish number")
     return number
 
-@router.put("/make-admin", response_model=UserResponse)
+
+@router.put("/make-user-admin", response_model=UserResponse)
 def make_admin(
-    data: UserCheck,
+    data: AdminChangeRequest,
     current_owner: models.Users = Depends(get_current_owner),
     db: Session = Depends(get_db),
 ):
     """Make a user an admin"""
-    user = crud.get_user_by_phone_number(db, phone_number=data.phone_number)
+    user = crud.get_user_by_phone_number_and_group_id(
+        db, phone_number=data.phone_number, group_id=current_owner.group_id
+    )
+    print(user)
     if not user or user.group_id != current_owner.group_id:
         raise HTTPException(status_code=404, detail="User does not exist in your group")
-    user.admin = True
-    db.commit()
-    db.refresh(user)
-    return user
+    updated_user = crud.make_user_admin(
+        db, user_id=user.id, group_id=current_owner.group_id
+    )
+    return updated_user
+
+@router.put("/remove-user-admin", response_model=UserResponse)
+def remove_admin(
+    data: AdminChangeRequest,
+    current_owner: models.Users = Depends(get_current_owner),
+    db: Session = Depends(get_db),
+):
+    """Remove a user's admin status"""
+    user = crud.get_user_by_phone_number_and_group_id(
+        db, phone_number=data.phone_number, group_id=current_owner.group_id
+    )
+    if not user or user.group_id != current_owner.group_id:
+        raise HTTPException(status_code=404, detail="User does not exist in your group")
+    
+    if user.id == current_owner.id:
+        raise HTTPException(status_code=400, detail="You cannot remove your own admin status")
+
+    updated_user = crud.remove_user_admin(
+        db, user_id=user.id, group_id=current_owner.group_id
+    )
+    return updated_user
+

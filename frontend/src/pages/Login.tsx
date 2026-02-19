@@ -5,7 +5,7 @@ import { Loading } from "@/components/Loading";
 import { useNavigate, Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
-import type { UserLogin, LoginResponse } from "../types";
+import type { UserLoginRequest, LoginResponse } from "../types";
 
 import loginUser from "../api/unprotected/log-in";
 import { useAuth } from "../context/AuthContext";
@@ -25,9 +25,9 @@ export default function Login() {
     register: register,
     handleSubmit: handleSubmit,
     formState: { errors },
-  } = useForm<UserLogin>();
+  } = useForm<UserLoginRequest>();
 
-  const onSubmit = async (data: UserLogin) => {
+  const onSubmit = async (data: UserLoginRequest) => {
     const user = await executeLogin(() => loginUser(data));
     if (user) {
       login(user.access_token, user.user);

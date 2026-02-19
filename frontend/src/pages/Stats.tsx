@@ -56,7 +56,7 @@ export default function Stats() {
     );
 
   return (
-    <div className="flex flex-col gap-8 pb-24 animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div className="flex flex-col gap-8 pb-24 animate-in fade-in slide-in-from-bottom-4 duration-300">
       {/* Header */}
       <div className="text-center space-y-2">
         <h1 className="text-3xl font-bold text-white tracking-tight">Stats</h1>
