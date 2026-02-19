@@ -23,6 +23,7 @@ class Groups(Base):
         index=True,
         nullable=False,
     )
+    swish_number = Column(String, nullable=True)
     name = Column(String, nullable=False)
     invite_code = Column(String, unique=True, nullable=False)
     members = relationship(

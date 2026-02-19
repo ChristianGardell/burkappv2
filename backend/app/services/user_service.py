@@ -5,19 +5,19 @@ from ..crud import crud
 from ..db.database import get_db
 
 import random
-from nltk.corpus import words
+from wordfreq import top_n_list
 
 
-word_list = words.words()
+words = top_n_list("en", 10000)
 
 
 def generate_invite_code() -> str:
     """Generate a unique invite code."""
-    word1 = random.choice(word_list)
-    word2 = random.choice(word_list)
+    word1 = random.choice(words)
+    word2 = random.choice(words)
     while len(word1) > 9 or len(word2) > 9:
-        word1 = random.choice(word_list)
-        word2 = random.choice(word_list)
+        word1 = random.choice(words)
+        word2 = random.choice(words)
     number = random.randint(100, 999)
     return f"{word1}-{word2}-{number}"
 

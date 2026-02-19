@@ -1,7 +1,10 @@
 from datetime import datetime
 from pydantic import BaseModel, Field
 
-
+class SwishSetRequest(BaseModel):
+    swish_number: str = Field(
+        ..., pattern=r"^\d{10}$", description="Must be exactly 10 digits"
+    )
 class UserCheck(BaseModel):
     phone_number: str = Field(
         ..., pattern=r"^\d{10}$", description="Must be exactly 10 digits"
@@ -46,9 +49,15 @@ class UserUpdateAdmin(BaseModel):
     beers: int = Field(..., ge=0, description="Number of beers must be non-negative")
 
 
+class SwishSetResponse(BaseModel):
+    swish_number: str = Field(
+        ..., pattern=r"^\d{10}$", description="Must be exactly 10 digits"
+    )
 class groupResponse(BaseModel):
     id: str
     name: str
+    swish_number: str | None
+    invite_code: str
 
     class Config:
         from_attributes = True  # för att fungera med SQLAlchemy modeller

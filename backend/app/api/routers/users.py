@@ -27,13 +27,6 @@ def read_current_user(
     return current_user
 
 
-@router.post("/check", response_model=bool)
-def read_user_check_phone_number(data: UserCheck, db: Session = Depends(get_db)):
-    """Check if a user exists by their phone number."""
-    entry = crud.get_user_by_phone_number(db, data.phone_number)
-    return entry is not None
-
-
 @router.post("/login", response_model=LoginResponse)
 def login_user(data: UserLogin, db: Session = Depends(get_db)):
     """Login a user by their phone number and pin."""
@@ -42,7 +35,7 @@ def login_user(data: UserLogin, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="User does not exist")
     if not verify_pin(data.pin, user.hashed_pin):
         raise HTTPException(status_code=401, detail="Incorrect PIN")
-    token = create_access_token({"sub": user.id})
+    token = create_access_token({"sub": user.id, "group_id": user.group_id})
     return LoginResponse(user=UserResponse.model_validate(user), access_token=token)
 
 
@@ -59,7 +52,7 @@ def create_user(data: UserCreate, db: Session = Depends(get_db)):
         )
 
     user = crud.create_user(db, data, group_id=group.id)
-    token = create_access_token({"sub": user.id})
+    token = create_access_token({"sub": user.id, "group_id": user.group_id})
     return LoginResponse(user=UserResponse.model_validate(user), access_token=token)
 
 
@@ -68,7 +61,7 @@ def create_group(data: GroupCreate, db: Session = Depends(get_db)):
     """Create a new group in the database, add User and make user admin and owner."""
     invite_code = user_service.generate_and_check_invite_code_is_unique(db)
     user = crud.create_user_and_new_group(db, data, invite_code = invite_code)
-    token = create_access_token({"sub": user.id})
+    token = create_access_token({"sub": user.id, "group_id": user.group_id})
     return LoginResponse(user=UserResponse.model_validate(user), access_token=token)
 
 

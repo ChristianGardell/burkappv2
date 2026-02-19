@@ -22,6 +22,13 @@ export default function UserCard({ user }: { user: UserResponse }) {
   // We compare against the current display value to determine if there are changes
   const oldValue: number = currBeers;
 
+
+  const makeBlur = () => {
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+  };
+
   const inputValueAsNumber: number = isNaN(parseInt(inputValue))
     ? oldValue
     : Math.max(0, parseInt(inputValue));
@@ -88,6 +95,7 @@ export default function UserCard({ user }: { user: UserResponse }) {
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
+                  makeBlur();
                   handleSave();
                 }}
               >
@@ -99,12 +107,10 @@ export default function UserCard({ user }: { user: UserResponse }) {
                   placeholder="Set"
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && handleSave()}
                   className="w-30 h-10 text-center text-3xl font-bold bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 tabular-nums placeholder:text-slate-600 transition-all p-0"
                 />
                 <Button
                   type="submit"
-                  onClick={handleSave}
                   disabled={!hasChanges || updateLoading}
                   size="icon"
                   className={`h-10 w-10 shrink-0 transition-all duration-200 ${

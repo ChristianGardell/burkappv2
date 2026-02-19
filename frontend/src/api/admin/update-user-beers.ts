@@ -5,7 +5,6 @@ const apiUrl =
 const updateUserBeers = async (
   userUpdateAdmin: UserUpdateAdmin,
 ): Promise<boolean> => {
-  try {
     const response = await fetch(`${apiUrl}/admin/setbeers`, {
       method: "PUT",
       headers: {
@@ -20,10 +19,6 @@ const updateUserBeers = async (
     }
 
     return true;
-  } catch (err) {
-    console.error(err);
-    throw err;
-  }
 };
 
 export default updateUserBeers;

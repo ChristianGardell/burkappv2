@@ -32,3 +32,13 @@ def get_current_admin(
             detail="Not authorized to access this resource"
         )
     return current_user
+
+def get_current_owner(
+        current_user: models.Users = Depends(get_current_user)
+) -> models.Users:
+    if not current_user.owner:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Not authorized to access this resource"
+        )
+    return current_user

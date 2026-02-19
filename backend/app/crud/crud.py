@@ -10,9 +10,9 @@ from ..models.models import BeerLog, Users, Groups
 from ..core.security import get_pin_hash
 
 
-def get_all_users(db: Session) -> list[Users]:
+def get_all_users(db: Session, group_id: str) -> list[Users]:
     """Get all users from db."""
-    return db.query(Users).all()
+    return db.query(Users).filter_by(group_id=group_id).all()
 
 
 def update_user_beers(db: Session, userUpdate: UserUpdateAdmin) -> bool:
@@ -24,10 +24,6 @@ def update_user_beers(db: Session, userUpdate: UserUpdateAdmin) -> bool:
     db.commit()
     db.refresh(user)
     return True
-
-
-def get_group_by_name(db: Session, group_name: str) -> Groups | None:
-    return db.query(Groups).filter_by(name=group_name).first()
 
 
 def get_group_by_invite_code(db: Session, invite_code: str) -> Groups | None:
@@ -105,3 +101,14 @@ def decrement_user_beer_one(db: Session, user_id: str) -> Users | None:
     db.commit()
     db.refresh(user)
     return user
+
+
+def set_group_swish_number(db: Session, group_id: str, swish_number: str) -> SwishSetResponse | None:
+    """Set a group's swish number."""
+    group = db.query(Groups).filter_by(id=group_id).first()
+    if not group:
+        return None
+    group.swish_number = swish_number
+    db.commit()
+    db.refresh(group)
+    return SwishSetResponse(swish_number=group.swish_number)

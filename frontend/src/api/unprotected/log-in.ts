@@ -12,7 +12,7 @@ const loginUser = async (user: UserLogin): Promise<LoginResponse> => {
     throw new Error("Incorrect PIN");
   }
   if (response.status === 404) {
-    throw new Error("Should not be possible through UI");
+    throw new Error("Incorrect phone number");
   }
   if (!response.ok) {
     const error = new Error("Server error") as any;

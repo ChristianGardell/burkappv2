@@ -40,7 +40,7 @@ def create_access_token(data: dict, expires_delta: int | None = None) -> str:
 def extract_userid_from_token(
     credentials: HTTPAuthorizationCredentials = Depends(security),
 ) -> str:
-    """Decode token."""
+    """Decode token for id."""
     token = credentials.credentials
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
@@ -56,3 +56,23 @@ def extract_userid_from_token(
         )
 
     return user_id
+
+def extract_groupid_from_token(
+    credentials: HTTPAuthorizationCredentials = Depends(security),
+) -> str:
+    """Decode token for group_id."""
+    token = credentials.credentials
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        group_id: str = payload.get("group_id")
+        if group_id is None:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token payload"
+            )
+    except (JWTError, ValueError):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Could not validate credentials",
+        )
+
+    return group_id

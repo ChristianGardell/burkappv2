@@ -20,7 +20,7 @@ def get_all_users(
     current_admin: models.Users = Depends(get_current_admin),
     db: Session = Depends(get_db),
 ):
-    return crud.get_all_users(db)
+    return crud.get_all_users(db, current_admin.group_id)
 
 
 @router.get("/stats", response_model=List[AdminStatsResponse])
@@ -32,7 +32,7 @@ def get_all_users_stats(
     Get all users for the stats page.
     Visible to all validated users (admins and regular users).
     """
-    entries =  crud.get_all_users(db)
+    entries =  crud.get_all_users(db, current_admin.group_id)
     for entry in entries:
         entry.beer_log = [log for log in entry.beer_log if log.timestamp > str(datetime.now() - timedelta(days=1))]
         entry.beer_log.sort(key=lambda log: log.timestamp, reverse=True)

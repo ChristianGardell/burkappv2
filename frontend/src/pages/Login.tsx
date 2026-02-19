@@ -1,13 +1,12 @@
 import { Button } from "@/components/ui/button";
-import { LogIn, Smartphone, Lock } from "lucide-react";
+import { LogIn, Smartphone, Lock, Loader2 } from "lucide-react";
 import { Loading } from "@/components/Loading";
 
 import { useNavigate, Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
-import type { UserLogin, LoginResponse, UserCheck } from "../types";
+import type { UserLogin, LoginResponse } from "../types";
 
-import checkUser from "../api/unprotected/check-user-exist";
 import loginUser from "../api/unprotected/log-in";
 import { useAuth } from "../context/AuthContext";
 import useApiCall from "../hooks/useApiCall";
@@ -15,12 +14,6 @@ import useApiCall from "../hooks/useApiCall";
 export default function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
-
-  const {
-    error: userExistsError,
-    loading: userExistsLoading,
-    execute: executeUserExists,
-  } = useApiCall<boolean>(3000);
 
   const {
     loading: loginLoading,
@@ -35,26 +28,13 @@ export default function Login() {
   } = useForm<UserLogin>();
 
   const onSubmit = async (data: UserLogin) => {
-    const checkData: UserCheck = { phone_number: data.phone_number };
-    const exists = await executeUserExists(() => checkUser(checkData));
-    if (exists) {
-      const loginData: UserLogin = {
-        phone_number: data.phone_number,
-        pin: data.pin,
-      };
-      const user = await executeLogin(() => loginUser(loginData));
-      if (user) {
-        login(user.access_token, user.user);
-        navigate("/home", { state: { user: user.user } });
-      }
-    } else {
-      navigate("/signup", { state: { formData: data } });
+    const user = await executeLogin(() => loginUser(data));
+    if (user) {
+      login(user.access_token, user.user);
+      navigate("/home", { state: { user: user.user } });
     }
   };
 
-  if (userExistsLoading || loginLoading) {
-    return <Loading />;
-  }
   return (
     <div className="flex flex-col h-dvh overflow-hidden bg-slate-950 font-libre text-slate-200">
       <main className="flex-1 flex flex-col items-center justify-center p-4">
@@ -78,7 +58,7 @@ export default function Login() {
               <div className="space-y-4">
                 <div className="space-y-2">
                   {loginError && <p>{loginError}</p>}
-                  {userExistsError && <p>{userExistsError}</p>}
+                  {/* {userExistsError && <p>{userExistsError}</p>} */}
                   <label className="text-xs font-semibold uppercase tracking-wider text-slate-500 ml-1">
                     Phone Number
                   </label>
@@ -131,16 +111,33 @@ export default function Login() {
               </div>
 
               <Button
+                disabled={loginLoading}
                 type="submit"
                 className="w-full h-14 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-900/20 text-lg font-bold gap-2"
               >
-                <LogIn className="w-5 h-5" />
+                {loginLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  </>
+                ) : (
+                  <LogIn className="w-5 h-5" />
+                )}
                 Log In
               </Button>
+
+              <Link to="/signup" className="block w-full">
+                <Button
+                  variant="outline"
+                  type="button"
+                  className="w-full h-14 rounded-2xl border-slate-700 bg-transparent text-slate-300 hover:bg-slate-800 hover:text-white font-bold"
+                >
+                  Join via Invite Code
+                </Button>
+              </Link>
             </div>
           </form>
 
-          <div className="pt-24 flex justify-center">
+          <div className="pt-10 flex justify-center">
             <Link to="/create-group" className="btn-style">
               <Button
                 className="bg-transparent hover:bg-transparent text-slate-600 hover:text-slate-400 text-sm font-medium underline underline-offset-4 shadow-none border-none h-auto w-auto"

@@ -2,6 +2,12 @@
 export interface GroupResponse {
   id: string;
   name: string;
+  swish_number: string | null;
+  invite_code: string;
+}
+
+export interface SwishSetResponse {
+  swish_number: string;
 }
 
 
@@ -12,6 +18,7 @@ export interface UserResponse {
   name: string;
   phone_number: string;
   admin: boolean;
+  owner: boolean;
   group: GroupResponse;
   
 }
@@ -42,6 +49,10 @@ export interface AdminStatsResponse {
 }
 
 // for POST / create
+
+export interface SwishSetRequest {
+  swish_number: string;
+}
 
 export interface GroupCreate {
   name: string;

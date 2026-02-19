@@ -8,6 +8,7 @@ from .models import models
 from .db.database import SessionLocal, engine
 from .api.routers import users
 from .api.routers import admin
+from .api.routers import owner
 from .crud import crud
 
 
@@ -34,8 +35,8 @@ app.add_middleware(
 
 # Include Routers
 app.include_router(users.router)
-
 app.include_router(admin.router)
+app.include_router(owner.router)
 
 if os.getenv("ENV") == "dev":
     db = SessionLocal()

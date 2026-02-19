@@ -8,6 +8,7 @@ import {
   MoreHorizontal,
   Home as HomeIcon,
   RefreshCcw,
+  Settings
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -110,14 +111,14 @@ export default function Layout() {
               variant="ghost"
               className={cn(
                 "flex flex-col items-center gap-1 h-auto py-2 hover:bg-transparent",
-                location.pathname === "/placeholder"
+                location.pathname === "/settings"
                   ? "text-emerald-400"
                   : "text-slate-400",
               )}
-              onClick={() => navigate("/placeholder")}
+              onClick={() => navigate("/settings")}
             >
-              <MoreHorizontal className="w-6 h-6" />
-              <span className="text-[10px] font-medium">More</span>
+              <Settings className="w-6 h-6" />
+              <span className="text-[10px] font-medium">Settings</span>
             </Button>
 
             {/* Also keeping Home accessible for admins */}
