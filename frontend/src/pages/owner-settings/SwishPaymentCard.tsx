@@ -1,4 +1,3 @@
-
 import { CreditCard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import useApiCall from "@/hooks/useApiCall";
@@ -6,7 +5,6 @@ import setGroupSwishNumber from "@/api/owner/set-group-swish-number";
 import { useState } from "react";
 import type { SwishSetRequest, SwishSetResponse } from "@/types";
 import ErrorDisplay from "@/components/errorDisplay";
-
 
 export function SwishPaymentCard({
   currentSwishNumber,
@@ -67,7 +65,7 @@ export function SwishPaymentCard({
         </div>
 
         <div className="space-y-2">
-          <ErrorDisplay error={swishError || formError}  />
+          <ErrorDisplay error={swishError || formError} />
           <label className="text-xs font-bold text-slate-500 uppercase tracking-wider ml-1"></label>
           <input
             type="tel"
@@ -89,7 +87,7 @@ export function SwishPaymentCard({
 
         <p className="text-[10px] text-emerald-400 ml-1 italic text-center">
           Current:{" "}
-          {swishNumberVisual
+          {swishNumberVisual && swishNumberVisual.length === 10
             ? `${swishNumberVisual.slice(0, 3)}-${swishNumberVisual.slice(3, 6)}-${swishNumberVisual.slice(6, 8)}-${swishNumberVisual.slice(8, 10)}`
             : "Not Set"}
         </p>

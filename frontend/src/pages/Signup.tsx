@@ -2,6 +2,8 @@ import { Button } from "@/components/ui/button";
 import { LogIn, Smartphone, Lock, User, Code } from "lucide-react";
 import { Loading } from "@/components/Loading";
 
+import ErrorDisplay from "@/components/errorDisplay";
+
 import { useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import type {
@@ -60,16 +62,21 @@ export default function Signup() {
               BurkApp{" "}
             </h1>
             <div className="min-h-10 text-sm text-rose-400">
-              {errors.phone_number?.message && (
-                <p>{errors.phone_number.message}</p>
-              )}
-              {errors.pin?.message && <p>{errors.pin.message}</p>}
-              {errors.name?.message && <p>{errors.name.message}</p>}
-              {errors.invite_code?.message && (
-                <p>{errors.invite_code.message}</p>
-              )}
-              <p>{signUpError}</p>
-              <p></p>
+              {signUpError ||
+              errors.invite_code?.message ||
+              errors.phone_number?.message ||
+              errors.pin?.message ||
+              errors.name?.message ? (
+                <ErrorDisplay
+                  error={
+                    signUpError ||
+                    errors.invite_code?.message ||
+                    errors.phone_number?.message ||
+                    errors.pin?.message ||
+                    errors.name?.message
+                  }
+                />
+              ) : null}
             </div>
           </div>
 

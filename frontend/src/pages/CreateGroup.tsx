@@ -2,10 +2,11 @@ import { Button } from "@/components/ui/button";
 import { LogIn, Smartphone, Lock, User, Users } from "lucide-react";
 import { Loading } from "@/components/Loading";
 
+import ErrorDisplay from "@/components/errorDisplay";
+
 import { useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import type {
-  UserCreateRequest,
   UserLoginRequest,
   LoginResponse,
   GroupCreateRequest,
@@ -61,13 +62,22 @@ export default function CreateGroup() {
               BurkApp{" "}
             </h1>
             <div className="min-h-10 text-sm text-rose-400">
-              {errors.phone_number?.message && (
-                <p>{errors.phone_number.message}</p>
-              )}
-              {errors.pin?.message && <p>{errors.pin.message}</p>}
-              {errors.name?.message && <p>{errors.name.message}</p>}
-              {errors.group_name?.message && <p>{errors.group_name.message}</p>}
-              <p>{createGroupError}</p>
+              {createGroupError ||
+              errors.group_name?.message ||
+              errors.name?.message ||
+              errors.phone_number?.message ||
+              errors.pin?.message ? (
+                <ErrorDisplay
+                  error={
+                    createGroupError ||
+                    errors.group_name?.message ||
+                    errors.name?.message ||
+                    errors.phone_number?.message ||
+                    errors.pin?.message
+                  }
+                />
+              ) : null}
+
               <p></p>
             </div>
           </div>

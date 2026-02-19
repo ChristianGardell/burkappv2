@@ -97,6 +97,7 @@ export default function Stats() {
             </PieChart>
           </ResponsiveContainer>
         </div>
+        <h1 className="text-center text-white font-bold">Total Beers Consumed: {adminTotal + userTotal}</h1>
       </div>
 
       {/* Ranking List */}
