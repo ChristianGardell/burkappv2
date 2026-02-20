@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import decrementBeer from "../api/user/decrement-beer";
 import useApiCall from "@/hooks/useApiCall";
-import {type UserBeersResponse } from "@/types";
+import {type UserBeerResponse } from "@/types";
 
 export default function Home() {
   const [disableDrinkButton, setDisableDrinkButton] = useState<boolean>(false);
@@ -16,7 +16,7 @@ export default function Home() {
     // loading: buyBeerLoading,
     error: buyBeerError,
     execute: executeBuyBeer,
-  } = useApiCall<UserBeersResponse>(3000);
+  } = useApiCall<UserBeerResponse>(3000);
 
   const disableButton = () => {
     setDisableDrinkButton(true);

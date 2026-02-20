@@ -75,6 +75,7 @@ export interface BeerLogResponse {
 }
 
 export interface AdminStatsResponse {
+  id:  string;
   name: string;
   phone_number: string;
   admin: boolean;

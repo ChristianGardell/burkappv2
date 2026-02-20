@@ -120,6 +120,7 @@ class BeerLogResponse(BaseModel):
 
 
 class AdminStatsResponse(BaseModel):
+    id: str
     name: str = Field(..., min_length=3)
     phone_number: str = Field(
         ..., pattern=r"^\d{10}$", description="Must be exactly 10 digits"

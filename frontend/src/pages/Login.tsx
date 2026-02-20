@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { LogIn, Smartphone, Lock, Loader2 } from "lucide-react";
-import { Loading } from "@/components/Loading";
 import ErrorDisplay from "@/components/errorDisplay";
 
 import { useNavigate, Link } from "react-router-dom";
@@ -46,11 +45,14 @@ export default function Login() {
               BurkApp{" "}
             </h1>
             <div className="min-h-10 text-sm text-rose-400">
-              {(loginError || errors.phone_number?.message || errors.pin?.message) ? (
-                <ErrorDisplay error={loginError || errors.phone_number?.message || errors.pin?.message} />
-              ) : null}
-       
-      
+              <ErrorDisplay
+                error={
+                  loginError ??
+                  errors.phone_number?.message ??
+                  errors.pin?.message ??
+                  null
+                }
+              />
             </div>
           </div>
 
@@ -59,7 +61,6 @@ export default function Login() {
             <div className="bg-slate-900 rounded-3xl p-8 shadow-xl shadow-slate-900/50 w-full border border-slate-800 space-y-6">
               <div className="space-y-4">
                 <div className="space-y-2">
-           
                   {/* {userExistsError && <p>{userExistsError}</p>} */}
                   <label className="text-xs font-semibold uppercase tracking-wider text-slate-500 ml-1">
                     Phone Number

@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 import swishLogo from "@/assets/swish.svg"; // Import the local SVG
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 
 const pricePerBeer = Number(import.meta.env.VITE_PRICE_PER_BEER);

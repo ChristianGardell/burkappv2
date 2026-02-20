@@ -62,21 +62,16 @@ export default function CreateGroup() {
               BurkApp{" "}
             </h1>
             <div className="min-h-10 text-sm text-rose-400">
-              {createGroupError ||
-              errors.group_name?.message ||
-              errors.name?.message ||
-              errors.phone_number?.message ||
-              errors.pin?.message ? (
-                <ErrorDisplay
-                  error={
-                    createGroupError ||
-                    errors.group_name?.message ||
-                    errors.name?.message ||
-                    errors.phone_number?.message ||
-                    errors.pin?.message
-                  }
-                />
-              ) : null}
+              <ErrorDisplay
+                error={
+                  createGroupError ??
+                  errors.group_name?.message ??
+                  errors.name?.message ??
+                  errors.phone_number?.message ??
+                  errors.pin?.message ??
+                  null
+                }
+              />
 
               <p></p>
             </div>

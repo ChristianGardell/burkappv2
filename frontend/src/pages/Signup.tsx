@@ -62,21 +62,16 @@ export default function Signup() {
               BurkApp{" "}
             </h1>
             <div className="min-h-10 text-sm text-rose-400">
-              {signUpError ||
-              errors.invite_code?.message ||
-              errors.phone_number?.message ||
-              errors.pin?.message ||
-              errors.name?.message ? (
-                <ErrorDisplay
-                  error={
-                    signUpError ||
-                    errors.invite_code?.message ||
-                    errors.phone_number?.message ||
-                    errors.pin?.message ||
-                    errors.name?.message
-                  }
-                />
-              ) : null}
+              <ErrorDisplay
+                error={
+                  signUpError ??
+                  errors.invite_code?.message ??
+                  errors.phone_number?.message ??
+                  errors.pin?.message ??
+                  errors.name?.message ??
+                  null
+                }
+              />
             </div>
           </div>
 
