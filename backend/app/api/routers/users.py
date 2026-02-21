@@ -1,6 +1,8 @@
 # backend/app/routers/competitors.py
-from fastapi import APIRouter, Depends, HTTPException
-from typing import List, Union
+from fastapi import APIRouter, Depends, HTTPException, Request
+from slowapi.errors import RateLimitExceeded
+
+from ...utils.limiter import ip_limiter, phone_limiter
 from sqlalchemy.orm import Session
 
 from ...models import models
@@ -19,7 +21,6 @@ from ...services import user_service
 router = APIRouter(prefix="/users", tags=["users"])
 
 
-
 @router.get("/me", response_model=UserResponse)
 def read_current_user(
     current_user: models.Users = Depends(get_current_user),
@@ -29,7 +30,11 @@ def read_current_user(
 
 
 @router.post("/login", response_model=LoginResponse)
-def login_user(data: UserLoginRequest, db: Session = Depends(get_db)):
+@phone_limiter .limit("7/minute")
+@ip_limiter.limit("50/minute")
+async def login_user(
+    request: Request, data: UserLoginRequest, db: Session = Depends(get_db)
+):
     """Login a user by their phone number and pin."""
     user = crud.get_user_by_phone_number(db, phone_number=data.phone_number)
     if not user:
@@ -41,7 +46,11 @@ def login_user(data: UserLoginRequest, db: Session = Depends(get_db)):
 
 
 @router.post("/create-user", response_model=LoginResponse)
-def create_user(data: UserCreateRequest, db: Session = Depends(get_db)):
+@phone_limiter.limit("10/minute")
+@ip_limiter.limit("50/minute")
+def create_user(
+    request: Request, data: UserCreateRequest, db: Session = Depends(get_db)
+):
     """Create a new user in the database."""
 
     if crud.get_user_by_phone_number(db, phone_number=data.phone_number):
@@ -58,7 +67,11 @@ def create_user(data: UserCreateRequest, db: Session = Depends(get_db)):
 
 
 @router.post("/create-group", response_model=LoginResponse)
-def create_group(data: GroupCreateRequest, db: Session = Depends(get_db)):
+@phone_limiter.limit("10/minute")
+@ip_limiter.limit("50/minute")
+def create_group(
+    request: Request, data: GroupCreateRequest, db: Session = Depends(get_db)
+):
     """Create a new group in the database, add User and make user admin and owner."""
     if crud.get_user_by_phone_number(db, phone_number=data.phone_number):
         raise HTTPException(status_code=409, detail="User already exists")

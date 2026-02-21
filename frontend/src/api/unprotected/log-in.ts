@@ -14,6 +14,9 @@ const loginUser = async (user: UserLoginRequest): Promise<LoginResponse> => {
   if (response.status === 404) {
     throw new Error("Incorrect phone number");
   }
+  if (response.status === 429) {
+    throw new Error("Too many requests, try again later")
+  }
   if (!response.ok) {
     const error = new Error("Server error") as any;
     error.status = response.status;
