@@ -1,4 +1,4 @@
-import type { AdminChangeRequest, GroupNameChangeRequest, GroupResponse, UserResponse } from "../../types";
+import type { GroupNameChangeRequest, GroupResponse } from "../../types";
 const apiUrl =
   import.meta.env.VITE_BACKEND_SERVER_URL || "http://localhost:8000";
 

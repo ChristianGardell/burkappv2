@@ -38,7 +38,7 @@ export function ChangeNameCard() {
         </div>
 
         <div className="space-y-2">
-          {/* <ErrorDisplay error={swishError || formError} /> */}
+          {changeNameError && <ErrorDisplay error={changeNameError} />}
           <label className="text-xs font-bold text-slate-500 uppercase tracking-wider ml-1"></label>
           <input
             type="text"
@@ -57,13 +57,6 @@ export function ChangeNameCard() {
         >
           Set Group Name
         </Button>
-
-        {/* <p className="text-[10px] text-emerald-400 ml-1 italic text-center">
-          Current:{" "}
-          {swishNumberVisual && swishNumberVisual.length === 10
-            ? `${swishNumberVisual.slice(0, 3)}-${swishNumberVisual.slice(3, 6)}-${swishNumberVisual.slice(6, 8)}-${swishNumberVisual.slice(8, 10)}`
-            : "Not Set"}
-        </p> */}
       </div>
     </form>
   );
