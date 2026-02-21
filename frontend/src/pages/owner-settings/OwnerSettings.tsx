@@ -1,7 +1,7 @@
 import { SwishPaymentCard } from "./SwishPaymentCard";
 import { AdminManagementCard } from "./AdminManagementCard";
+import { ChangeNameCard } from "./ChangeNameCard";
 import { useAuth } from "@/context/AuthContext";
-
 
 export default function OwnerSettings() {
   const { user } = useAuth();
@@ -28,6 +28,9 @@ export default function OwnerSettings() {
       {/* Swish Payment Section */}
 
       <SwishPaymentCard currentSwishNumber={user.group?.swish_number || ""} />
+
+      {/* Change Group Name Section */}
+      <ChangeNameCard />
     </div>
   );
 }

@@ -23,7 +23,7 @@ class UserCreateRequest(BaseModel):
     pin: str = Field(..., pattern=r"^\d{6}$", description="Must be exactly 6 digits")
 
 
-# --- Group & Admin Input ---
+# --- Admin Input ---
 
 
 class GroupCreateRequest(BaseModel):
@@ -42,6 +42,21 @@ class GroupCreateRequest(BaseModel):
     pin: str = Field(..., pattern=r"^\d{6}$", description="Must be exactly 6 digits")
 
 
+class UserUpdateAdminRequest(BaseModel):
+    id: str
+    beers: int = Field(..., ge=0, description="Number of beers must be non-negative")
+
+
+# --- Owner Input ---
+class GroupNameChangeRequest(BaseModel):
+    name: str = Field(
+        ...,
+        min_length=3,
+        max_length=20,
+        description="Group name must be at least 3 characters and no more than 20 characters",
+    )
+
+
 class SwishSetRequest(BaseModel):
     swish_number: str = Field(
         ..., pattern=r"^\d{10}$", description="Must be exactly 10 digits"
@@ -52,11 +67,6 @@ class AdminChangeRequest(BaseModel):
     phone_number: str = Field(
         ..., pattern=r"^\d{10}$", description="Must be exactly 10 digits"
     )
-
-
-class UserUpdateAdminRequest(BaseModel):
-    id: str
-    beers: int = Field(..., ge=0, description="Number of beers must be non-negative")
 
 
 # --- Responses ---

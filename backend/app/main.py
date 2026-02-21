@@ -43,7 +43,6 @@ origins = [
 ]
 
 
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -91,8 +90,6 @@ async def log_with_user_agent(request: Request, call_next):
 app.include_router(users.router)
 app.include_router(admin.router)
 app.include_router(owner.router)
-
-
 
 
 if os.getenv("ENV") == "dev":

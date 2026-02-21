@@ -5,6 +5,7 @@ import setGroupSwishNumber from "@/api/owner/set-group-swish-number";
 import { useState } from "react";
 import type { SwishSetRequest, SwishSetResponse } from "@/types";
 import ErrorDisplay from "@/components/errorDisplay";
+import { makeBlur, phoneInputValidations } from "../../lib/utils";
 
 export function SwishPaymentCard({
   currentSwishNumber,
@@ -20,18 +21,6 @@ export function SwishPaymentCard({
 
   const { error: swishError, execute: executeSetSwishNumber } =
     useApiCall<SwishSetResponse>(3000);
-
-  const makeBlur = () => {
-    if (document.activeElement instanceof HTMLElement) {
-      document.activeElement.blur();
-    }
-  };
-
-  const phoneInputValidations = (phone_number: string): boolean => {
-    const isNumeric = /^\d+$/.test(phone_number);
-    const isCorrectLength = phone_number.length === 10;
-    return isNumeric && isCorrectLength;
-  };
 
   const handleSwishSubmit = async () => {
     if (!phoneInputValidations(swishNumberCandidate)) {

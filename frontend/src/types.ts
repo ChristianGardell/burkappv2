@@ -12,13 +12,23 @@ export interface UserCreateRequest {
   pin: string;
 }
 
-// --- Group & Admin Input ---
-
 export interface GroupCreateRequest {
   name: string;
   group_name: string;
   phone_number: string;
   pin: string;
+}
+
+// --- Admin Input ---
+
+export interface UserUpdateAdmin {
+  id: string;
+  beers: number;
+}
+
+// --- Owner Input ---
+export interface GroupNameChangeRequest {
+  name: string;
 }
 
 export interface SwishSetRequest {
@@ -27,11 +37,6 @@ export interface SwishSetRequest {
 
 export interface AdminChangeRequest {
   phone_number: string;
-}
-
-export interface UserUpdateAdmin {
-  id: string;
-  beers: number;
 }
 
 // --- Responses ---
@@ -75,7 +80,7 @@ export interface BeerLogResponse {
 }
 
 export interface AdminStatsResponse {
-  id:  string;
+  id: string;
   name: string;
   phone_number: string;
   admin: boolean;

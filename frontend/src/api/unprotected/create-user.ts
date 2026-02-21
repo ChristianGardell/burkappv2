@@ -11,8 +11,11 @@ const createUser = async (user: UserCreateRequest): Promise<LoginResponse> => {
   if (response.status === 409) {
     throw new Error("User already exists. Please log in.");
   }
-    if (response.status === 404) {
+  if (response.status === 404) {
     throw new Error("Group with invite code does not exist. ");
+  }
+  if (response.status === 429) {
+    throw new Error("Too many requests. Please try again later.");
   }
 
   if (!response.ok) {

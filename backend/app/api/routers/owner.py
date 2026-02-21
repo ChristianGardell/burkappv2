@@ -42,6 +42,18 @@ def make_admin(
     )
     return updated_user
 
+
+@router.put("/change-group-name", response_model=GroupResponse)
+def set_group_name(
+    data: GroupNameChangeRequest,
+    current_owner: models.Users = Depends(get_current_owner),
+    db: Session = Depends(get_db),
+):
+    group = crud.set_group_name(db, current_owner.group_id, data.name)
+    if not group:
+        raise HTTPException(status_code=400, detail="Failed to set group name")
+    return group
+
 @router.put("/remove-user-admin", response_model=UserResponse)
 def remove_admin(
     data: AdminChangeRequest,

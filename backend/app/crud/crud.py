@@ -110,6 +110,15 @@ def decrement_user_beer_one(db: Session, user_id: str) -> Users | None:
     db.refresh(user)
     return user
 
+def set_group_name(db: Session, group_id: str, name: str) -> Groups | None:
+    """Set a group's name."""
+    group = db.query(Groups).filter_by(id=group_id).first()
+    if not group:
+        return None
+    group.name = name
+    db.commit()
+    db.refresh(group)
+    return group
 
 def set_group_swish_number(
     db: Session, group_id: str, swish_number: str

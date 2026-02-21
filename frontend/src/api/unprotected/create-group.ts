@@ -11,13 +11,16 @@ const createGroup = async (
     body: JSON.stringify(user),
   });
 
-    if (response.status === 409) {
+  if (response.status === 409) {
     throw new Error("User already exists. Please log in.");
   }
   if (response.status === 400) {
     throw new Error("Group already exists. Please log in.");
   }
 
+  if (response.status === 429) {
+    throw new Error("Too many requests. Please try again later.");
+  }
   if (!response.ok) {
     const error = new Error("Failed to create group. Server error") as any;
     error.status = response.status;

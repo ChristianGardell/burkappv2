@@ -6,6 +6,7 @@ import makeUserAdmin from "@/api/owner/make-user-admin";
 import removeUserAdmin from "@/api/owner/remove-user-admin";
 import { Button } from "@/components/ui/button";
 import ErrorDisplay from "@/components/errorDisplay";
+import { phoneInputValidations } from "../../lib/utils";
 
 import useApiCall from "@/hooks/useApiCall";
 
@@ -16,11 +17,6 @@ export function AdminManagementCard() {
   const { error: adminError, execute: executeAdminAction } =
     useApiCall<UserResponse>();
 
-  const phoneInputValidations = (phone_number: string): boolean => {
-    const isNumeric = /^\d+$/.test(phone_number);
-    const isCorrectLength = phone_number.length === 10;
-    return isNumeric && isCorrectLength;
-  };
   const handdleAction = async (action: "make" | "remove") => {
     if (!phoneInputValidations(phoneNumber)) {
       setPhoneError("Phone number must be 10 digits");
@@ -48,7 +44,9 @@ export function AdminManagementCard() {
       </div>
 
       <div className="space-y-4">
-        {adminError || phoneError ? <ErrorDisplay error={adminError || phoneError}  /> : null}
+        {adminError || phoneError ? (
+          <ErrorDisplay error={adminError || phoneError} />
+        ) : null}
         {/* {phoneError && <ErrorDisplay error={phoneError} />} */}
         <div className="space-y-2">
           <label className="text-xs font-bold text-slate-500 uppercase tracking-wider ml-1"></label>
