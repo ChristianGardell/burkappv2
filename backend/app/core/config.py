@@ -1,11 +1,4 @@
 import os
-from dotenv import load_dotenv
-
-# Load the appropriate .env file based on ENV
-env = os.getenv("ENV", "dev")  # default to dev
-
-dotenv_path = ".env.prod" if env == "prod" else ".env.dev"
-load_dotenv(dotenv_path)
 
 # Required variables
 SECRET_KEY = os.getenv("SECRET_KEY")
