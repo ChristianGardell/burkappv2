@@ -53,7 +53,9 @@ app.add_middleware(
 
 @app.middleware("http")
 async def cache_request_body(request: Request, call_next):
-    await request.body()  # this caches ._body on the request internally
+    if request.method == "OPTIONS":
+        return await call_next(request)
+    await request.body()
     try:
         request.state.body = json.loads(request._body)
     except Exception:
