@@ -1,5 +1,11 @@
 import os
+from dotenv import load_dotenv
 
+# Load local env files if they exist (dev or prod)
+load_dotenv(".env.dev")
+load_dotenv(".env.prod")
+
+env = os.getenv("ENV", "production")
 # Required variables
 SECRET_KEY = os.getenv("SECRET_KEY")
 if not SECRET_KEY:
