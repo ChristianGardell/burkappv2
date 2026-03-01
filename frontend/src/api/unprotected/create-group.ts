@@ -1,4 +1,4 @@
-import type { LoginResponse, GroupCreateRequest } from "../../types";
+import type { GroupCreateRequest, LoginResponse } from "../../types";
 const apiUrl =
   import.meta.env.VITE_BACKEND_SERVER_URL || "http://localhost:8000";
 
@@ -22,13 +22,14 @@ const createGroup = async (
     throw new Error("Too many requests. Please try again later.");
   }
   if (!response.ok) {
-    const error = new Error("Failed to create group. Server error") as any;
-    error.status = response.status;
+    const error = new Error("Failed to create group. Server error");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (error as any).status = response.status;
     throw error;
   }
 
   const data = await response.json();
-  return data;
+  return data as LoginResponse;
 };
 
 export default createGroup;

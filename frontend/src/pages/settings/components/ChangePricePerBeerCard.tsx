@@ -1,12 +1,13 @@
 import { DollarSign } from "lucide-react";
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import ErrorDisplay from "@/components/errorDisplay";
-import { makeBlur } from "../../../lib/utils";
 
-import type { PricePerBeerSetRequest, PricePerBeerSetResponse } from "@/types";
-import useApiCall from "@/hooks/useApiCall";
 import setGroupPricePerBeer from "@/api/owner/set-price-per-beer";
+import ErrorDisplay from "@/components/errorDisplay";
+import { Button } from "@/components/ui/button";
+import useApiCall from "@/hooks/useApiCall";
+import type { PricePerBeerSetRequest, PricePerBeerSetResponse } from "@/types";
+
+import { makeBlur } from "../../../lib/utils";
 
 export function ChangePricePerBeerCard({
   current_price_per_beer,

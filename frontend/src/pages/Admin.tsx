@@ -1,10 +1,11 @@
-import { useAuth } from "@/context/AuthContext";
-import { useEffect, useState } from "react";
-import getAllUsers from "@/api/admin/get-all-users-admin";
-import type { UserResponse } from "@/types";
 import { Loader2 } from "lucide-react";
+import { useEffect, useState } from "react";
+
+import getAllUsers from "@/api/admin/get-all-users-admin";
 import UserCard from "@/components/UserCard";
+import { useAuth } from "@/context/AuthContext";
 import useApiCall from "@/hooks/useApiCall";
+import type { UserResponse } from "@/types";
 
 export default function Admin() {
   const { user } = useAuth();
@@ -19,21 +20,20 @@ export default function Admin() {
   } = useApiCall<UserResponse[]>(3000);
 
   useEffect(() => {
+    const loadUsers = async () => {
+      const dbUsers = await executeGetAllUsers(() => getAllUsers());
+      if (dbUsers) {
+        const nonAdminOrCurrentUserSorted = dbUsers
+          .filter((u: UserResponse) => u.admin === false || u.id === user?.id)
+          .sort((a: UserResponse, b: UserResponse) =>
+            a.name.localeCompare(b.name),
+          );
+        setSearchedUsers(nonAdminOrCurrentUserSorted);
+        setAllUsers(nonAdminOrCurrentUserSorted);
+      }
+    };
     loadUsers();
-  }, [user]);
-
-  const loadUsers = async () => {
-    const dbUsers = await executeGetAllUsers(() => getAllUsers());
-    if (dbUsers) {
-      const nonAdminOrCurrentUserSorted = dbUsers
-        .filter((u: UserResponse) => u.admin === false || u.id === user?.id)
-        .sort((a: UserResponse, b: UserResponse) =>
-          a.name.localeCompare(b.name),
-        );
-      setSearchedUsers(nonAdminOrCurrentUserSorted);
-      setAllUsers(nonAdminOrCurrentUserSorted);
-    }
-  };
+  }, [executeGetAllUsers]);
 
   const filterUsersOnSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const searchTerm = e.target.value.toLowerCase();

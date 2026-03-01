@@ -1,32 +1,22 @@
-import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
+
 import swishLogo from "@/assets/swish.svg"; // Import the local SVG
-import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
-
-
 
 export default function Buy() {
   const { user } = useAuth();
   const pricePerBeer = user?.group.price_per_beer || 10;
   const [buyBeersAmount, setBuyBeersAmount] = useState<number>(0);
 
-  const [disabledSwish, setDisabledSwish] = useState<boolean>(true);
+  const disabledSwish =
+    buyBeersAmount === 0 ||
+    buyBeersAmount === null ||
+    !user?.group.swish_number;
 
   const amountToPay = buyBeersAmount * pricePerBeer;
-
-  useEffect(() => {
-    if (
-      buyBeersAmount == 0 ||
-      buyBeersAmount === null ||
-      !user?.group.swish_number
-    ) {
-      setDisabledSwish(true);
-    } else {
-      setDisabledSwish(false);
-    }
-  }, [buyBeersAmount, user]);
 
   const handleBuyButtonClick = () => {
     const swishUrl = `https://app.swish.nu/1/p/sw/?sw=${user?.group.swish_number}&amt=${amountToPay}&cur=SEK&msg=&src=qr`;

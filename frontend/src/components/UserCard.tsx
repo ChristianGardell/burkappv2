@@ -1,17 +1,15 @@
-import { Button } from "@/components/ui/button";
-import updateUserBeers from "@/api/admin/update-user-beers";
-import type { UserResponse } from "@/types";
 import { Loader2, Save } from "lucide-react";
 import { useState } from "react";
 
-import type { UserUpdateAdmin } from "@/types";
+import updateUserBeers from "@/api/admin/update-user-beers";
+import { Button } from "@/components/ui/button";
 import useApiCall from "@/hooks/useApiCall";
+import type { UserResponse } from "@/types";
+import type { UserUpdateAdmin } from "@/types";
 
 export default function UserCard({ user }: { user: UserResponse }) {
   const [currBeers, setCurrBeers] = useState<number>(user.beers);
   const [inputValue, setInputValue] = useState<string>("");
-
-
 
   const {
     error: updateError,
@@ -21,7 +19,6 @@ export default function UserCard({ user }: { user: UserResponse }) {
 
   // We compare against the current display value to determine if there are changes
   const oldValue: number = currBeers;
-
 
   const makeBlur = () => {
     if (document.activeElement instanceof HTMLElement) {
@@ -100,7 +97,6 @@ export default function UserCard({ user }: { user: UserResponse }) {
                 }}
               >
                 <input
-
                   inputMode="numeric"
                   pattern="[0-9]*"
                   min="0"

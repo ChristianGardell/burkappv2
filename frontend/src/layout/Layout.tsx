@@ -1,14 +1,15 @@
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { useAuth } from "@/context/AuthContext";
 import {
-  LogOut,
   BarChart3,
-  Shield,
   Home as HomeIcon,
+  LogOut,
   RefreshCcw,
   Settings,
+  Shield,
 } from "lucide-react";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
+
+import { Button } from "@/components/ui/button";
+import { useAuth } from "@/context/AuthContext";
 import { cn } from "@/lib/utils";
 
 export default function Layout() {

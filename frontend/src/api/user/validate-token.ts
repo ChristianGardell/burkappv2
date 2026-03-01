@@ -13,7 +13,7 @@ const valditateToken = async (): Promise<UserResponse> => {
     });
 
     if (!response.ok) {
-      const error = new Error("Failed to validate token") as any;
+      const error = new Error("Failed to validate token");
       error.status = response.status;
       throw error;
     }

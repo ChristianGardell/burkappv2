@@ -1,17 +1,19 @@
 // src/router.tsx
-import { createBrowserRouter, Navigate } from "react-router-dom";
 import Layout from "@layout/Layout";
-import Home from "@pages/Home";
+import Admin from "@pages/Admin";
 import Buy from "@pages/Buy";
+import CreateGroup from "@pages/CreateGroup";
+import Home from "@pages/Home";
 import Login from "@pages/Login";
 import Signup from "@pages/Signup";
-import CreateGroup from "@pages/CreateGroup";
-import Admin from "@pages/Admin";
 import Stats from "@pages/Stats";
+import { createBrowserRouter, Navigate } from "react-router-dom";
+
 import OwnerSettings from "@/pages/settings/OwnerSettings";
-import ProtectedRoute from "./lib/protectedRoute";
+
 import AdminRoute from "./lib/adminRoute";
 import OwnerRoute from "./lib/ownerRoute";
+import ProtectedRoute from "./lib/protectedRoute";
 import RedirectHome from "./lib/redirectHome";
 
 const router = createBrowserRouter([

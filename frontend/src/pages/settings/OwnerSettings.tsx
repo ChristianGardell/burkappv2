@@ -1,8 +1,9 @@
-import { SwishPaymentCard } from "./components/SwishPaymentCard";
+import { useAuth } from "@/context/AuthContext";
+
 import { AdminManagementCard } from "./components/AdminManagementCard";
 import { ChangeNameCard } from "./components/ChangeNameCard";
 import { ChangePricePerBeerCard } from "./components/ChangePricePerBeerCard";
-import { useAuth } from "@/context/AuthContext";
+import { SwishPaymentCard } from "./components/SwishPaymentCard";
 
 export default function OwnerSettings() {
   const { user } = useAuth();
@@ -34,7 +35,9 @@ export default function OwnerSettings() {
       <ChangeNameCard />
 
       {/* Change Price Per Beer Section */}
-      <ChangePricePerBeerCard current_price_per_beer={user.group.price_per_beer} />
+      <ChangePricePerBeerCard
+        current_price_per_beer={user.group.price_per_beer}
+      />
     </div>
   );
 }

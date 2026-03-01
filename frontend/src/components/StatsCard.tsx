@@ -1,5 +1,6 @@
-import type { AdminStatsResponse } from "@/types";
 import { useState } from "react";
+
+import type { AdminStatsResponse } from "@/types";
 
 export function StatsCard({
   index,
@@ -62,7 +63,9 @@ export function StatsCard({
                   className="flex justify-between text-xs text-slate-400"
                 >
                   <span>Beer Logged</span>
-                  <span>{new Date(log.timestamp).toLocaleTimeString("se-SV")}</span>
+                  <span>
+                    {new Date(log.timestamp).toLocaleTimeString("se-SV")}
+                  </span>
                 </div>
               ))
             ) : (

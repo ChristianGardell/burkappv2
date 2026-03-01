@@ -1,14 +1,14 @@
 import { ShieldCheck } from "lucide-react";
 import React from "react";
 
-import type { UserResponse } from "@/types";
 import makeUserAdmin from "@/api/owner/make-user-admin";
 import removeUserAdmin from "@/api/owner/remove-user-admin";
-import { Button } from "@/components/ui/button";
 import ErrorDisplay from "@/components/errorDisplay";
-import { phoneInputValidations } from "../../../lib/utils";
-
+import { Button } from "@/components/ui/button";
 import useApiCall from "@/hooks/useApiCall";
+import type { UserResponse } from "@/types";
+
+import { phoneInputValidations } from "../../../lib/utils";
 
 export function AdminManagementCard() {
   const [phoneError, setPhoneError] = React.useState<string>("");

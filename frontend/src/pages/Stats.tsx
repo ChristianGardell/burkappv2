@@ -1,16 +1,18 @@
-import { StatsCard } from "./../components/StatsCard";
 import { useEffect, useState } from "react";
 import {
-  PieChart,
-  Pie,
   Cell,
-  ResponsiveContainer,
   Legend,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
   Tooltip,
 } from "recharts";
-import type { AdminStatsResponse } from "../types";
-import getAllStats from "../api/admin/get-all-stats-admin";
+
 import useApiCall from "@/hooks/useApiCall";
+
+import getAllStats from "../api/admin/get-all-stats-admin";
+import type { AdminStatsResponse } from "../types";
+import { StatsCard } from "./../components/StatsCard";
 
 export default function Stats() {
   const [users, setUsers] = useState<AdminStatsResponse[]>([]);
@@ -22,19 +24,19 @@ export default function Stats() {
   } = useApiCall<AdminStatsResponse[]>(3000);
 
   useEffect(() => {
-    loadUsers();
-  }, []);
+    const loadUsers = async () => {
+      const userStats = await executeGetStats(() => getAllStats());
+      if (userStats) {
+        const sortedStats = [...userStats].sort(
+          (a: AdminStatsResponse, b: AdminStatsResponse) =>
+            b.total_beers - a.total_beers,
+        );
+        setUsers(sortedStats);
+      }
+    };
 
-  const loadUsers = async () => {
-    const userStats = await executeGetStats(() => getAllStats());
-    if (userStats) {
-      const sortedStats = userStats.sort(
-        (a: AdminStatsResponse, b: AdminStatsResponse) =>
-          b.total_beers - a.total_beers,
-      );
-      setUsers(sortedStats);
-    }
-  };
+    loadUsers();
+  }, [executeGetStats]);
 
   const adminTotal = users
     .filter((u) => u.admin)
@@ -97,7 +99,9 @@ export default function Stats() {
             </PieChart>
           </ResponsiveContainer>
         </div>
-        <h1 className="text-center text-white font-bold">Total Beers Consumed: {adminTotal + userTotal}</h1>
+        <h1 className="text-center text-white font-bold">
+          Total Beers Consumed: {adminTotal + userTotal}
+        </h1>
       </div>
 
       {/* Ranking List */}

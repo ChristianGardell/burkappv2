@@ -1,20 +1,19 @@
-import { Button } from "@/components/ui/button";
-import { LogIn, Smartphone, Lock, User, Code } from "lucide-react";
-import { Loading } from "@/components/Loading";
+import { Code, Lock, LogIn, Smartphone, User } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import ErrorDisplay from "@/components/errorDisplay";
-
-import { useLocation, useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
-import type {
-  UserCreateRequest,
-  UserLoginRequest,
-  LoginResponse,
-} from "../types";
+import { Loading } from "@/components/Loading";
+import { Button } from "@/components/ui/button";
 
 import createUser from "../api/unprotected/create-user";
 import { useAuth } from "../context/AuthContext";
 import useApiCall from "../hooks/useApiCall";
+import type {
+  LoginResponse,
+  UserCreateRequest,
+  UserLoginRequest,
+} from "../types";
 
 export default function Signup() {
   const { login } = useAuth();

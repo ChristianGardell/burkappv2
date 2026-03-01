@@ -1,20 +1,19 @@
-import { Button } from "@/components/ui/button";
-import { LogIn, Smartphone, Lock, User, Users } from "lucide-react";
-import { Loading } from "@/components/Loading";
+import { Lock, LogIn, Smartphone, User, Users } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import ErrorDisplay from "@/components/errorDisplay";
-
-import { useLocation, useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
-import type {
-  UserLoginRequest,
-  LoginResponse,
-  GroupCreateRequest,
-} from "../types";
+import { Loading } from "@/components/Loading";
+import { Button } from "@/components/ui/button";
 
 import createGroup from "../api/unprotected/create-group";
 import { useAuth } from "../context/AuthContext";
 import useApiCall from "../hooks/useApiCall";
+import type {
+  GroupCreateRequest,
+  LoginResponse,
+  UserLoginRequest,
+} from "../types";
 
 export default function CreateGroup() {
   const { login } = useAuth();

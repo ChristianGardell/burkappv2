@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 interface ErrorDisplayProps {
-  error: string | null; 
+  error: string | null;
   className?: string;
   timer?: number;
 }
@@ -12,20 +12,25 @@ export default function ErrorDisplay({
   timer,
 }: ErrorDisplayProps) {
   const [visible, setVisible] = useState(false);
+  const [lastError, setLastError] = useState<string | null>(null);
+
+  // When a new error arrives, reset visibility
+  if (error !== lastError) {
+    setLastError(error);
+    if (error) {
+      setVisible(true);
+    }
+  }
 
   useEffect(() => {
     if (error && timer && timer > 0) {
-      setVisible(true);
-      
       const timeoutId = setTimeout(() => {
         setVisible(false);
       }, timer);
 
       return () => clearTimeout(timeoutId);
-    } else if (error) {
-      setVisible(true);
     }
-  }, [error, timer]); 
+  }, [error, timer]);
 
   if (!error || !visible) return null;
 
