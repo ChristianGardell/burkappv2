@@ -62,7 +62,7 @@ export function StatsCard({
                   className="flex justify-between text-xs text-slate-400"
                 >
                   <span>Beer Logged</span>
-                  <span>{new Date(log.timestamp).toLocaleTimeString()}</span>
+                  <span>{new Date(log.timestamp).toLocaleTimeString("se-SV")}</span>
                 </div>
               ))
             ) : (

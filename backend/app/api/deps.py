@@ -3,7 +3,7 @@ from fastapi import Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from app.db.database import get_db
 from app.core.security import extract_userid_from_token  # Ensure this exists/is exported
-from app.crud import crud
+from app.crud import user_crud
 from app.models import models
 
 def get_current_user(
@@ -15,13 +15,13 @@ def get_current_user(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid token payload"
         )
-    user = crud.get_user_by_id(db, user_id=user_id)
-    if not user:
+    current_user = user_crud.get_user_by_id(db, user_id=user_id)
+    if not current_user:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="User not found"
         )
-    return user
+    return current_user
 
 def get_current_admin(
         current_user: models.Users = Depends(get_current_user)

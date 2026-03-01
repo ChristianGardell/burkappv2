@@ -6,5 +6,6 @@
     "**/dist": true,
     "**/.git": true,
     "**/.DS_Store": true
-  }
+  },
+  "python-envs.pythonProjects": []
 }

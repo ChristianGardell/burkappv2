@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from fastapi import Depends
 from ..models.models import Groups
-from ..crud import crud
+from ..crud import group_crud
 from ..db.database import get_db
 
 import random
@@ -25,8 +25,8 @@ def generate_invite_code() -> str:
 def generate_and_check_invite_code_is_unique(db: Session = Depends(get_db)) -> str:
     """Check if a group exists with the given invite code."""
     invite_code = generate_invite_code()
-    entry = crud.get_group_by_invite_code(db, invite_code=invite_code)
+    entry = group_crud.get_group_by_invite_code(db, invite_code=invite_code)
     while entry is not None:
         invite_code = generate_invite_code()
-        entry = crud.get_group_by_invite_code(db, invite_code=invite_code)
+        entry = group_crud.get_group_by_invite_code(db, invite_code=invite_code)
     return invite_code

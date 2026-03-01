@@ -24,6 +24,7 @@ class Groups(Base):
         nullable=False,
     )
     swish_number = Column(String, nullable=True)
+    price_per_beer = Column(Integer, default=10, nullable=False)
     name = Column(String, nullable=False)
     invite_code = Column(String, unique=True, nullable=False)
     members = relationship(

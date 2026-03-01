@@ -9,7 +9,7 @@ from ...models import models
 from ..deps import get_current_user
 
 
-from ...crud import crud
+from ...crud import user_crud, group_crud
 from ...db.database import get_db
 from ...schemas.schemas import *
 from ...core.security import (
@@ -30,13 +30,13 @@ def read_current_user(
 
 
 @router.post("/login", response_model=LoginResponse)
-@phone_limiter .limit("7/minute")
+@phone_limiter.limit("7/minute")
 @ip_limiter.limit("50/minute")
 async def login_user(
     request: Request, data: UserLoginRequest, db: Session = Depends(get_db)
 ):
     """Login a user by their phone number and pin."""
-    user = crud.get_user_by_phone_number(db, phone_number=data.phone_number)
+    user = user_crud.get_user_by_phone_number(db, phone_number=data.phone_number)
     if not user:
         raise HTTPException(status_code=404, detail="User does not exist")
     if not verify_pin(data.pin, user.hashed_pin):
@@ -53,15 +53,15 @@ def create_user(
 ):
     """Create a new user in the database."""
 
-    if crud.get_user_by_phone_number(db, phone_number=data.phone_number):
+    if user_crud.get_user_by_phone_number(db, phone_number=data.phone_number):
         raise HTTPException(status_code=409, detail="User already exists")
-    group = crud.get_group_by_invite_code(db, invite_code=data.invite_code)
+    group = group_crud.get_group_by_invite_code(db, invite_code=data.invite_code)
     if group is None:
         raise HTTPException(
             status_code=404, detail="Group with invite code does not exist"
         )
 
-    user = crud.create_user(db, data, group_id=group.id)
+    user = user_crud.create_user(db, data, group_id=group.id)
     token = create_access_token({"sub": user.id, "group_id": user.group_id})
     return LoginResponse(user=UserResponse.model_validate(user), access_token=token)
 
@@ -73,11 +73,10 @@ def create_group(
     request: Request, data: GroupCreateRequest, db: Session = Depends(get_db)
 ):
     """Create a new group in the database, add User and make user admin and owner."""
-    if crud.get_user_by_phone_number(db, phone_number=data.phone_number):
+    if user_crud.get_user_by_phone_number(db, phone_number=data.phone_number):
         raise HTTPException(status_code=409, detail="User already exists")
     invite_code = user_service.generate_and_check_invite_code_is_unique(db)
-    print(invite_code)
-    user = crud.create_user_and_new_group(db, data, invite_code=invite_code)
+    user = group_crud.create_user_and_new_group(db, data, invite_code=invite_code)
     token = create_access_token({"sub": user.id, "group_id": user.group_id})
     return LoginResponse(user=UserResponse.model_validate(user), access_token=token)
 
@@ -90,5 +89,5 @@ def decrement_user_beer(
     """Decrement a user's beer count by one."""
     if current_user.beers <= 0:
         raise HTTPException(status_code=400, detail="No beers left to decrement")
-    current_user = crud.decrement_user_beer_one(db, user_id=current_user.id)
+    current_user = user_crud.decrement_user_beer_one(db, user_id=current_user.id)
     return current_user

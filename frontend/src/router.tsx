@@ -11,7 +11,9 @@ import Stats from "@pages/Stats";
 import OwnerSettings from "@/pages/owner-settings/OwnerSettings";
 import ProtectedRoute from "./lib/protectedRoute";
 import AdminRoute from "./lib/adminRoute";
+import OwnerRoute from "./lib/ownerRoute";
 import RedirectHome from "./lib/redirectHome";
+
 const router = createBrowserRouter([
   {
     path: "/login",
@@ -61,6 +63,17 @@ const router = createBrowserRouter([
       { path: "/", element: <Navigate to="/home" replace /> },
       { path: "/admin", element: <Admin /> },
       { path: "/stats", element: <Stats /> },
+    ],
+  },
+  {
+    path: "/",
+    element: (
+      <OwnerRoute>
+        <Layout />
+      </OwnerRoute>
+    ),
+    children: [
+      { path: "/", element: <Navigate to="/home" replace /> },
       { path: "/settings", element: <OwnerSettings /> },
     ],
   },

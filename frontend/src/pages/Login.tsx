@@ -134,7 +134,7 @@ export default function Login() {
                   type="button"
                   className="w-full h-14 rounded-2xl border-slate-700 bg-transparent text-slate-300 hover:bg-slate-800 hover:text-white font-bold"
                 >
-                  Join via Invite Code
+                  Join Existing Group
                 </Button>
               </Link>
             </div>
@@ -147,7 +147,7 @@ export default function Login() {
                 variant="ghost"
                 type="button"
               >
-                Start a new group
+                Start A New Group
               </Button>
             </Link>
           </div>

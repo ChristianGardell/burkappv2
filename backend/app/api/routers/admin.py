@@ -1,38 +1,36 @@
 # backend/app/routers/competitors.py
 from datetime import timedelta
 from fastapi import APIRouter, Depends, HTTPException
-from app.crud import crud
+from app.crud import admin_crud
 from sqlalchemy.orm import Session
 from app.db.database import get_db
 from ..deps import get_current_admin
 from ...models import models
-from typing import List, Union
 from app.schemas.schemas import *
-from app.core.security import (
-    extract_userid_from_token,
-)
+
 
 router = APIRouter(prefix="/admin", tags=["admin"])
 
 
-@router.get("/getall", response_model=List[UserResponse])
+@router.get("/getall", response_model=list[UserResponse])
 def get_all_users(
     current_admin: models.Users = Depends(get_current_admin),
     db: Session = Depends(get_db),
 ):
-    return crud.get_all_users(db, current_admin.group_id)
+    """Get all users in the admin's group. Visible to all validated users (admins and owners)."""
+    return admin_crud.get_all_users(db, current_admin.group_id)
 
 
-@router.get("/stats", response_model=List[AdminStatsResponse])
+@router.get("/stats", response_model=list[AdminStatsResponse])
 def get_all_users_stats(
     current_admin: models.Users = Depends(get_current_admin),
     db: Session = Depends(get_db),
 ):
     """
     Get all users for the stats page.
-    Visible to all validated users (admins and regular users).
+    Visible to all validated users (admins and owners).
     """
-    entries = crud.get_all_users(db, current_admin.group_id)
+    entries = admin_crud.get_all_users(db, current_admin.group_id)
     for entry in entries:
         entry.beer_log = [
             log
@@ -49,7 +47,7 @@ def update_user_beers(
     current_admin: models.Users = Depends(get_current_admin),
     db: Session = Depends(get_db),
 ):
-    success = crud.update_user_beers(db, data)
+    success = admin_crud.update_user_beers(db, data)
     if not success:
         raise HTTPException(status_code=400, detail="Failed to update user beers")
     return success

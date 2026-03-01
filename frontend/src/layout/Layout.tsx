@@ -12,7 +12,7 @@ import {
 import { cn } from "@/lib/utils";
 
 export default function Layout() {
-  const { user, logout } = useAuth();
+  const { user, logout, refresh } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -21,7 +21,7 @@ export default function Layout() {
     navigate("/login", { replace: true });
   };
   const handleRefresh = () => {
-    navigate(0);
+    refresh();
   };
 
   return (
