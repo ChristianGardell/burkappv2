@@ -1,24 +1,31 @@
 import { DollarSign } from "lucide-react";
-import { useState } from "react";
+import { useEffect,useState } from "react";
 
 import setGroupPricePerBeer from "@/api/owner/set-price-per-beer";
 import ErrorDisplay from "@/components/errorDisplay";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/context/AuthContext";
 import useApiCall from "@/hooks/useApiCall";
 import type { PricePerBeerSetRequest, PricePerBeerSetResponse } from "@/types";
 
 import { makeBlur } from "../../../lib/utils";
 
 export function ChangePricePerBeerCard({
+
   current_price_per_beer,
 }: {
   current_price_per_beer: number;
 }) {
+  const { user } = useAuth();
   const [pricePerBeerCandidate, setPricePerBeerCandidate] = useState<string>();
   const [currentPricePerBeerVisual, setCurrentPricePerBeerVisual] =
-    useState<string>(current_price_per_beer.toString());
+    useState<string>(current_price_per_beer.toString() || "Not Set");
   const { execute: executeChangePricePerBeer, error: changePriceError } =
     useApiCall<PricePerBeerSetResponse>(3000);
+
+    useEffect(() => {
+      setCurrentPricePerBeerVisual(user?.group.price_per_beer.toString() || "Not Set");
+    }, [user]);
 
   const handlePricePerBeerChange = async () => {
     const request: PricePerBeerSetRequest = {
@@ -54,7 +61,7 @@ export function ChangePricePerBeerCard({
           <input
             type="numeric"
             placeholder="Price Per Beer"
-            value={pricePerBeerCandidate}
+            value={pricePerBeerCandidate || ""}
             inputMode="decimal"
             maxLength={3}
             onChange={(e) => setPricePerBeerCandidate(e.target.value)}

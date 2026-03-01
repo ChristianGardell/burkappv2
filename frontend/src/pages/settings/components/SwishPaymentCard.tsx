@@ -16,6 +16,7 @@ export function SwishPaymentCard({
 }) {
   const [swishNumberVisual, setSwishNumberVisual] = useState<string>(
     currentSwishNumber || "Not Set",
+
   );
 
   const [swishNumberCandidate, setSwishNumberCandidate] = useState<string>("");

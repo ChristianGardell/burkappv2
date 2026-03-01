@@ -6,6 +6,7 @@ import {
   Settings,
   Shield,
 } from "lucide-react";
+import { useEffect } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
@@ -13,7 +14,7 @@ import { useAuth } from "@/context/AuthContext";
 import { cn } from "@/lib/utils";
 
 export default function Layout() {
-  const { user, logout, refresh } = useAuth();
+  const { user, logout, refresh, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -24,6 +25,13 @@ export default function Layout() {
   const handleRefresh = () => {
     refresh();
   };
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      refresh();
+    }
+  }, [location.pathname]);
+
 
   return (
     <div className="flex flex-col h-dvh overflow-hidden bg-slate-950 font-libre text-slate-200">
