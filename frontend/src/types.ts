@@ -35,6 +35,10 @@ export interface SwishSetRequest {
   swish_number: string;
 }
 
+export interface PricePerBeerSetRequest {
+  price_per_beer: number;
+}
+
 export interface AdminChangeRequest {
   phone_number: string;
 }
@@ -45,11 +49,16 @@ export interface GroupResponse {
   id: string;
   name: string;
   swish_number: string | null;
+  price_per_beer: number;
   invite_code: string;
 }
 
 export interface SwishSetResponse {
   swish_number: string;
+}
+
+export interface PricePerBeerSetResponse {
+  price_per_beer: number;
 }
 
 export interface UserResponse {

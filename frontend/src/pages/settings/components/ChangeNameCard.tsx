@@ -2,7 +2,7 @@ import { Users } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import ErrorDisplay from "@/components/errorDisplay";
-import { makeBlur } from "../../lib/utils";
+import { makeBlur } from "../../../lib/utils";
 
 import type { GroupNameChangeRequest } from "@/types";
 import useApiCall from "@/hooks/useApiCall";

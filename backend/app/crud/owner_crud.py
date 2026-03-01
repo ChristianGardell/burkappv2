@@ -1,4 +1,3 @@
-
 from sqlalchemy.orm import Session
 from ..schemas.schemas import *
 from ..models.models import Users, Groups
@@ -48,3 +47,16 @@ def set_group_swish_number(
     db.commit()
     db.refresh(group)
     return SwishSetResponse(swish_number=group.swish_number)
+
+
+def set_group_price_per_beer(
+    db: Session, group_id: str, price_per_beer: int
+) -> Groups | None:
+    """Set a group's price per beer."""
+    group = db.query(Groups).filter_by(id=group_id).first()
+    if not group:
+        return None
+    group.price_per_beer = price_per_beer
+    db.commit()
+    db.refresh(group)
+    return group

@@ -8,7 +8,7 @@ import Signup from "@pages/Signup";
 import CreateGroup from "@pages/CreateGroup";
 import Admin from "@pages/Admin";
 import Stats from "@pages/Stats";
-import OwnerSettings from "@/pages/owner-settings/OwnerSettings";
+import OwnerSettings from "@/pages/settings/OwnerSettings";
 import ProtectedRoute from "./lib/protectedRoute";
 import AdminRoute from "./lib/adminRoute";
 import OwnerRoute from "./lib/ownerRoute";

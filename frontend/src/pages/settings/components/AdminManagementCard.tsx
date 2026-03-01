@@ -6,7 +6,7 @@ import makeUserAdmin from "@/api/owner/make-user-admin";
 import removeUserAdmin from "@/api/owner/remove-user-admin";
 import { Button } from "@/components/ui/button";
 import ErrorDisplay from "@/components/errorDisplay";
-import { phoneInputValidations } from "../../lib/utils";
+import { phoneInputValidations } from "../../../lib/utils";
 
 import useApiCall from "@/hooks/useApiCall";
 

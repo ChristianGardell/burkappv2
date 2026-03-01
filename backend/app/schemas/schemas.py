@@ -62,6 +62,8 @@ class SwishSetRequest(BaseModel):
         ..., pattern=r"^\d{10}$", description="Must be exactly 10 digits"
     )
 
+class PricePerBeerSetRequest(BaseModel):
+    price_per_beer: int = Field(..., ge=1, description="Price per beer must be at least 1 SEK")
 
 class AdminChangeRequest(BaseModel):
     phone_number: str = Field(
@@ -76,6 +78,7 @@ class GroupResponse(BaseModel):
     id: str
     name: str
     swish_number: str | None
+    price_per_beer: int
     invite_code: str
 
     class Config:
@@ -83,9 +86,17 @@ class GroupResponse(BaseModel):
 
 
 class SwishSetResponse(BaseModel):
-    swish_number: str = Field(
-        ..., pattern=r"^\d{10}$", description="Must be exactly 10 digits"
-    )
+    swish_number: str
+
+    class Config:
+        from_attributes = True
+
+
+class PricePerBeerSetResponse(BaseModel):
+    price_per_beer: int
+
+    class Config:
+        from_attributes = True
 
 
 class UserResponse(BaseModel):

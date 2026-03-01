@@ -26,6 +26,21 @@ def set_swish_number(
     return number
 
 
+@router.put("/set-group-price-per-beer", response_model=PricePerBeerSetResponse)
+def set_price_per_beer(
+    data: PricePerBeerSetRequest,
+    current_owner: models.Users = Depends(get_current_owner),
+    db: Session = Depends(get_db),
+):
+    """Set a group's price per beer."""
+    group = owner_crud.set_group_price_per_beer(
+        db, current_owner.group_id, data.price_per_beer
+    )
+    if not group:
+        raise HTTPException(status_code=400, detail="Failed to set price per beer")
+    return PricePerBeerSetResponse(price_per_beer=group.price_per_beer)
+
+
 @router.put("/change-group-name", response_model=GroupResponse)
 def set_group_name(
     data: GroupNameChangeRequest,

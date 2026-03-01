@@ -5,10 +5,11 @@ import swishLogo from "@/assets/swish.svg"; // Import the local SVG
 import { useState, useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 
-const pricePerBeer = Number(import.meta.env.VITE_PRICE_PER_BEER);
+
 
 export default function Buy() {
   const { user } = useAuth();
+  const pricePerBeer = user?.group.price_per_beer || 10;
   const [buyBeersAmount, setBuyBeersAmount] = useState<number>(0);
 
   const [disabledSwish, setDisabledSwish] = useState<boolean>(true);

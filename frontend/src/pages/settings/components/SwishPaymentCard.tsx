@@ -5,7 +5,7 @@ import setGroupSwishNumber from "@/api/owner/set-group-swish-number";
 import { useState } from "react";
 import type { SwishSetRequest, SwishSetResponse } from "@/types";
 import ErrorDisplay from "@/components/errorDisplay";
-import { makeBlur, phoneInputValidations } from "../../lib/utils";
+import { makeBlur, phoneInputValidations } from "../../../lib/utils";
 
 export function SwishPaymentCard({
   currentSwishNumber,
