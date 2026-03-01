@@ -1,12 +1,12 @@
-from sqlalchemy.orm import Session
-from fastapi import Depends
-from ..models.models import Groups
-from ..crud import group_crud
-from ..db.database import get_db
-
 import random
+
+from fastapi import Depends
+from sqlalchemy.orm import Session
 from wordfreq import top_n_list
 
+from ..crud import group_crud
+from ..db.database import get_db
+from ..models.models import Groups
 
 words = top_n_list("en", 10000)
 

@@ -1,22 +1,19 @@
 # backend/app/routers/competitors.py
 from fastapi import APIRouter, Depends, HTTPException, Request
 from slowapi.errors import RateLimitExceeded
-
-from ...utils.limiter import ip_limiter, phone_limiter
 from sqlalchemy.orm import Session
 
-from ...models import models
-from ..deps import get_current_user
-
-
-from ...crud import user_crud, group_crud
-from ...db.database import get_db
-from ...schemas.schemas import *
 from ...core.security import (
-    verify_pin,
     create_access_token,
+    verify_pin,
 )
+from ...crud import group_crud, user_crud
+from ...db.database import get_db
+from ...models import models
+from ...schemas.schemas import *
 from ...services import user_service
+from ...utils.limiter import ip_limiter, phone_limiter
+from ..deps import get_current_user
 
 router = APIRouter(prefix="/users", tags=["users"])
 

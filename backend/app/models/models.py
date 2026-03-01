@@ -1,14 +1,15 @@
+import uuid
+
 from sqlalchemy import (
+    Boolean,
     Column,
+    Float,
+    ForeignKey,
     Integer,
     String,
-    Float,
-    Boolean,
-    ForeignKey,
     UniqueConstraint,
 )
 from sqlalchemy.orm import relationship
-import uuid
 
 from ..db.database import Base
 

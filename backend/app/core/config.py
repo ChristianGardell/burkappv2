@@ -1,4 +1,5 @@
 import os
+
 from dotenv import load_dotenv
 
 # Load local env files if they exist (dev or prod)
@@ -14,4 +15,6 @@ if not SECRET_KEY:
 # Optional variables with defaults
 ALGORITHM = os.getenv("ALGORITHM", "HS256")
 ACCESS_TOKEN_EXPIRE_DAYS = int(os.getenv("ACCESS_TOKEN_EXPIRE_DAYS", 30))
-FRONTEND_SERVER_IP = os.getenv("FRONTEND_SERVER_IP", "http://localhost:5173")  # fallback for dev
+FRONTEND_SERVER_IP = os.getenv(
+    "FRONTEND_SERVER_IP", "http://localhost:5173"
+)  # fallback for dev

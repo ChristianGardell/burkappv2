@@ -1,6 +1,7 @@
 from datetime import datetime
-from pydantic import BaseModel, Field
 from typing import List, Optional
+
+from pydantic import BaseModel, Field
 
 # --- Authentication & User Input ---
 
@@ -62,8 +63,12 @@ class SwishSetRequest(BaseModel):
         ..., pattern=r"^\d{10}$", description="Must be exactly 10 digits"
     )
 
+
 class PricePerBeerSetRequest(BaseModel):
-    price_per_beer: int = Field(..., ge=1, description="Price per beer must be at least 1 SEK")
+    price_per_beer: int = Field(
+        ..., ge=1, description="Price per beer must be at least 1 SEK"
+    )
+
 
 class AdminChangeRequest(BaseModel):
     phone_number: str = Field(

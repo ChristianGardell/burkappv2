@@ -1,13 +1,15 @@
 # backend/app/routers/competitors.py
 from datetime import timedelta
+
 from fastapi import APIRouter, Depends, HTTPException
-from app.crud import admin_crud
 from sqlalchemy.orm import Session
+
+from app.crud import admin_crud
 from app.db.database import get_db
-from ..deps import get_current_admin
-from ...models import models
 from app.schemas.schemas import *
 
+from ...models import models
+from ..deps import get_current_admin
 
 router = APIRouter(prefix="/admin", tags=["admin"])
 

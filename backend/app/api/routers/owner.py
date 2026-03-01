@@ -1,12 +1,14 @@
 # backend/app/routers/competitors.py
 
 from fastapi import APIRouter, Depends, HTTPException
-from app.crud import owner_crud, user_crud
 from sqlalchemy.orm import Session
+
+from app.crud import owner_crud, user_crud
 from app.db.database import get_db
-from ..deps import get_current_owner
-from ...models import models
 from app.schemas.schemas import *
+
+from ...models import models
+from ..deps import get_current_owner
 
 router = APIRouter(prefix="/owner", tags=["owner"])
 

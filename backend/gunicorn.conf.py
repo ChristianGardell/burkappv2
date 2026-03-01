@@ -13,7 +13,7 @@ workers = 4  # Standard for most small servers (2 * cores + 1)
 accesslog = "/var/log/burkapp_access.log"
 errorlog = "/var/log/burkapp_error.log"
 
-# capture_output ensures that your print() and logger.info() 
+# capture_output ensures that your print() and logger.info()
 # from the middleware actually end up in the errorlog or accesslog
 capture_output = True
 

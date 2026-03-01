@@ -1,17 +1,15 @@
+import json
+
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-import json
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 
+from .api.routers import admin, owner, users
 from .core.config import FRONTEND_SERVER_IP
-from .utils.limiter import ip_limiter
-from .models import models
 from .db.database import engine
-from .api.routers import users
-from .api.routers import admin
-from .api.routers import owner
-
+from .models import models
+from .utils.limiter import ip_limiter
 
 # Create database tables
 models.Base.metadata.create_all(bind=engine)
