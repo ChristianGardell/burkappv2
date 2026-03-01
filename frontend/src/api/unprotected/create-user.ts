@@ -19,10 +19,7 @@ const createUser = async (user: UserCreateRequest): Promise<LoginResponse> => {
   }
 
   if (!response.ok) {
-    const error = new Error("Failed to create user. Server error");
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (error as any).status = response.status;
-    throw error;
+    throw new Error("Failed to create user. Server error");
   }
 
   const data = await response.json();

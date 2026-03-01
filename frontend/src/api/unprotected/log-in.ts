@@ -18,11 +18,9 @@ const loginUser = async (user: UserLoginRequest): Promise<LoginResponse> => {
     throw new Error("Too many requests, try again later");
   }
   if (!response.ok) {
-    const error = new Error("Server error");
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (error as any).status = response.status;
-    throw error;
+    throw new Error("Server error");
   }
+
   const data = await response.json();
   return data;
 };

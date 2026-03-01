@@ -22,10 +22,8 @@ const createGroup = async (
     throw new Error("Too many requests. Please try again later.");
   }
   if (!response.ok) {
-    const error = new Error("Failed to create group. Server error");
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (error as any).status = response.status;
-    throw error;
+    throw new Error("Failed to create group. Server error");
+
   }
 
   const data = await response.json();
