@@ -6,7 +6,7 @@ from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 
 from .api.routers import admin, owner, users
-from .core.config import FRONTEND_SERVER_IP
+from .core.config import FRONTEND_LAN, FRONTEND_LOCAL
 from .db.database import engine
 from .models import models
 from .utils.limiter import ip_limiter
@@ -25,7 +25,8 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 # Configure CORS
 origins = [
-    FRONTEND_SERVER_IP,
+    FRONTEND_LAN,
+    FRONTEND_LOCAL,
 ]
 
 

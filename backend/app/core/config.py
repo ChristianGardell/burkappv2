@@ -15,6 +15,9 @@ if not SECRET_KEY:
 # Optional variables with defaults
 ALGORITHM = os.getenv("ALGORITHM", "HS256")
 ACCESS_TOKEN_EXPIRE_DAYS = int(os.getenv("ACCESS_TOKEN_EXPIRE_DAYS", 30))
-FRONTEND_SERVER_IP = os.getenv(
-    "FRONTEND_SERVER_IP", "http://localhost:5173"
+FRONTEND_LOCAL = os.getenv(
+    "FRONTEND_LOCAL", "http://localhost:5173"
 )  # fallback for dev
+FRONTEND_LAN = os.getenv(
+    "FRONTEND_LAN", "http://192.168.0.208:5173"
+)  # fallback for LAN
