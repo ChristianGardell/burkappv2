@@ -1,12 +1,12 @@
 // src/router.tsx
 import Layout from "@layout/Layout";
-import Admin from "@pages/Admin";
+import Admin from "@/pages/admin/Admin";
 import Buy from "@pages/Buy";
 import CreateGroup from "@pages/CreateGroup";
 import Home from "@pages/Home";
 import Login from "@pages/Login";
 import Signup from "@pages/Signup";
-import Stats from "@pages/Stats";
+import Stats from "@/pages/stats/Stats";
 import { createBrowserRouter, Navigate } from "react-router-dom";
 
 import OwnerSettings from "@/pages/settings/OwnerSettings";

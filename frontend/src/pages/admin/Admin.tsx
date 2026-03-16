@@ -2,7 +2,7 @@ import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import getAllUsers from "@/api/admin/get-all-users-admin";
-import UserCard from "@/components/UserCard";
+import UserCard from "@/pages/admin/components/UserCard";
 import { useAuth } from "@/context/AuthContext";
 import useApiCall from "@/hooks/useApiCall";
 import type { UserResponse } from "@/types";

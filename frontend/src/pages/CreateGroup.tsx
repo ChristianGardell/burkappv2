@@ -97,7 +97,7 @@ export default function CreateGroup() {
                     })}
                     type="text"
                     name="group_name"
-                    placeholder="The cool kids"
+                    placeholder="D Flames 4ever"
                     className="w-full h-14 bg-white/5 rounded-2xl pl-12 pr-4 text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 border border-transparent focus:border-emerald-500/50 transition-all font-medium"
                   />
                 </div>

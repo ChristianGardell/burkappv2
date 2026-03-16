@@ -10,9 +10,9 @@ import {
 
 import useApiCall from "@/hooks/useApiCall";
 
-import getAllStats from "../api/admin/get-all-stats-admin";
-import type { AdminStatsResponse } from "../types";
-import { StatsCard } from "./../components/StatsCard";
+import getAllStats from "../../api/admin/get-all-stats-admin";
+import type { AdminStatsResponse } from "../../types";
+import { StatsCard } from "./components/StatsCard";
 
 export default function Stats() {
   const [users, setUsers] = useState<AdminStatsResponse[]>([]);
