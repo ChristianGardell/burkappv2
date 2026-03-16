@@ -49,6 +49,7 @@ def update_user_beers(
     current_admin: models.Users = Depends(get_current_admin),
     db: Session = Depends(get_db),
 ):
+    """Update a user's beer count. Visible to all validated users (admins and owners)."""
     success = admin_crud.update_user_beers(db, data)
     if not success:
         raise HTTPException(status_code=400, detail="Failed to update user beers")
