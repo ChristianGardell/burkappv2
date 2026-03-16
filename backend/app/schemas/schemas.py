@@ -60,7 +60,7 @@ class UserUpdateAdminRequest(BaseModel):
         max_length=36,
         description="User ID must be a valid UUID4 string",
     )
-    beers: int = Field(..., ge=0, description="Number of beers must be non-negative")
+    beers: int = Field(..., ge=0, le=10000, description="Number of beers must be non-negative")
 
 
 # --- Owner Input ---
@@ -81,7 +81,7 @@ class SwishSetRequest(BaseModel):
 
 class PricePerBeerSetRequest(BaseModel):
     price_per_beer: int = Field(
-        ..., ge=1, description="Price per beer must be at least 1 SEK"
+        ..., ge=1, le=1000, description="Price per beer must be at least 1 SEK"
     )
 
 

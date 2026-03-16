@@ -1,5 +1,5 @@
 # backend/app/routers/competitors.py
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
