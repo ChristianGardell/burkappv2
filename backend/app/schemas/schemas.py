@@ -1,5 +1,4 @@
-from datetime import datetime
-from typing import List, Optional
+
 
 from pydantic import BaseModel, Field
 
@@ -15,9 +14,17 @@ class UserLoginRequest(BaseModel):
 
 class UserCreateRequest(BaseModel):
     name: str = Field(
-        ..., min_length=3, description="Name must be at least 3 characters"
+        ...,
+        min_length=3,
+        max_length=20,
+        description="Name must be at least 3 characters and no more than 20 characters",
     )
-    invite_code: str
+    invite_code: str = Field(
+        ...,
+        min_length=6,
+        max_length=30,
+        description="Invite code must be between 6 and 30 characters",
+    )
     phone_number: str = Field(
         ..., pattern=r"^\d{10}$", description="Must be exactly 10 digits"
     )
@@ -29,7 +36,10 @@ class UserCreateRequest(BaseModel):
 
 class GroupCreateRequest(BaseModel):
     name: str = Field(
-        ..., min_length=3, description="Name must be at least 3 characters"
+        ...,
+        min_length=3,
+        max_length=20,
+        description="Name must be at least 3 characters and no more than 20 characters",
     )
     group_name: str = Field(
         ...,
@@ -44,7 +54,12 @@ class GroupCreateRequest(BaseModel):
 
 
 class UserUpdateAdminRequest(BaseModel):
-    id: str
+    id: str = Field(
+        ...,
+        min_length=36,
+        max_length=36,
+        description="User ID must be a valid UUID4 string",
+    )
     beers: int = Field(..., ge=0, description="Number of beers must be non-negative")
 
 
