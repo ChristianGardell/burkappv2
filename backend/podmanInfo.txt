@@ -1,0 +1,8 @@
+build with:
+podman build -t beertrack-backend .
+run with: 
+podman run -d -p 8000:8000 \
+  -v ~/logs/beertrack-logs:/app/logs:Z \
+  --name beertrack \
+  beertrack-backend:latest
+for logs, create ~/logs/beertrack-logs
