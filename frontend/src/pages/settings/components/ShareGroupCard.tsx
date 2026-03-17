@@ -1,7 +1,7 @@
-import { useAuth } from "@/context/AuthContext";
-import { Button } from "@/components/ui/button";
-
 import { Link } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import { useAuth } from "@/context/AuthContext";
 
 export function ShareGroupCard() {
   const { user } = useAuth();

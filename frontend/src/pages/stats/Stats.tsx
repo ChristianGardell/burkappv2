@@ -8,9 +8,9 @@ import {
   Tooltip,
 } from "recharts";
 
+import Loading from "@/components/Loading";
 import useApiCall from "@/hooks/useApiCall";
 
-import Loading from "@/components/Loading";
 import getAllStats from "../../api/admin/get-all-stats-admin";
 import type { AdminStatsResponse } from "../../types";
 import { StatsCard } from "./components/StatsCard";

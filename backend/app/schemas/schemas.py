@@ -1,5 +1,3 @@
-
-
 from pydantic import BaseModel, Field
 
 # --- Authentication & User Input ---
@@ -29,6 +27,7 @@ class UserCreateRequest(BaseModel):
         ..., pattern=r"^\d{10}$", description="Must be exactly 10 digits"
     )
     pin: str = Field(..., pattern=r"^\d{6}$", description="Must be exactly 6 digits")
+
 
 class ValidateGroupRequest(BaseModel):
     invite_code: str = Field(
@@ -68,7 +67,9 @@ class UserUpdateAdminRequest(BaseModel):
         max_length=36,
         description="User ID must be a valid UUID4 string",
     )
-    beers: int = Field(..., ge=0, le=9999, description="Number of beers must be non-negative")
+    beers: int = Field(
+        ..., ge=0, le=9999, description="Number of beers must be non-negative"
+    )
 
 
 # --- Owner Input ---

@@ -2,10 +2,9 @@ import { Loader2, Lock, LogIn, Smartphone, User, Users } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
+import createGroup from "@/api/unprotected/create-group";
 import Loading from "@/components/Loading";
 import { Button } from "@/components/ui/button";
-
-import createGroup from "@/api/unprotected/create-group";
 import { useAuth } from "@/context/AuthContext";
 import useApiCall from "@/hooks/useApiCall";
 import type {
@@ -13,6 +12,7 @@ import type {
   LoginResponse,
   UserLoginRequest,
 } from "@/types";
+
 import AuthLayout from "../AuthLayout";
 
 export default function CreateGroup() {

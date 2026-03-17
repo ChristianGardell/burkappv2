@@ -1,9 +1,8 @@
 // src/components/ProtectedRoute.tsx
 import { Navigate } from "react-router-dom";
 
-import { useAuth } from "@/context/AuthContext";
-
 import Loading from "@/components/Loading";
+import { useAuth } from "@/context/AuthContext";
 
 interface AdminRouteProps {
   children: React.ReactNode;

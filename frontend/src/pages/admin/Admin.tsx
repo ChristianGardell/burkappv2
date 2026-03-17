@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 
-import Loading from "@/components/Loading";
 import getAllUsers from "@/api/admin/get-all-users-admin";
-import UserCard from "@/pages/admin/components/UserCard";
+import Loading from "@/components/Loading";
 import { useAuth } from "@/context/AuthContext";
 import useApiCall from "@/hooks/useApiCall";
+import UserCard from "@/pages/admin/components/UserCard";
 import type { UserResponse } from "@/types";
 
 export default function Admin() {

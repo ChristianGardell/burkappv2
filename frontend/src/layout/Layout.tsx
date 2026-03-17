@@ -1,10 +1,10 @@
 import {
   BarChart3,
   Home as HomeIcon,
-  LogOut,
   RefreshCcw,
   Settings,
   Shield,
+  UserCog,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
@@ -14,15 +14,11 @@ import { useAuth } from "@/context/AuthContext";
 import { cn } from "@/lib/utils";
 
 export default function Layout() {
-  const { user, logout, refresh, isAuthenticated } = useAuth();
+  const { user, refresh, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [isRefreshing, setIsRefreshing] = useState(false);
 
-  const handleLogout = () => {
-    logout();
-    navigate("/login", { replace: true });
-  };
   const handleRefresh = async () => {
     setIsRefreshing(true);
     await refresh();
@@ -39,15 +35,25 @@ export default function Layout() {
     <div className="flex flex-col h-dvh overflow-hidden bg-slate-950 font-libre text-slate-200">
       <nav className="fixed top-0 left-0 right-0 h-16 bg-slate-950/80 backdrop-blur-md border-b border-white/5 z-50 px-4 md:px-8">
         <div className="max-w-md mx-auto h-full flex items-center justify-between">
-          {/* Left: Logout Button */}
+          {/* Left: Navigation Button */}
           <div className="flex items-center">
             <Button
-              onClick={handleLogout}
+              onClick={() =>
+                navigate(
+                  location.pathname.includes("settings")
+                    ? "/home"
+                    : "/settings",
+                )
+              }
               variant="ghost"
               size="icon"
               className="text-slate-400 hover:text-white hover:bg-white/10"
             >
-              <LogOut className="w-5 h-5" />
+              {location.pathname.includes("settings") ? (
+                <HomeIcon className="w-5 h-5" />
+              ) : (
+                <UserCog className="w-5 h-5" />
+              )}
             </Button>
           </div>
 
@@ -130,11 +136,11 @@ export default function Layout() {
                 variant="ghost"
                 className={cn(
                   "flex flex-col items-center gap-1 h-auto py-2 hover:bg-transparent flex-1",
-                  location.pathname === "/settings"
+                  location.pathname === "/group-settings"
                     ? "text-emerald-400"
                     : "text-slate-400",
                 )}
-                onClick={() => navigate("/settings")}
+                onClick={() => navigate("/group-settings")}
               >
                 <Settings className="w-6 h-6" />
                 <span className="text-[10px] font-medium">Settings</span>

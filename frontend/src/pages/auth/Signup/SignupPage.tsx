@@ -2,10 +2,9 @@ import { Loader2, Lock, LogIn, Smartphone, User } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 
+import createUser from "@/api/unprotected/create-user";
 import Loading from "@/components/Loading";
 import { Button } from "@/components/ui/button";
-
-import createUser from "@/api/unprotected/create-user";
 import { useAuth } from "@/context/AuthContext";
 import useApiCall from "@/hooks/useApiCall";
 import type {
@@ -13,6 +12,7 @@ import type {
   UserCreateRequest,
   UserLoginRequest,
 } from "@/types";
+
 import AuthLayout from "../AuthLayout";
 
 export default function Signup() {

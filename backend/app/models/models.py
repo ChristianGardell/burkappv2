@@ -48,13 +48,11 @@ class Users(Base):
     phone_number = Column(String, unique=True, index=True, nullable=False)
     admin = Column(Boolean, default=False, nullable=False)
     owner = Column(Boolean, default=False, nullable=False)
-    group_id = Column(String, ForeignKey("groups.id", ondelete="CASCADE"), index=True, nullable=False)
+    group_id = Column(
+        String, ForeignKey("groups.id", ondelete="CASCADE"), index=True, nullable=False
+    )
     hashed_pin = Column(String, nullable=False)
     total_beers = Column(Integer, default=0, nullable=False)
-
-    __table_args__ = (
-        UniqueConstraint("phone_number", "group_id", name="uq_user_phone_group"),
-    )
 
     group = relationship("Groups", foreign_keys=[group_id], back_populates="members")
     beer_log = relationship(
@@ -71,6 +69,8 @@ class BeerLog(Base):
         unique=True,
         index=True,
     )
-    user_id = Column(String, ForeignKey("users.id", ondelete="CASCADE"), index=True, nullable=False)
+    user_id = Column(
+        String, ForeignKey("users.id", ondelete="CASCADE"), index=True, nullable=False
+    )
     timestamp = Column(String, nullable=False)
     user = relationship("Users", foreign_keys=[user_id], back_populates="beer_log")

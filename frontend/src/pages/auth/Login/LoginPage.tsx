@@ -2,12 +2,12 @@ import { Loader2, Lock, LogIn, Smartphone } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 
-import { Button } from "@/components/ui/button";
-
 import loginUser from "@/api/unprotected/log-in";
+import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
 import useApiCall from "@/hooks/useApiCall";
 import type { LoginResponse, UserLoginRequest } from "@/types";
+
 import AuthLayout from "../AuthLayout";
 
 export default function Login() {
@@ -15,7 +15,6 @@ export default function Login() {
   const navigate = useNavigate();
 
   const {
-    
     loading: loginLoading,
     error: loginError,
     execute: executeLogin,

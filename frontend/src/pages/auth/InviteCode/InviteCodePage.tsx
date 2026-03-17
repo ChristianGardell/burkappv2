@@ -1,12 +1,12 @@
-import { Loader2, Code, LogIn } from "lucide-react";
+import { Code, Loader2, LogIn } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 
-import { Button } from "@/components/ui/button";
 import validateGroup from "@/api/unprotected/validate-group";
-
+import { Button } from "@/components/ui/button";
 import useApiCall from "@/hooks/useApiCall";
 import type { GroupResponse, ValidateGroupRequest } from "@/types";
+
 import AuthLayout from "../AuthLayout";
 
 export default function InviteCodeSignUp() {

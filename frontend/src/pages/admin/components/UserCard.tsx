@@ -2,13 +2,12 @@ import { Loader2, Save } from "lucide-react";
 import { useState } from "react";
 
 import updateUserBeers from "@/api/admin/update-user-beers";
+import ErrorDisplay from "@/components/errorDisplay";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import useApiCall from "@/hooks/useApiCall";
 import type { UserResponse } from "@/types";
 import type { UserUpdateAdmin } from "@/types";
-
-import ErrorDisplay from "@/components/errorDisplay";
 
 export default function UserCard({ user }: { user: UserResponse }) {
   const [currBeers, setCurrBeers] = useState<number>(user.beers);

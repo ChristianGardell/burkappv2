@@ -77,6 +77,7 @@ def create_group(
     token = create_access_token({"sub": user.id, "group_id": user.group_id})
     return LoginResponse(user=UserResponse.model_validate(user), access_token=token)
 
+
 @router.post("/validate-group", response_model=GroupResponse)
 @ip_limiter.limit("50/minute")
 def validate_group(
@@ -85,12 +86,11 @@ def validate_group(
     """Create a new group in the database, add User and make user admin and owner."""
     group = group_crud.get_group_by_invite_code(db, invite_code=data.invite_code)
     if not group:
-        raise HTTPException(status_code=404, detail="Group with invite code does not exist")
+        raise HTTPException(
+            status_code=404, detail="Group with invite code does not exist"
+        )
 
     return GroupResponse.model_validate(group)
-
-
-
 
 
 @router.put("/decrement", response_model=UserBeerResponse)

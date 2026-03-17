@@ -3,8 +3,9 @@ import { useAuth } from "@/context/AuthContext";
 import { AdminManagementCard } from "./components/AdminManagementCard";
 import { ChangeNameCard } from "./components/ChangeNameCard";
 import { ChangePricePerBeerCard } from "./components/ChangePricePerBeerCard";
-import { SwishPaymentCard } from "./components/SwishPaymentCard";
+import { DeleteGroupCard } from "./components/DeleteGroupCard";
 import { ShareGroupCard } from "./components/ShareGroupCard";
+import { SwishPaymentCard } from "./components/SwishPaymentCard";
 
 export default function OwnerSettings() {
   const { user } = useAuth();
@@ -41,6 +42,9 @@ export default function OwnerSettings() {
 
       {/* Share Group Section */}
       <ShareGroupCard />
+
+      {/* Delete Group Section */}
+      <DeleteGroupCard />
     </div>
   );
 }

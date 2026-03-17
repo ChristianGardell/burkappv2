@@ -2,12 +2,11 @@ import { Minus, ShoppingCart } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
+import decrementBeer from "@/api/user/decrement-beer";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/context/AuthContext";
 import useApiCall from "@/hooks/useApiCall";
 import { type UserBeerResponse } from "@/types";
-
-import decrementBeer from "@/api/user/decrement-beer";
-import { useAuth } from "@/context/AuthContext";
 
 export default function Home() {
   const [disableDrinkButton, setDisableDrinkButton] = useState<boolean>(false);
