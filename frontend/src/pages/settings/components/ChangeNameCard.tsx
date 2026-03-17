@@ -1,6 +1,6 @@
 import { Users } from "lucide-react";
 import { useState } from "react";
-import React from "react";
+
 
 import changeGroupName from "@/api/owner/change-group-name";
 import ErrorDisplay from "@/components/errorDisplay";
