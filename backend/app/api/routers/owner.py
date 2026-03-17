@@ -20,12 +20,12 @@ def set_swish_number(
     db: Session = Depends(get_db),
 ):
     """Set a group's swish number."""
-    number = owner_crud.set_group_swish_number(
+    group = owner_crud.set_group_swish_number(
         db, current_owner.group_id, data.swish_number
     )
-    if not number:
+    if not group:
         raise HTTPException(status_code=400, detail="Failed to set swish number")
-    return number
+    return SwishSetResponse(swish_number=group.swish_number)
 
 
 @router.put("/set-group-price-per-beer", response_model=PricePerBeerSetResponse)

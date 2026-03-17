@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 
 from ..models.models import Groups, Users
-from ..schemas.schemas import *
+# from ..schemas.schemas import *
 
 
 def make_user_admin(db: Session, user_id: str, group_id: str) -> Users | None:
@@ -39,7 +39,7 @@ def set_group_name(db: Session, group_id: str, name: str) -> Groups | None:
 
 def set_group_swish_number(
     db: Session, group_id: str, swish_number: str
-) -> SwishSetResponse | None:
+) -> Groups | None:
     """Set a group's swish number."""
     group = db.query(Groups).filter_by(id=group_id).first()
     if not group:
@@ -47,7 +47,7 @@ def set_group_swish_number(
     group.swish_number = swish_number
     db.commit()
     db.refresh(group)
-    return SwishSetResponse(swish_number=group.swish_number)
+    return group
 
 
 def set_group_price_per_beer(

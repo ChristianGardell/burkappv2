@@ -50,7 +50,7 @@ def update_user_beers(
     db: Session = Depends(get_db),
 ):
     """Update a user's beer count. Visible to all validated users (admins and owners)."""
-    success = admin_crud.update_user_beers(db, data)
-    if not success:
+    user = admin_crud.update_user_beers(db, data)
+    if not user:
         raise HTTPException(status_code=400, detail="Failed to update user beers")
-    return success
+    return True

@@ -2,7 +2,7 @@ import { Loader2, Save } from "lucide-react";
 import { useState } from "react";
 
 import updateUserBeers from "@/api/admin/update-user-beers";
-import { Button} from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import useApiCall from "@/hooks/useApiCall";
 import type { UserResponse } from "@/types";
@@ -105,6 +105,7 @@ export default function UserCard({ user }: { user: UserResponse }) {
                   inputMode="numeric"
                   pattern="[0-9]*"
                   min="0"
+                  maxLength={4}
                   placeholder="Set"
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}

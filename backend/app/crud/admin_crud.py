@@ -9,15 +9,15 @@ from ..models.models import BeerLog, Groups, Users
 from ..schemas.schemas import *
 
 
-def update_user_beers(db: Session, userUpdate: UserUpdateAdminRequest) -> bool:
+def update_user_beers(db: Session, userUpdate: UserUpdateAdminRequest) -> Users | None:
     """Update a user's beer count."""
     user = db.query(Users).filter_by(id=userUpdate.id).first()
     if not user:
-        return False
+        return None
     user.beers = userUpdate.beers
     db.commit()
     db.refresh(user)
-    return True
+    return user
 
 
 def get_all_users(db: Session, group_id: str) -> list[Users]:
