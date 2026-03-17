@@ -127,7 +127,7 @@ export default function Login() {
                 Log In
               </Button>
 
-              <Link to="/signup" className="block w-full">
+              <Link to="/join" className="block w-full">
                 <Button
                   variant="outline"
                   type="button"

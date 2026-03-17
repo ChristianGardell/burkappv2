@@ -1,6 +1,6 @@
-import { Code, Lock, LogIn, Smartphone, User } from "lucide-react";
+import { Lock, LogIn, Smartphone, User } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 import ErrorDisplay from "@/components/errorDisplay";
 import Loading from "@/components/Loading";
@@ -19,6 +19,7 @@ export default function Signup() {
   const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const { inviteCode } = useParams<{ inviteCode?: string }>();
 
   const formData = location.state?.formData as UserLoginRequest | undefined;
 
@@ -34,7 +35,7 @@ export default function Signup() {
     formState: { errors },
   } = useForm<UserCreateRequest>({
     defaultValues: {
-      invite_code: "",
+      invite_code: inviteCode,
       name: "",
       phone_number: formData?.phone_number || "",
       pin: formData?.pin || "",
@@ -77,29 +78,6 @@ export default function Signup() {
           {/* Signup Form Card */}
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="bg-slate-900 rounded-3xl p-8 shadow-xl shadow-slate-900/50 w-full border border-slate-800 space-y-6">
-              <div className="space-y-2">
-                <label className="text-xs font-semibold uppercase tracking-wider text-slate-500 ml-1">
-                  Invite Code
-                </label>
-                <div className="relative">
-                  <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500">
-                    <Code className="w-5 h-5" />
-                  </div>
-                  <input
-                    {...register("invite_code", {
-                      required: "Invite code is required",
-                      minLength: {
-                        value: 3,
-                        message: "Invite code must be at least 3 characters",
-                      },
-                    })}
-                    type="text"
-                    name="invite_code"
-                    placeholder="fancy-cat-256"
-                    className="w-full h-14 bg-white/5 rounded-2xl pl-12 pr-4 text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 border border-transparent focus:border-emerald-500/50 transition-all font-medium"
-                  />
-                </div>
-              </div>
               <div className="space-y-2">
                 <label className="text-xs font-semibold uppercase tracking-wider text-slate-500 ml-1">
                   Name

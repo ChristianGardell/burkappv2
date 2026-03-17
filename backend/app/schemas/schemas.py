@@ -30,6 +30,14 @@ class UserCreateRequest(BaseModel):
     )
     pin: str = Field(..., pattern=r"^\d{6}$", description="Must be exactly 6 digits")
 
+class ValidateGroupRequest(BaseModel):
+    invite_code: str = Field(
+        ...,
+        min_length=6,
+        max_length=50,
+        description="Invite code must be between 6 and 50 characters",
+    )
+
 
 # --- Admin Input ---
 

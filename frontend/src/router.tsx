@@ -5,8 +5,9 @@ import Buy from "@pages/Buy";
 import CreateGroup from "@pages/CreateGroup";
 import Home from "@pages/Home";
 import Login from "@pages/Login";
-import Signup from "@pages/Signup";
+import Signup from "@/pages/DetailsSignup";
 import Stats from "@/pages/stats/Stats";
+import InviteCodeSignUp from "@/pages/InviteCodeSignUp";
 import { createBrowserRouter, Navigate } from "react-router-dom";
 
 import OwnerSettings from "@/pages/settings/OwnerSettings";
@@ -15,6 +16,7 @@ import AdminRoute from "./lib/adminRoute";
 import OwnerRoute from "./lib/ownerRoute";
 import ProtectedRoute from "./lib/protectedRoute";
 import RedirectHome from "./lib/redirectHome";
+
 
 const router = createBrowserRouter([
   {
@@ -26,7 +28,15 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/signup",
+    path: "/join",
+    element: (
+      <RedirectHome>
+        <InviteCodeSignUp />
+      </RedirectHome>
+    ),
+  },
+  {
+    path: "/join/:inviteCode?",
     element: (
       <RedirectHome>
         <Signup />

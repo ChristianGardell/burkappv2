@@ -19,6 +19,10 @@ export interface GroupCreateRequest {
   pin: string;
 }
 
+export interface ValidateGroupRequest {
+  invite_code: string;
+}
+
 // --- Admin Input ---
 
 export interface UserUpdateAdmin {

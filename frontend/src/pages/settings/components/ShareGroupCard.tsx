@@ -14,7 +14,7 @@ export function ShareGroupCard() {
   const handleAction = () => {
     if (!user?.group?.invite_code) return;
     const baseUrl = window.location.origin;
-    const shareUrl = `${baseUrl}/signup/${user.group.invite_code}`;
+    const shareUrl = `${baseUrl}/join/${user.group.invite_code}`;
     navigator.clipboard.writeText(shareUrl);
   };
 
