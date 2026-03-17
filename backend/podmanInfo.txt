@@ -21,3 +21,7 @@ podman exec -it beertrack bash
 to cascade delete FK:
 PRAGMA foreign_keys=ON;
 DELETE FROM groups WHERE id = '...';
+
+
+analyze tables: 
+sqlite-utils analyze-tables app.db
