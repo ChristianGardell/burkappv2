@@ -1,54 +1,53 @@
-import { Lock, LogIn, Smartphone, User } from "lucide-react";
+import { Lock, LogIn, Smartphone, User, Users } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import ErrorDisplay from "@/components/errorDisplay";
 import Loading from "@/components/Loading";
 import { Button } from "@/components/ui/button";
 
-import createUser from "../api/unprotected/create-user";
-import { useAuth } from "../context/AuthContext";
-import useApiCall from "../hooks/useApiCall";
+import createGroup from "@/api/unprotected/create-group";
+import { useAuth } from "@/context/AuthContext";
+import useApiCall from "@/hooks/useApiCall";
 import type {
+  GroupCreateRequest,
   LoginResponse,
-  UserCreateRequest,
   UserLoginRequest,
-} from "../types";
+} from "@/types";
 
-export default function Signup() {
+export default function CreateGroup() {
   const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const { inviteCode } = useParams<{ inviteCode?: string }>();
 
   const formData = location.state?.formData as UserLoginRequest | undefined;
 
   const {
-    error: signUpError,
-    loading: signUpLoading,
-    execute: executeSignUp,
+    error: createGroupError,
+    loading: createGroupLoading,
+    execute: executeCreateGroup,
   } = useApiCall<LoginResponse>(3000);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<UserCreateRequest>({
+  } = useForm<GroupCreateRequest>({
     defaultValues: {
-      invite_code: inviteCode,
-      name: "",
       phone_number: formData?.phone_number || "",
       pin: formData?.pin || "",
+      name: "",
+      group_name: "",
     },
   });
-  const onSubmit = async (data: UserCreateRequest) => {
-    const user = await executeSignUp(() => createUser(data));
+  const onSubmit = async (data: GroupCreateRequest) => {
+    const user = await executeCreateGroup(() => createGroup(data));
     if (user) {
       login(user.access_token, user.user);
       navigate("/home");
     }
   };
-  if (signUpLoading) {
+  if (createGroupLoading) {
     return <Loading />;
   }
 
@@ -64,20 +63,46 @@ export default function Signup() {
             <div className="min-h-10 text-sm text-rose-400">
               <ErrorDisplay
                 error={
-                  signUpError ??
-                  errors.invite_code?.message ??
+                  createGroupError ??
+                  errors.group_name?.message ??
+                  errors.name?.message ??
                   errors.phone_number?.message ??
                   errors.pin?.message ??
-                  errors.name?.message ??
                   null
                 }
               />
+
+              <p></p>
             </div>
           </div>
 
           {/* Signup Form Card */}
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="bg-slate-900 rounded-3xl p-8 shadow-xl shadow-slate-900/50 w-full border border-slate-800 space-y-6">
+              <div className="space-y-2">
+                <label className="text-xs font-semibold uppercase tracking-wider text-slate-500 ml-1">
+                  Group Name
+                </label>
+                <div className="relative">
+                  <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500">
+                    <Users className="w-5 h-5" />
+                  </div>
+                  <input
+                    {...register("group_name", {
+                      required: "Group name is required",
+                      minLength: {
+                        value: 5,
+                        message: "Group name must be at least 5 characters",
+                      },
+                    })}
+                    type="text"
+                    name="group_name"
+                    placeholder="D Flames 4ever"
+                    className="w-full h-14 bg-white/5 rounded-2xl pl-12 pr-4 text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 border border-transparent focus:border-emerald-500/50 transition-all font-medium"
+                  />
+                </div>
+              </div>
+
               <div className="space-y-2">
                 <label className="text-xs font-semibold uppercase tracking-wider text-slate-500 ml-1">
                   Name
@@ -101,7 +126,6 @@ export default function Signup() {
                   />
                 </div>
               </div>
-
               <div className="space-y-2">
                 <label className="text-xs font-semibold uppercase tracking-wider text-slate-500 ml-1">
                   Phone Number
@@ -154,7 +178,7 @@ export default function Signup() {
 
               <Button className="w-full h-14 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-900/20 text-lg font-bold gap-2">
                 <LogIn className="w-5 h-5" />
-                Sign Up
+                Create Group and Sign Up
               </Button>
             </div>
           </form>

@@ -6,8 +6,8 @@ import ErrorDisplay from "@/components/errorDisplay";
 import { Button } from "@/components/ui/button";
 import validateGroup from "@/api/unprotected/validate-group";
 
-import useApiCall from "../hooks/useApiCall";
-import type { GroupResponse, ValidateGroupRequest } from "../types";
+import useApiCall from "@/hooks/useApiCall";
+import type { GroupResponse, ValidateGroupRequest } from "@/types";
 
 export default function InviteCodeSignUp() {
   const navigate = useNavigate();
