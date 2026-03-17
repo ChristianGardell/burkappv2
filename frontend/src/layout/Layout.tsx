@@ -6,7 +6,7 @@ import {
   Settings,
   Shield,
 } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
@@ -17,13 +17,16 @@ export default function Layout() {
   const { user, logout, refresh, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const handleLogout = () => {
     logout();
     navigate("/login", { replace: true });
   };
-  const handleRefresh = () => {
-    refresh();
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    await refresh();
+    setTimeout(() => setIsRefreshing(false), 500);
   };
 
   useEffect(() => {
@@ -31,7 +34,6 @@ export default function Layout() {
       refresh();
     }
   }, [location.pathname]);
-
 
   return (
     <div className="flex flex-col h-dvh overflow-hidden bg-slate-950 font-libre text-slate-200">
@@ -58,15 +60,23 @@ export default function Layout() {
               {user?.group?.name}
             </span>
           </div>
-          {/* Right: Empty for balance */}
+          {/* Right: Refresh Button */}
           <div className="flex items-center">
             <Button
               onClick={handleRefresh}
               variant="ghost"
               size="icon"
-              className="text-slate-400 hover:text-white hover:bg-white/10"
+              disabled={isRefreshing}
+              className={cn(
+                "transition-all duration-300",
+                isRefreshing
+                  ? "text-emerald-400 bg-emerald-400/10"
+                  : "text-slate-400 hover:text-white hover:bg-white/10",
+              )}
             >
-              <RefreshCcw className="w-5 h-5" />
+              <RefreshCcw
+                className={cn("w-5 h-5", isRefreshing && "animate-spin")}
+              />
             </Button>
           </div>
         </div>
