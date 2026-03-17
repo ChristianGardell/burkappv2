@@ -18,6 +18,7 @@ models.Base.metadata.create_all(bind=engine)
 # Create FastAPI app and configure rate limiting
 
 app = FastAPI()
+
 app.state.limiter = ip_limiter
 
 

@@ -1,0 +1,8 @@
+{
+  "backend/**/*.py": [
+    "backend/venv/bin/black"
+  ],
+  "frontend/**/*.{ts,tsx,js,jsx,json,css}": [
+    "npx --prefix frontend prettier --write"
+  ]
+}

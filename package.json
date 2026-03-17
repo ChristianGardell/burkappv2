@@ -1,0 +1,12 @@
+{
+  "name": "beertrack-monorepo",
+  "private": true,
+  "description": "Root package for managing Husky hooks and lint-staged across frontend and backend",
+  "scripts": {
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.2"
+  }
+}
