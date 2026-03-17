@@ -11,6 +11,7 @@ import type { GroupNameChangeRequest } from "@/types";
 
 import { makeBlur } from "../../../lib/utils";
 
+
 export function ChangeNameCard() {
   const [groupNameCandidate, setGroupNameCandidate] = useState("");
   const { execute: executeChangeGroupName, error: changeNameError } =
