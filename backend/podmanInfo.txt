@@ -14,7 +14,10 @@ for logs, create ~/logs/beertrack-logs
 to apply new changes, podman stop tab, podman rm tab
 
 to copy the db for inspection:
-podman cp beertrack:/app//app.db .
-
+podman cp beertrack:/app/app.db  ~/
 to launch a bash shell:
 podman exec -it beertrack bash
+
+to cascade delete FK:
+PRAGMA foreign_keys=ON;
+DELETE FROM groups WHERE id = '...';
