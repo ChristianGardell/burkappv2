@@ -1,8 +1,7 @@
 
-import type { UserResponse } from "@/types";
 import {useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
-import ErrorDisplay from "@/components/errorDisplay";
+
 import { Link } from "lucide-react";
 
 
