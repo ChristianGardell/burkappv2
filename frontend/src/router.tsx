@@ -5,7 +5,7 @@ import Buy from "@pages/Buy";
 import CreateGroup from "@pages/CreateGroup";
 import Home from "@pages/Home";
 import Login from "@pages/Login";
-import Signup from "@/pages/DetailsSignup";
+import Signup from "@/pages/Signup";
 import Stats from "@/pages/stats/Stats";
 import InviteCodeSignUp from "@/pages/InviteCodeSignUp";
 import { createBrowserRouter, Navigate } from "react-router-dom";
@@ -17,42 +17,20 @@ import OwnerRoute from "./lib/ownerRoute";
 import ProtectedRoute from "./lib/protectedRoute";
 import RedirectHome from "./lib/redirectHome";
 
-
 const router = createBrowserRouter([
+  // Public Routes (Unprotected)
   {
-    path: "/login",
-    element: (
-      <RedirectHome>
-        <Login />
-      </RedirectHome>
-    ),
+    element: <RedirectHome />,
+    children: [
+      { path: "/login", element: <Login /> },
+      { path: "/join", element: <InviteCodeSignUp /> },
+      { path: "/join/:inviteCode?", element: <Signup /> },
+      { path: "/create-group", element: <CreateGroup /> },
+    ],
   },
+
+  // Protected Routes (Uses Layout)
   {
-    path: "/join",
-    element: (
-      <RedirectHome>
-        <InviteCodeSignUp />
-      </RedirectHome>
-    ),
-  },
-  {
-    path: "/join/:inviteCode?",
-    element: (
-      <RedirectHome>
-        <Signup />
-      </RedirectHome>
-    ),
-  },
-  {
-    path: "/create-group",
-    element: (
-      <RedirectHome>
-        <CreateGroup />
-      </RedirectHome>
-    ),
-  },
-  {
-    path: "/",
     element: (
       <ProtectedRoute>
         <Layout />
@@ -64,31 +42,32 @@ const router = createBrowserRouter([
       { path: "/buy", element: <Buy /> },
     ],
   },
+
+  // Admin Routes (Uses Layout)
   {
-    path: "/",
     element: (
       <AdminRoute>
         <Layout />
       </AdminRoute>
     ),
     children: [
-      { path: "/", element: <Navigate to="/home" replace /> },
       { path: "/admin", element: <Admin /> },
       { path: "/stats", element: <Stats /> },
     ],
   },
+
+  // Owner Routes (Uses Layout)
   {
-    path: "/",
     element: (
       <OwnerRoute>
         <Layout />
       </OwnerRoute>
     ),
-    children: [
-      { path: "/", element: <Navigate to="/home" replace /> },
-      { path: "/settings", element: <OwnerSettings /> },
-    ],
+    children: [{ path: "/settings", element: <OwnerSettings /> }],
   },
+
+  // Fallback
+  { path: "*", element: <Navigate to="/home" replace /> },
 ]);
 
 export default router;

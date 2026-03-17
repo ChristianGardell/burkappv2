@@ -3,15 +3,17 @@ import { Navigate } from "react-router-dom";
 
 import { useAuth } from "@/context/AuthContext";
 
+import Loading from "@/components/Loading";
+
 interface AdminRouteProps {
   children: React.ReactNode;
 }
 
 const AdminRoute = ({ children }: AdminRouteProps) => {
-  const { isAuthenticated, isLoading, user } = useAuth();
+  const { isAuthenticated, isLoading, user } = useAuth( );
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   if (!isAuthenticated || !user?.admin) {
