@@ -1,8 +1,20 @@
 build with:
 podman build -t beertrack-backend .
+
+runs from systemdservice: systemctl --user status beertrack.service 
+
 run with: 
 podman run -d -p 8000:8000 \
   -v ~/logs/beertrack-logs:/app/logs:Z \
   --name beertrack \
   beertrack-backend:latest
+
 for logs, create ~/logs/beertrack-logs
+
+to apply new changes, podman stop tab, podman rm tab
+
+to copy the db for inspection:
+podman cp beertrack:/app//app.db .
+
+to launch a bash shell:
+podman exec -it beertrack bash
