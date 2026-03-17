@@ -67,4 +67,3 @@ def delete_user_account(db: Session, user_id: str) -> bool:
     db.delete(user)
     db.commit()
     return True
-

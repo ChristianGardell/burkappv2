@@ -1,10 +1,10 @@
 import { Trash2 } from "lucide-react";
 import { useState } from "react";
 
+import deleteAccount from "@/api/user/delete-account";
+import ErrorDisplay from "@/components/errorDisplay";
 import { Button } from "@/components/ui/button";
 import useApi from "@/hooks/useApiCall";
-import ErrorDisplay from "@/components/errorDisplay";
-import deleteAccount from "@/api/user/delete-account";
 
 export function DeleteAccountCard() {
   const [isConfirming, setIsConfirming] = useState(false);

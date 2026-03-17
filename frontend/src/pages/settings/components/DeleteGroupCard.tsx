@@ -1,15 +1,14 @@
 import { Trash2 } from "lucide-react";
 import { useState } from "react";
 
+import deleteGroup from "@/api/owner/delete-group";
+import ErrorDisplay from "@/components/errorDisplay";
 import { Button } from "@/components/ui/button";
 import useApi from "@/hooks/useApiCall";
-import ErrorDisplay from "@/components/errorDisplay";
-import deleteGroup from "@/api/owner/delete-group";
 
 export function DeleteGroupCard() {
   const [isConfirming, setIsConfirming] = useState(false);
   const { execute: executeDeleteGroup, error: deleteGroupError } = useApi(3000);
-
 
   const handleDelete = async () => {
     const result = await executeDeleteGroup(() => deleteGroup());

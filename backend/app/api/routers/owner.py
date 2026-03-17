@@ -96,6 +96,7 @@ def remove_admin(
     )
     return updated_user
 
+
 @router.delete("/delete-group", response_model=bool)
 def delete_group(
     current_owner: models.Users = Depends(get_current_owner),
@@ -106,4 +107,3 @@ def delete_group(
     if not success:
         raise HTTPException(status_code=400, detail="Failed to delete group")
     return True
-
