@@ -4,6 +4,7 @@ import { useState } from "react";
 import setGroupSwishNumber from "@/api/owner/set-group-swish-number";
 import ErrorDisplay from "@/components/errorDisplay";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import useApiCall from "@/hooks/useApiCall";
 import type { SwishSetRequest, SwishSetResponse } from "@/types";
 
@@ -16,7 +17,6 @@ export function SwishPaymentCard({
 }) {
   const [swishNumberVisual, setSwishNumberVisual] = useState<string>(
     currentSwishNumber || "Not Set",
-
   );
 
   const [swishNumberCandidate, setSwishNumberCandidate] = useState<string>("");
@@ -60,14 +60,13 @@ export function SwishPaymentCard({
         <div className="space-y-2">
           <ErrorDisplay error={swishError || formError} />
           <label className="text-xs font-bold text-slate-500 uppercase tracking-wider ml-1"></label>
-          <input
+          <Input
             type="tel"
             placeholder="070 123 45 67"
             value={swishNumberCandidate}
             inputMode="numeric"
             maxLength={10}
             onChange={(e) => setSwishNumberCandidate(e.target.value)}
-            className="w-full p-4 rounded-2xl bg-slate-950 border border-slate-800 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all font-mono"
           />
         </div>
 

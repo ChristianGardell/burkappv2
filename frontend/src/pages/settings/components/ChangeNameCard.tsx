@@ -1,9 +1,11 @@
 import { Users } from "lucide-react";
 import { useState } from "react";
+import React from "react";
 
 import changeGroupName from "@/api/owner/change-group-name";
 import ErrorDisplay from "@/components/errorDisplay";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import useApiCall from "@/hooks/useApiCall";
 import type { GroupNameChangeRequest } from "@/types";
 
@@ -41,14 +43,13 @@ export function ChangeNameCard() {
         <div className="space-y-2">
           {changeNameError && <ErrorDisplay error={changeNameError} />}
           <label className="text-xs font-bold text-slate-500 uppercase tracking-wider ml-1"></label>
-          <input
+          <Input
             type="text"
             placeholder="Group Name"
             value={groupNameCandidate}
             inputMode="text"
             maxLength={100}
             onChange={(e) => setGroupNameCandidate(e.target.value)}
-            className="w-full p-4 rounded-2xl bg-slate-950 border border-slate-800 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all font-mono"
           />
         </div>
 

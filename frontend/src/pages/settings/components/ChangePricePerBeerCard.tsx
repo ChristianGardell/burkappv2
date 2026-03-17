@@ -1,9 +1,10 @@
 import { DollarSign } from "lucide-react";
-import { useEffect,useState } from "react";
+import { useEffect, useState } from "react";
 
 import setGroupPricePerBeer from "@/api/owner/set-price-per-beer";
 import ErrorDisplay from "@/components/errorDisplay";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { useAuth } from "@/context/AuthContext";
 import useApiCall from "@/hooks/useApiCall";
 import type { PricePerBeerSetRequest, PricePerBeerSetResponse } from "@/types";
@@ -11,7 +12,6 @@ import type { PricePerBeerSetRequest, PricePerBeerSetResponse } from "@/types";
 import { makeBlur } from "../../../lib/utils";
 
 export function ChangePricePerBeerCard({
-
   current_price_per_beer,
 }: {
   current_price_per_beer: number;
@@ -23,9 +23,11 @@ export function ChangePricePerBeerCard({
   const { execute: executeChangePricePerBeer, error: changePriceError } =
     useApiCall<PricePerBeerSetResponse>(3000);
 
-    useEffect(() => {
-      setCurrentPricePerBeerVisual(user?.group.price_per_beer.toString() || "Not Set");
-    }, [user]);
+  useEffect(() => {
+    setCurrentPricePerBeerVisual(
+      user?.group.price_per_beer.toString() || "Not Set",
+    );
+  }, [user]);
 
   const handlePricePerBeerChange = async () => {
     const request: PricePerBeerSetRequest = {
@@ -58,14 +60,13 @@ export function ChangePricePerBeerCard({
         <div className="space-y-2">
           {changePriceError && <ErrorDisplay error={changePriceError} />}
           <label className="text-xs font-bold text-slate-500 uppercase tracking-wider ml-1"></label>
-          <input
+          <Input
             type="numeric"
             placeholder="Price Per Beer"
             value={pricePerBeerCandidate || ""}
             inputMode="decimal"
             maxLength={3}
             onChange={(e) => setPricePerBeerCandidate(e.target.value)}
-            className="w-full p-4 rounded-2xl bg-slate-950 border border-slate-800 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all font-mono"
           />
         </div>
 
