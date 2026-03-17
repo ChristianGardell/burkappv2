@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import ErrorDisplay from "@/components/errorDisplay";
-import { Loading } from "@/components/Loading";
+import Loading from "@/components/Loading";
 import { Button } from "@/components/ui/button";
 
 import createGroup from "../api/unprotected/create-group";

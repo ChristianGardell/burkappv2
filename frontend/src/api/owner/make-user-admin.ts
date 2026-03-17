@@ -15,7 +15,7 @@ const makeUserAdmin = async (
   });
 
   if (response.status === 404) {
-    throw new Error("User not found");
+    throw new Error("User not found in your group");
   }
   if (response.status === 422) {
     throw new Error("Invalid user ID");

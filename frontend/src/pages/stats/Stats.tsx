@@ -10,6 +10,7 @@ import {
 
 import useApiCall from "@/hooks/useApiCall";
 
+import Loading from "@/components/Loading";
 import getAllStats from "../../api/admin/get-all-stats-admin";
 import type { AdminStatsResponse } from "../../types";
 import { StatsCard } from "./components/StatsCard";
@@ -54,7 +55,7 @@ export default function Stats() {
 
   if (loadingStats)
     return (
-      <div className="p-8 text-center text-slate-400">Loading stats...</div>
+      <Loading/>
     );
 
   return (

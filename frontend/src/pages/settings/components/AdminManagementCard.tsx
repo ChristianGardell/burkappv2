@@ -47,7 +47,6 @@ export function AdminManagementCard() {
         {adminError || phoneError ? (
           <ErrorDisplay error={adminError || phoneError} />
         ) : null}
-        {/* {phoneError && <ErrorDisplay error={phoneError} />} */}
         <div className="space-y-2">
           <label className="text-xs font-bold text-slate-500 uppercase tracking-wider ml-1"></label>
           <input

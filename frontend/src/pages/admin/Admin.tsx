@@ -1,6 +1,7 @@
 import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 
+import Loading from "@/components/Loading";
 import getAllUsers from "@/api/admin/get-all-users-admin";
 import UserCard from "@/pages/admin/components/UserCard";
 import { useAuth } from "@/context/AuthContext";
@@ -51,9 +52,7 @@ export default function Admin() {
 
   if (loadingAllUsers) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <Loader2 className="w-8 h-8 animate-spin text-slate-400" />
-      </div>
+      <Loading/>
     );
   }
 
