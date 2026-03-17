@@ -38,6 +38,7 @@ export function SwishPaymentCard({
     );
     if (result) {
       setFormError(null);
+      setSwishNumberCandidate("");
       setSwishNumberVisual(result.swish_number);
     }
   };

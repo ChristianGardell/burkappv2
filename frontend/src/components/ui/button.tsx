@@ -29,7 +29,7 @@ function Button({
   ...props
 }: ButtonProps) {
   const baseClasses =
-    "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 outline-none";
+    "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 outline-none active:scale-95";
 
   const variantClasses: Record<ButtonVariant, string> = {
     default: "bg-primary text-primary-foreground hover:bg-primary/90",

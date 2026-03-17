@@ -4,6 +4,7 @@ import { AdminManagementCard } from "./components/AdminManagementCard";
 import { ChangeNameCard } from "./components/ChangeNameCard";
 import { ChangePricePerBeerCard } from "./components/ChangePricePerBeerCard";
 import { SwishPaymentCard } from "./components/SwishPaymentCard";
+import { ShareGroupCard } from "./components/ShareGroupCard";
 
 export default function OwnerSettings() {
   const { user } = useAuth();
@@ -38,6 +39,9 @@ export default function OwnerSettings() {
       <ChangePricePerBeerCard
         current_price_per_beer={user.group.price_per_beer}
       />
+
+      {/* Share Group Section */}
+      <ShareGroupCard />
     </div>
   );
 }
