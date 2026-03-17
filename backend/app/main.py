@@ -23,6 +23,19 @@ app.state.limiter = ip_limiter
 
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
+
+@app.middleware("http")
+async def cache_request_body(request: Request, call_next):
+    if request.method == "OPTIONS":
+        return await call_next(request)
+    await request.body()
+    try:
+        request.state.body = json.loads(request._body)
+    except Exception:
+        request.state.body = {}
+    return await call_next(request)
+
+
 # Configure CORS
 origins = [
     FRONTEND_SERVER_IP,
@@ -37,18 +50,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-
-@app.middleware("http")
-async def cache_request_body(request: Request, call_next):
-    if request.method == "OPTIONS":
-        return await call_next(request)
-    await request.body()
-    try:
-        request.state.body = json.loads(request._body)
-    except Exception:
-        request.state.body = {}
-    return await call_next(request)
 
 
 # Include Routers
