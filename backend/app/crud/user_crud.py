@@ -59,3 +59,12 @@ def create_user(db: Session, userCreate: UserCreateRequest, group_id: str) -> Us
     return entry
 
 
+def delete_user_account(db: Session, user_id: str) -> bool:
+    """Delete a user from the database."""
+    user = db.query(Users).filter_by(id=user_id).first()
+    if not user:
+        return False
+    db.delete(user)
+    db.commit()
+    return True
+

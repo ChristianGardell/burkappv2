@@ -104,13 +104,18 @@ def decrement_user_beer(
     current_user = user_crud.decrement_user_beer_one(db, user_id=current_user.id)
     return current_user
 
+
 @router.delete("/delete-account", response_model=bool)
 def delete_account(
     current_user: models.Users = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
     """Delete the current user's account."""
-    success = user_service.delete_user_account(db, user_id=current_user.id)
+    if current_user.owner:
+        raise HTTPException(
+            status_code=403, detail="Owners cannot delete their own account"
+        )
+    success = user_crud.delete_user_account(db, user_id=current_user.id)
     if not success:
         raise HTTPException(status_code=400, detail="Failed to delete account")
     return True

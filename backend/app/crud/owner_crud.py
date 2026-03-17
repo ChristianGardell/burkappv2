@@ -62,3 +62,13 @@ def set_group_price_per_beer(
     db.commit()
     db.refresh(group)
     return group
+
+
+def delete_group(db: Session, group_id: str) -> bool:
+    """Delete a group and all associated users and beers."""
+    group = db.query(Groups).filter_by(id=group_id).first()
+    if not group:
+        return False
+    db.delete(group)
+    db.commit()
+    return True

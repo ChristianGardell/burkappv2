@@ -2,9 +2,21 @@ import { Trash2 } from "lucide-react";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import useApi from "@/hooks/useApiCall";
+import ErrorDisplay from "@/components/errorDisplay";
+import deleteAccount from "@/api/user/delete-account";
 
 export function DeleteAccountCard() {
   const [isConfirming, setIsConfirming] = useState(false);
+  const { execute: executeDeleteAccount, error: deleteAccountError } =
+    useApi(3000);
+
+  const handleDelete = async () => {
+    const result = await executeDeleteAccount(() => deleteAccount());
+    if (result) {
+      window.location.href = "/goodbye"; // Redirect to a goodbye page or homepage after deletion
+    }
+  };
 
   return (
     <div className="bg-red-950/20 border border-red-900/50 rounded-2xl p-6 shadow-xl space-y-4">
@@ -13,6 +25,7 @@ export function DeleteAccountCard() {
           <Trash2 className="w-5 h-5 text-red-500" />
         </div>
         <div>
+          <ErrorDisplay error={deleteAccountError} />
           <h2 className="text-white font-semibold flex items-center">
             Delete Account
           </h2>
@@ -45,8 +58,7 @@ export function DeleteAccountCard() {
             </Button>
             <Button
               onClick={() => {
-                // TODO: Add frontend API logic for deletion
-                console.log("Delete account triggered");
+                handleDelete();
               }}
               variant="destructive"
               className="flex-1 bg-red-600 hover:bg-red-700 text-white"

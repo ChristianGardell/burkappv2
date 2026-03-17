@@ -40,7 +40,8 @@ export default function Layout() {
             <Button
               onClick={() =>
                 navigate(
-                  location.pathname.includes("settings")
+                  location.pathname.includes("settings") &&
+                    !location.pathname.includes("group-settings")
                     ? "/home"
                     : "/settings",
                 )
@@ -49,7 +50,8 @@ export default function Layout() {
               size="icon"
               className="text-slate-400 hover:text-white hover:bg-white/10"
             >
-              {location.pathname.includes("settings") ? (
+              {location.pathname.includes("settings") &&
+              !location.pathname.includes("group-settings") ? (
                 <HomeIcon className="w-5 h-5" />
               ) : (
                 <UserCog className="w-5 h-5" />
