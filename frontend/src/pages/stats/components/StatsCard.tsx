@@ -5,22 +5,32 @@ import type { AdminStatsResponse } from "@/types";
 export function StatsCard({
   index,
   user,
+  maxBeers = 1,
 }: {
   index: number;
   user: AdminStatsResponse;
+  maxBeers?: number;
 }) {
   const [selected, setSelected] = useState(false);
+  const percent = maxBeers > 0 ? (user.total_beers / maxBeers) * 100 : 0;
+
   return (
     <div
       onClick={() => setSelected(!selected)}
-      className={`flex flex-col gap-4 p-4 rounded-2xl border transition-all duration-300 bg-slate-900 ${
+      className={`relative flex flex-col gap-4 p-4 rounded-2xl border transition-all duration-300 bg-slate-900 overflow-hidden cursor-pointer ${
         selected
           ? "border-emerald-500 ring-1 ring-emerald-500/20"
           : "border-slate-800"
       }`}
     >
-      {/* Top Row (Always Visible) */}
-      <div className="flex items-center justify-between">
+      {/* Background Progress Bar */}
+      <div
+        className="absolute top-0 left-0 bottom-0 bg-slate-800/30 transition-all duration-1000 ease-out"
+        style={{ width: `${percent}%` }}
+      />
+
+      {/* Top Row (Always Visible) relative to stay above background */}
+      <div className="relative flex items-center justify-between z-10">
         <div className="flex items-center gap-4">
           <div className="w-8 flex justify-center text-lg font-bold text-slate-400">
             <span>#{index + 1}</span>
@@ -48,7 +58,7 @@ export function StatsCard({
 
       {/* Expanded Content (Visible on click) */}
       {selected && (
-        <div className="pt-4 border-t border-slate-800 animate-in fade-in slide-in-from-top-2">
+        <div className="relative pt-4 border-t border-slate-800 animate-in fade-in slide-in-from-top-2 z-10">
           <p className="text-sm font-bold text-emerald-400 mb-2">
             24h Activity Log
           </p>

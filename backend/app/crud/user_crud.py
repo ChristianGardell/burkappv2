@@ -57,3 +57,5 @@ def create_user(db: Session, userCreate: UserCreateRequest, group_id: str) -> Us
     db.refresh(entry)
 
     return entry
+
+

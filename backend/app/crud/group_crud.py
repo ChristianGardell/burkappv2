@@ -37,3 +37,5 @@ def create_user_and_new_group(
 
 def get_group_by_invite_code(db: Session, invite_code: str) -> Groups | None:
     return db.query(Groups).filter_by(invite_code=invite_code).first()
+
+

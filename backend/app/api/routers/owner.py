@@ -95,3 +95,4 @@ def remove_admin(
         db, user_id=user.id, group_id=current_owner.group_id
     )
     return updated_user
+

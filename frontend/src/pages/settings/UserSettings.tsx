@@ -37,7 +37,8 @@ export default function UserSettings() {
       </div>
 
       {/* Delete Account Section */}
-      <DeleteAccountCard />
+
+      {!user.owner && <DeleteAccountCard />}
     </div>
   );
 }
