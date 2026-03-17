@@ -14,6 +14,9 @@ const updateUserBeers = async (
     body: JSON.stringify(userUpdateAdmin),
   });
 
+  if (response.status === 422) {
+    throw new Error("Must be between 0 and 9999 beers");
+  }
   if (!response.ok) {
     throw new Error("Failed to update user beers");
   }

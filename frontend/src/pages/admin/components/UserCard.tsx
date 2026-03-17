@@ -2,10 +2,13 @@ import { Loader2, Save } from "lucide-react";
 import { useState } from "react";
 
 import updateUserBeers from "@/api/admin/update-user-beers";
-import { Button } from "@/components/ui/button";
+import { Button} from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import useApiCall from "@/hooks/useApiCall";
 import type { UserResponse } from "@/types";
 import type { UserUpdateAdmin } from "@/types";
+
+import ErrorDisplay from "@/components/errorDisplay";
 
 export default function UserCard({ user }: { user: UserResponse }) {
   const [currBeers, setCurrBeers] = useState<number>(user.beers);
@@ -41,8 +44,8 @@ export default function UserCard({ user }: { user: UserResponse }) {
     const success = await executeUpdateBeers(() => updateUserBeers(toUpdate));
     if (success) {
       setCurrBeers(inputValueAsNumber);
-      setInputValue("");
     }
+    setInputValue("");
   };
 
   return (
@@ -56,11 +59,13 @@ export default function UserCard({ user }: { user: UserResponse }) {
       <div className="flex flex-col gap-5">
         {/* Top Row: User Info & Admin Badge */}
         <div className="flex items-start justify-between">
-          <div>
-            {updateError && <p>{updateError}</p>}
-            <h3 className="text-xl font-bold text-white leading-tight">
-              {user.name}
-            </h3>
+          <div className="flex flex-col">
+            <div className="flex flex-row items-center gap-3">
+              <h3 className="text-xl font-bold text-white leading-tight">
+                {user.name}
+              </h3>
+              <ErrorDisplay error={updateError} />
+            </div>
             <p className="text-sm text-slate-400 font-mono mt-1">
               {user.phone_number}
             </p>
@@ -96,7 +101,7 @@ export default function UserCard({ user }: { user: UserResponse }) {
                   handleSave();
                 }}
               >
-                <input
+                <Input
                   inputMode="numeric"
                   pattern="[0-9]*"
                   min="0"

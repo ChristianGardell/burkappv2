@@ -68,7 +68,7 @@ class UserUpdateAdminRequest(BaseModel):
         max_length=36,
         description="User ID must be a valid UUID4 string",
     )
-    beers: int = Field(..., ge=0, le=10000, description="Number of beers must be non-negative")
+    beers: int = Field(..., ge=0, le=9999, description="Number of beers must be non-negative")
 
 
 # --- Owner Input ---
