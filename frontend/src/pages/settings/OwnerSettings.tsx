@@ -16,8 +16,7 @@ export default function OwnerSettings() {
       <div className="space-y-1 text-center">
         <h1 className="text-2xl font-bold text-white">Group Settings</h1>
         <p className="text-slate-400 text-sm">
-          Managing:{" "}
-          <span className="text-emerald-400">{user.group.name}</span>
+          Managing: <span className="text-emerald-400">{user.group.name}</span>
         </p>
         <p className="text-slate-400 text-sm">
           <span className="text-slate-500 ml-1">Invite Code: </span>

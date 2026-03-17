@@ -53,10 +53,7 @@ export default function Stats() {
 
   const COLORS = ["#10b981", "#3b82f6"]; // Emerald (Admin) & Blue (User)
 
-  if (loadingStats)
-    return (
-      <Loading/>
-    );
+  if (loadingStats) return <Loading />;
 
   return (
     <div className="flex flex-col gap-8 pb-24 animate-in fade-in slide-in-from-bottom-4 duration-400">

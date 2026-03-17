@@ -23,7 +23,6 @@ const createGroup = async (
   }
   if (!response.ok) {
     throw new Error("Failed to create group. Server error");
-
   }
 
   const data = await response.json();

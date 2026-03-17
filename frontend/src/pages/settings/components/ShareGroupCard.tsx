@@ -1,15 +1,10 @@
-
-import {useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
 
 import { Link } from "lucide-react";
 
-
-
 export function ShareGroupCard() {
   const { user } = useAuth();
-
-
 
   const handleAction = () => {
     if (!user?.group?.invite_code) return;
@@ -25,18 +20,17 @@ export function ShareGroupCard() {
         <h2 className="font-bold">Share Group</h2>
       </div>
 
-
-
-        <div className="flex flex-col gap-
-        2">
-          <Button
-            onClick={handleAction}
-            className="w-full py-7 rounded-2xl bg-emerald-600 hover:bg-emerald-500 font-bold"
-          >
-            Copy Invite Link
-          </Button>
-        </div>
+      <div
+        className="flex flex-col gap-
+        2"
+      >
+        <Button
+          onClick={handleAction}
+          className="w-full py-7 rounded-2xl bg-emerald-600 hover:bg-emerald-500 font-bold"
+        >
+          Copy Invite Link
+        </Button>
       </div>
-    
+    </div>
   );
 }

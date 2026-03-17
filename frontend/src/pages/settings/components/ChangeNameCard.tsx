@@ -1,7 +1,6 @@
 import { Users } from "lucide-react";
 import { useState } from "react";
 
-
 import changeGroupName from "@/api/owner/change-group-name";
 import ErrorDisplay from "@/components/errorDisplay";
 import { Button } from "@/components/ui/button";
@@ -10,7 +9,6 @@ import useApiCall from "@/hooks/useApiCall";
 import type { GroupNameChangeRequest } from "@/types";
 
 import { makeBlur } from "../../../lib/utils";
-
 
 export function ChangeNameCard() {
   const [groupNameCandidate, setGroupNameCandidate] = useState("");

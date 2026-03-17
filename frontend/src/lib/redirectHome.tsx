@@ -10,7 +10,7 @@ interface RedirectHomeProps {
 const RedirectHome = ({ children }: RedirectHomeProps) => {
   const { isAuthenticated, isLoading } = useAuth();
   if (isLoading) {
-    return <Loading/>;
+    return <Loading />;
   }
 
   if (isAuthenticated) {

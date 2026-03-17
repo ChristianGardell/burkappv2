@@ -10,7 +10,7 @@ interface AdminRouteProps {
 }
 
 const AdminRoute = ({ children }: AdminRouteProps) => {
-  const { isAuthenticated, isLoading, user } = useAuth( );
+  const { isAuthenticated, isLoading, user } = useAuth();
 
   if (isLoading) {
     return <Loading />;

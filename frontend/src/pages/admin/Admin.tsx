@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 
 import Loading from "@/components/Loading";
@@ -51,9 +50,7 @@ export default function Admin() {
   };
 
   if (loadingAllUsers) {
-    return (
-      <Loading/>
-    );
+    return <Loading />;
   }
 
   return (
