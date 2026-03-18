@@ -1,81 +1,57 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { createContext, useContext, useMemo, useState } from "react";
 
-import validateToken from "@/api/user/validate-token";
+import { useAuthUser } from "@/features/auth/hooks";
 import type { UserResponse } from "@/types";
 
 type AuthContextValue = {
-  // just a type
   user: UserResponse | null;
-  setUser: React.Dispatch<React.SetStateAction<UserResponse | null>>;
   token: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
   login: (token: string, user?: UserResponse) => void;
   logout: () => void;
-  refresh: () => Promise<void>;
-
-  //actual logic
 };
+
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<UserResponse | null>(null);
+  const queryClient = useQueryClient();
+
   const [token, setToken] = useState<string | null>(() =>
     localStorage.getItem("access_token"),
   );
-  const [isLoading, setIsLoading] = useState(true);
 
-  const isAuthenticated: boolean = !!token && !!user;
+  const { data: user, isLoading: isFetching } = useAuthUser(!!token);
+
+  // Derived state
+  const isAuthenticated = !!token && !!user;
+  const isLoading = token ? isFetching : false;
 
   const login = (newToken: string, userData?: UserResponse) => {
     localStorage.setItem("access_token", newToken);
     setToken(newToken);
+
     if (userData) {
-      localStorage.setItem("user", JSON.stringify(userData));
-      setUser(userData);
+      queryClient.setQueryData(["auth"], userData);
     }
   };
 
   const logout = () => {
     localStorage.removeItem("access_token");
-    localStorage.removeItem("user");
     setToken(null);
-    setUser(null);
+    queryClient.removeQueries({ queryKey: ["auth"] });
   };
-
-  const refresh = async () => {
-    if (!token) {
-      setUser(null);
-      setIsLoading(false);
-      return;
-    }
-    try {
-      const me = await validateToken();
-      setUser(me);
-      localStorage.setItem("user", JSON.stringify(me));
-    } catch {
-      logout();
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    refresh();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token]);
 
   const value = useMemo(
     () => ({
-      user,
-      setUser,
+      user: user || null,
       token,
       isAuthenticated,
       isLoading,
       login,
       logout,
-      refresh,
     }),
     [user, token, isAuthenticated, isLoading],
   );

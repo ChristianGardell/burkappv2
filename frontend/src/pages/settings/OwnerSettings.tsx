@@ -30,15 +30,12 @@ export default function OwnerSettings() {
 
       {/* Swish Payment Section */}
 
-      <SwishPaymentCard currentSwishNumber={user.group.swish_number || ""} />
-
+      <SwishPaymentCard />
       {/* Change Group Name Section */}
       <ChangeNameCard />
 
       {/* Change Price Per Beer Section */}
-      <ChangePricePerBeerCard
-        current_price_per_beer={user.group.price_per_beer}
-      />
+      <ChangePricePerBeerCard />
 
       {/* Share Group Section */}
       <ShareGroupCard />

@@ -2,22 +2,17 @@ import { Minus, ShoppingCart } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-import decrementBeer from "@/api/user/decrement-beer";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
-import useApiCall from "@/hooks/useApiCall";
-import { type UserBeerResponse } from "@/types";
+import { useDecrementBeer } from "@/features/users/hooks";
 
 export default function Home() {
   const [disableDrinkButton, setDisableDrinkButton] = useState<boolean>(false);
   const [flashCardGreen, setFlashCardGreen] = useState<boolean>(false);
-  const { user, setUser } = useAuth();
+  const { user } = useAuth();
 
-  const {
-    // loading: buyBeerLoading,
-    error: buyBeerError,
-    execute: executeBuyBeer,
-  } = useApiCall<UserBeerResponse>(3000);
+  const { mutate: decrementBeer, error: beerErrorObj } = useDecrementBeer();
+  const buyBeerError = beerErrorObj?.message || "";
 
   const disableButton = () => {
     setDisableDrinkButton(true);
@@ -32,19 +27,18 @@ export default function Home() {
     }, 1000);
   };
 
-  const handleDrinkOnePress = async () => {
-    if (user === null || user.beers === 0) {
+  const handleDrinkOnePress = () => {
+    if (user?.beers === 0) {
       return;
     }
-    const data = await executeBuyBeer(() => decrementBeer());
-    if (!data) return;
-    if (data) {
-      setUser({ ...user, beers: data.beers });
-      if (!user.admin) {
-        disableButton();
-      }
-      sucessFlash();
-    }
+    decrementBeer(undefined, {
+      onSuccess: () => {
+        if (!user?.admin) {
+          disableButton();
+        }
+        sucessFlash();
+      },
+    });
   };
   return (
     <div className="flex flex-col items-center justify-center max-w-md mx-auto w-full gap-8 py-8 animate-in fade-in slide-in-from-bottom-4 duration-300">

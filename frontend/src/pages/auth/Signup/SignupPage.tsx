@@ -1,33 +1,26 @@
 import { Loader2, Lock, LogIn, Smartphone, User } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
-import createUser from "@/api/unprotected/create-user";
 import Loading from "@/components/Loading";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
-import useApiCall from "@/hooks/useApiCall";
-import type {
-  LoginResponse,
-  UserCreateRequest,
-  UserLoginRequest,
-} from "@/types";
+import { useCreateUser } from "@/features/auth/hooks";
+import type { UserCreateRequest } from "@/types";
 
 import AuthLayout from "../AuthLayout";
 
 export default function Signup() {
   const { login } = useAuth();
   const navigate = useNavigate();
-  const location = useLocation();
+
   const { inviteCode } = useParams<{ inviteCode?: string }>();
 
-  const formData = location.state?.formData as UserLoginRequest | undefined;
-
   const {
+    mutate: createUser,
     error: signUpError,
-    loading: signUpLoading,
-    execute: executeSignUp,
-  } = useApiCall<LoginResponse>(3000);
+    isPending: signUpLoading,
+  } = useCreateUser();
 
   const {
     register,
@@ -35,22 +28,21 @@ export default function Signup() {
     formState: { errors },
   } = useForm<UserCreateRequest>({
     defaultValues: {
-      invite_code: inviteCode,
-      name: "",
-      phone_number: formData?.phone_number || "",
-      pin: formData?.pin || "",
+      invite_code: inviteCode || "",
     },
   });
-  const onSubmit = async (data: UserCreateRequest) => {
-    const user = await executeSignUp(() => createUser(data));
-    if (user) {
-      login(user.access_token, user.user);
-      navigate("/home");
-    }
+
+  const onSubmit = (data: UserCreateRequest) => {
+    createUser(data, {
+      onSuccess: (responseData) => {
+        login(responseData.access_token, responseData.user);
+        navigate("/home");
+      },
+    });
   };
 
   const currentError =
-    signUpError ??
+    signUpError?.message ??
     errors.invite_code?.message ??
     errors.phone_number?.message ??
     errors.pin?.message ??
