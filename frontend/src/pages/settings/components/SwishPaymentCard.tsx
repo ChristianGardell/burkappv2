@@ -1,46 +1,30 @@
 import { CreditCard } from "lucide-react";
 import { useState } from "react";
 
-import setGroupSwishNumber from "@/api/owner/set-group-swish-number";
 import ErrorDisplay from "@/components/errorDisplay";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import useApiCall from "@/hooks/useApiCall";
-import type { SwishSetRequest, SwishSetResponse } from "@/types";
+import { useSetSwishNumber } from "@/features/groups/hooks";
+import type { SwishSetRequest } from "@/types";
 
-import { makeBlur, phoneInputValidations } from "../../../lib/utils";
+import { useAuth } from "../../../context/AuthContext";
+import { makeBlur } from "../../../lib/utils";
 
-export function SwishPaymentCard({
-  currentSwishNumber,
-}: {
-  currentSwishNumber: string;
-}) {
-  const [swishNumberVisual, setSwishNumberVisual] = useState<string>(
-    currentSwishNumber || "Not Set",
-  );
-
+export function SwishPaymentCard({}: {}) {
   const [swishNumberCandidate, setSwishNumberCandidate] = useState<string>("");
-  const [formError, setFormError] = useState<string | null>(null);
+  const { user } = useAuth();
 
-  const { error: swishError, execute: executeSetSwishNumber } =
-    useApiCall<SwishSetResponse>(3000);
+  const { mutate: setGroupSwishNumber, error: swishErrorObj } =
+    useSetSwishNumber();
+  const swishError = swishErrorObj?.message || "";
 
-  const handleSwishSubmit = async () => {
-    if (!phoneInputValidations(swishNumberCandidate)) {
-      setFormError("Swish number must be 10 digits");
-      return;
-    }
-    const swishNumberRequest: SwishSetRequest = {
+  const handleSwishSubmit = () => {
+    const request: SwishSetRequest = {
       swish_number: swishNumberCandidate,
     };
-    const result = await executeSetSwishNumber(async () =>
-      setGroupSwishNumber(swishNumberRequest),
-    );
-    if (result) {
-      setFormError(null);
-      setSwishNumberCandidate("");
-      setSwishNumberVisual(result.swish_number);
-    }
+    setGroupSwishNumber(request);
+
+    setSwishNumberCandidate("");
   };
 
   return (
@@ -58,7 +42,7 @@ export function SwishPaymentCard({
         </div>
 
         <div className="space-y-2">
-          <ErrorDisplay error={swishError || formError} />
+          <ErrorDisplay error={swishError} />
           <label className="text-xs font-bold text-slate-500 uppercase tracking-wider ml-1"></label>
           <Input
             type="tel"
@@ -79,8 +63,8 @@ export function SwishPaymentCard({
 
         <p className="text-[10px] text-emerald-400 ml-1 italic text-center">
           Current:{" "}
-          {swishNumberVisual && swishNumberVisual.length === 10
-            ? `${swishNumberVisual.slice(0, 3)}-${swishNumberVisual.slice(3, 6)}-${swishNumberVisual.slice(6, 8)}-${swishNumberVisual.slice(8, 10)}`
+          {user?.group?.swish_number && user?.group?.swish_number.length === 10
+            ? `${user?.group?.swish_number.slice(0, 3)}-${user?.group?.swish_number.slice(3, 6)}-${user?.group?.swish_number.slice(6, 8)}-${user?.group?.swish_number.slice(8, 10)}`
             : "Not Set"}
         </p>
       </div>

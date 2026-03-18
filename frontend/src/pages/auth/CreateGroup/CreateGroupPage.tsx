@@ -1,51 +1,39 @@
 import { Loader2, Lock, LogIn, Smartphone, User, Users } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-import createGroup from "@/api/unprotected/create-group";
 import Loading from "@/components/Loading";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
-import useApiCall from "@/hooks/useApiCall";
-import type {
-  GroupCreateRequest,
-  LoginResponse,
-  UserLoginRequest,
-} from "@/types";
+import { useCreateGroup } from "@/features/auth/hooks";
+import type { GroupCreateRequest } from "@/types";
 
 import AuthLayout from "../AuthLayout";
 
 export default function CreateGroup() {
   const { login } = useAuth();
   const navigate = useNavigate();
-  const location = useLocation();
-
-  const formData = location.state?.formData as UserLoginRequest | undefined;
 
   const {
-    error: createGroupError,
-    loading: createGroupLoading,
-    execute: executeCreateGroup,
-  } = useApiCall<LoginResponse>(3000);
+    mutate: createGroup,
+    isPending: createGroupLoading,
+    error: groupErrorObj,
+  } = useCreateGroup();
+  const createGroupError = groupErrorObj?.message || "";
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<GroupCreateRequest>({
-    defaultValues: {
-      phone_number: formData?.phone_number || "",
-      pin: formData?.pin || "",
-      name: "",
-      group_name: "",
-    },
-  });
-  const onSubmit = async (data: GroupCreateRequest) => {
-    const user = await executeCreateGroup(() => createGroup(data));
-    if (user) {
-      login(user.access_token, user.user);
-      navigate("/home");
-    }
+  } = useForm<GroupCreateRequest>();
+
+  const onSubmit = (data: GroupCreateRequest) => {
+    createGroup(data, {
+      onSuccess: (responseData) => {
+        login(responseData.access_token, responseData.user);
+        navigate("/home");
+      },
+    });
   };
 
   const currentError =

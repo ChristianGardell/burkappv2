@@ -1,32 +1,27 @@
 import { Loader2, Save } from "lucide-react";
 import { useState } from "react";
 
-import updateUserBeers from "@/api/admin/update-user-beers";
 import ErrorDisplay from "@/components/errorDisplay";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import useApiCall from "@/hooks/useApiCall";
+import { useUpdateUserBeers } from "@/features/users/hooks";
 import type { UserResponse } from "@/types";
 import type { UserUpdateAdmin } from "@/types";
 
+import { makeBlur } from "../../../lib/utils";
+
 export default function UserCard({ user }: { user: UserResponse }) {
-  const [currBeers, setCurrBeers] = useState<number>(user.beers);
   const [inputValue, setInputValue] = useState<string>("");
 
   const {
-    error: updateError,
-    loading: updateLoading,
-    execute: executeUpdateBeers,
-  } = useApiCall<boolean>(3000);
+    mutate: updateUserBeers,
+    isPending: updateLoading,
+    error,
+  } = useUpdateUserBeers();
+  const updateError = error?.message || "";
 
   // We compare against the current display value to determine if there are changes
-  const oldValue: number = currBeers;
-
-  const makeBlur = () => {
-    if (document.activeElement instanceof HTMLElement) {
-      document.activeElement.blur();
-    }
-  };
+  const oldValue: number = user.beers;
 
   const inputValueAsNumber: number = isNaN(parseInt(inputValue))
     ? oldValue
@@ -34,16 +29,13 @@ export default function UserCard({ user }: { user: UserResponse }) {
 
   const hasChanges: boolean = inputValueAsNumber !== oldValue;
 
-  const handleSave = async () => {
+  const handleSave = () => {
     if (!hasChanges) return;
     const toUpdate: UserUpdateAdmin = {
       id: user.id,
       beers: inputValueAsNumber,
     };
-    const success = await executeUpdateBeers(() => updateUserBeers(toUpdate));
-    if (success) {
-      setCurrBeers(inputValueAsNumber);
-    }
+    updateUserBeers(toUpdate);
     setInputValue("");
   };
 
@@ -84,7 +76,7 @@ export default function UserCard({ user }: { user: UserResponse }) {
               Current
             </span>
             <span className="text-3xl font-bold text-white tabular-nums leading-none mt-1">
-              {currBeers}
+              {user.beers}
             </span>
           </div>
 

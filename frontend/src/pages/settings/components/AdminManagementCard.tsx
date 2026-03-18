@@ -1,39 +1,30 @@
 import { ShieldCheck } from "lucide-react";
 import React from "react";
 
-import makeUserAdmin from "@/api/owner/make-user-admin";
-import removeUserAdmin from "@/api/owner/remove-user-admin";
 import ErrorDisplay from "@/components/errorDisplay";
 import { Button } from "@/components/ui/button";
-import useApiCall from "@/hooks/useApiCall";
-import type { UserResponse } from "@/types";
-
-import { phoneInputValidations } from "../../../lib/utils";
+import { useMakeUserAdmin, useRemoveUserAdmin } from "@/features/users/hooks";
 
 export function AdminManagementCard() {
-  const [phoneError, setPhoneError] = React.useState<string>("");
   const [phoneNumber, setPhoneNumber] = React.useState<string>("");
 
-  const { error: adminError, execute: executeAdminAction } =
-    useApiCall<UserResponse>();
+  const { mutate: makeUserAdmin, error: makeErrorObj } = useMakeUserAdmin();
+  const { mutate: removeUserAdmin, error: removeErrorObj } =
+    useRemoveUserAdmin();
+  const adminError = makeErrorObj?.message || removeErrorObj?.message || "";
 
   const handdleAction = async (action: "make" | "remove") => {
-    if (!phoneInputValidations(phoneNumber)) {
-      setPhoneError("Phone number must be 10 digits");
-      return;
-    }
     const makeAdminRequest = {
       phone_number: phoneNumber,
     };
-    const result = await executeAdminAction(() =>
-      action === "make"
-        ? makeUserAdmin(makeAdminRequest)
-        : removeUserAdmin(makeAdminRequest),
-    );
-    if (result) {
-      setPhoneError("");
-      setPhoneNumber("");
+
+    if (action === "make") {
+      makeUserAdmin(makeAdminRequest);
+    } else {
+      removeUserAdmin(makeAdminRequest);
     }
+
+    setPhoneNumber("");
   };
 
   return (
@@ -44,9 +35,7 @@ export function AdminManagementCard() {
       </div>
 
       <div className="space-y-4">
-        {adminError || phoneError ? (
-          <ErrorDisplay error={adminError || phoneError} />
-        ) : null}
+        {adminError ? <ErrorDisplay error={adminError} /> : null}
         <div className="space-y-2">
           <label className="text-xs font-bold text-slate-500 uppercase tracking-wider ml-1"></label>
           <input

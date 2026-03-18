@@ -2,10 +2,9 @@ import { Code, Loader2, LogIn } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 
-import validateGroup from "@/api/unprotected/validate-group";
 import { Button } from "@/components/ui/button";
-import useApiCall from "@/hooks/useApiCall";
-import type { GroupResponse, ValidateGroupRequest } from "@/types";
+import { useValidateGroup } from "@/features/groups/hooks";
+import type { ValidateGroupRequest } from "@/types";
 
 import AuthLayout from "../AuthLayout";
 
@@ -19,19 +18,21 @@ export default function InviteCodeSignUp() {
   } = useForm<ValidateGroupRequest>();
 
   const {
-    loading: validateLoading,
+    mutate: validateGroup,
+    isPending: validateLoading,
     error: validateError,
-    execute: executeValidate,
-  } = useApiCall<GroupResponse>(3000);
+  } = useValidateGroup();
 
-  const onSubmit = async (data: ValidateGroupRequest) => {
-    const group = await executeValidate(() => validateGroup(data));
-    if (group) {
-      navigate(`/join/${data.invite_code}`);
-    }
+  const onSubmit = (data: ValidateGroupRequest) => {
+    validateGroup(data, {
+      onSuccess: (responseData) => {
+        navigate(`/join/${responseData.invite_code}`);
+      },
+    });
   };
 
-  const currentError = validateError ?? errors.invite_code?.message ?? null;
+  const currentError =
+    validateError?.message ?? errors.invite_code?.message ?? null;
 
   return (
     <AuthLayout error={currentError}>

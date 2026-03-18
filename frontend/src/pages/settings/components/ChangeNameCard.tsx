@@ -1,28 +1,26 @@
 import { Users } from "lucide-react";
 import { useState } from "react";
 
-import changeGroupName from "@/api/owner/change-group-name";
 import ErrorDisplay from "@/components/errorDisplay";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import useApiCall from "@/hooks/useApiCall";
+import { useChangeGroupName } from "@/features/groups/hooks";
 import type { GroupNameChangeRequest } from "@/types";
 
 import { makeBlur } from "../../../lib/utils";
 
 export function ChangeNameCard() {
   const [groupNameCandidate, setGroupNameCandidate] = useState("");
-  const { execute: executeChangeGroupName, error: changeNameError } =
-    useApiCall<GroupNameChangeRequest>(3000);
+  const { mutate: changeGroupName, error } = useChangeGroupName();
+  const changeNameError = error?.message || "";
 
-  const handleGroupNameChange = async () => {
+  const handleGroupNameChange = () => {
     const request: GroupNameChangeRequest = {
       name: groupNameCandidate,
     };
-    const result = await executeChangeGroupName(() => changeGroupName(request));
-    if (result) {
-      setGroupNameCandidate("");
-    }
+    changeGroupName(request);
+
+    setGroupNameCandidate("");
   };
 
   return (

@@ -1,35 +1,10 @@
-import { useEffect, useState } from "react";
-
 import Loading from "@/components/Loading";
-import useApiCall from "@/hooks/useApiCall";
+import { useAdminStats } from "@/features/stats/hooks";
 
-import getAllStats from "../../api/admin/get-all-stats-admin";
-import type { AdminStatsResponse } from "../../types";
 import { StatsCard } from "./components/StatsCard";
 
 export default function Stats() {
-  const [users, setUsers] = useState<AdminStatsResponse[]>([]);
-
-  const {
-    error: errorStats,
-    loading: loadingStats,
-    execute: executeGetStats,
-  } = useApiCall<AdminStatsResponse[]>(3000);
-
-  useEffect(() => {
-    const loadUsers = async () => {
-      const userStats = await executeGetStats(() => getAllStats());
-      if (userStats) {
-        const sortedStats = [...userStats].sort(
-          (a: AdminStatsResponse, b: AdminStatsResponse) =>
-            b.total_beers - a.total_beers,
-        );
-        setUsers(sortedStats);
-      }
-    };
-
-    loadUsers();
-  }, [executeGetStats]);
+  const { data: users = [], isLoading, error } = useAdminStats();
 
   const adminTotal = users
     .filter((u) => u.admin)
@@ -43,7 +18,7 @@ export default function Stats() {
     totalBeers > 0 ? Math.round((adminTotal / totalBeers) * 100) : 0;
   const userPercent = totalBeers > 0 ? 100 - adminPercent : 0;
 
-  if (loadingStats) return <Loading />;
+  if (isLoading) return <Loading />;
 
   return (
     <div className="flex flex-col gap-8 pb-24 animate-in fade-in slide-in-from-bottom-4 duration-400">
@@ -96,8 +71,8 @@ export default function Stats() {
           </div>
         )}
 
-        {errorStats && (
-          <p className="text-red-400 text-sm text-center">{errorStats}</p>
+        {error && (
+          <p className="text-red-400 text-sm text-center">{error.message}</p>
         )}
       </div>
 

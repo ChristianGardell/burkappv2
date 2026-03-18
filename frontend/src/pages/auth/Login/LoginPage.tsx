@@ -2,11 +2,10 @@ import { Loader2, Lock, LogIn, Smartphone } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 
-import loginUser from "@/api/unprotected/log-in";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
-import useApiCall from "@/hooks/useApiCall";
-import type { LoginResponse, UserLoginRequest } from "@/types";
+import { useLogin } from "@/features/auth/hooks";
+import type { UserLoginRequest } from "@/types";
 
 import AuthLayout from "../AuthLayout";
 
@@ -15,10 +14,11 @@ export default function Login() {
   const navigate = useNavigate();
 
   const {
-    loading: loginLoading,
-    error: loginError,
-    execute: executeLogin,
-  } = useApiCall<LoginResponse>(3000);
+    mutate: loginUser,
+    isPending: loginLoading,
+    error: loginErrorObj,
+  } = useLogin();
+  const loginError = loginErrorObj?.message || "";
 
   const {
     register: register,
@@ -26,12 +26,13 @@ export default function Login() {
     formState: { errors },
   } = useForm<UserLoginRequest>();
 
-  const onSubmit = async (data: UserLoginRequest) => {
-    const user = await executeLogin(() => loginUser(data));
-    if (user) {
-      login(user.access_token, user.user);
-      navigate("/home", { state: { user: user.user } });
-    }
+  const onSubmit = (data: UserLoginRequest) => {
+    loginUser(data, {
+      onSuccess: (responseData) => {
+        login(responseData.access_token, responseData.user);
+        navigate("/home");
+      },
+    });
   };
 
   const currentError =

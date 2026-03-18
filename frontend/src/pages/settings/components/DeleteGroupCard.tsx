@@ -1,22 +1,22 @@
 import { Trash2 } from "lucide-react";
 import { useState } from "react";
 
-import deleteGroup from "@/api/owner/delete-group";
 import ErrorDisplay from "@/components/errorDisplay";
 import { Button } from "@/components/ui/button";
-import useApi from "@/hooks/useApiCall";
+import { useDeleteGroup } from "@/features/groups/hooks";
 
 export function DeleteGroupCard() {
   const [isConfirming, setIsConfirming] = useState(false);
-  const { execute: executeDeleteGroup, error: deleteGroupError } = useApi(3000);
+  const { mutate: deleteGroup, error: deleteGroupError } = useDeleteGroup();
+  const deleteGroupErrorMessage = deleteGroupError?.message || "";
 
-  const handleDelete = async () => {
-    const result = await executeDeleteGroup(() => deleteGroup());
-    if (result) {
-      window.location.href = "/goodbye"; // Redirect to a goodbye page or homepage after deletion
-    }
+  const handleDelete = () => {
+    deleteGroup(undefined, {
+      onSuccess: () => {
+        window.location.href = "/goodbye"; // Redirect to a goodbye page or homepage after deletion
+      },
+    });
   };
-
   return (
     <div className="bg-red-950/20 border border-red-900/50 rounded-2xl p-6 shadow-xl space-y-4">
       <div className="flex items-center gap-3">
@@ -24,7 +24,7 @@ export function DeleteGroupCard() {
           <Trash2 className="w-5 h-5 text-red-500" />
         </div>
         <div>
-          <ErrorDisplay error={deleteGroupError} />
+          <ErrorDisplay error={deleteGroupErrorMessage} />
           <h2 className="text-white font-semibold">Delete Group</h2>
           <p className="text-sm text-slate-400">
             Permanently remove this group.

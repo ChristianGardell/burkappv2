@@ -1,53 +1,33 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-import getAllUsers from "@/api/admin/get-all-users-admin";
+import ErrorDisplay from "@/components/errorDisplay";
 import Loading from "@/components/Loading";
 import { useAuth } from "@/context/AuthContext";
-import useApiCall from "@/hooks/useApiCall";
+import { useAllUsers } from "@/features/users/hooks";
 import UserCard from "@/pages/admin/components/UserCard";
 import type { UserResponse } from "@/types";
 
 export default function Admin() {
   const { user } = useAuth();
 
-  const [allUsers, setAllUsers] = useState<UserResponse[]>([]);
-  const [searchedUsers, setSearchedUsers] = useState<UserResponse[]>([]);
-
   const {
-    error: getAllUsersError,
-    loading: loadingAllUsers,
-    execute: executeGetAllUsers,
-  } = useApiCall<UserResponse[]>(3000);
+    data: dbUsers = [],
+    isLoading: loadingAllUsers,
+    error: usersErrorObj,
+  } = useAllUsers();
+  const getAllUsersError = usersErrorObj?.message || "";
 
-  useEffect(() => {
-    const loadUsers = async () => {
-      const dbUsers = await executeGetAllUsers(() => getAllUsers());
-      if (dbUsers) {
-        const nonAdminOrCurrentUserSorted = dbUsers
-          .filter((u: UserResponse) => u.admin === false || u.id === user?.id)
-          .sort((a: UserResponse, b: UserResponse) =>
-            a.name.localeCompare(b.name),
-          );
-        setSearchedUsers(nonAdminOrCurrentUserSorted);
-        setAllUsers(nonAdminOrCurrentUserSorted);
-      }
-    };
-    loadUsers();
-  }, [executeGetAllUsers]);
+  const [searchTerm, setSearchTerm] = useState("");
 
-  const filterUsersOnSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const searchTerm = e.target.value.toLowerCase();
-    const filtered = allUsers.filter(
-      (u) =>
-        u.name.toLowerCase().includes(searchTerm) ||
-        u.phone_number.includes(searchTerm),
-    );
-    if (searchTerm === "") {
-      setSearchedUsers(allUsers);
-      return;
-    }
-    setSearchedUsers(filtered);
-  };
+  const baseUsers = dbUsers
+    .filter((u: UserResponse) => u.admin === false || u.id === user?.id)
+    .sort((a: UserResponse, b: UserResponse) => a.name.localeCompare(b.name));
+
+  const searchedUsers = baseUsers.filter(
+    (u) =>
+      u.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      u.phone_number.includes(searchTerm),
+  );
 
   if (loadingAllUsers) {
     return <Loading />;
@@ -55,23 +35,15 @@ export default function Admin() {
 
   return (
     <div className="flex flex-col gap-6 pb-24 animate-in fade-in slide-in-from-bottom-4 duration-300">
-      {/* <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-white">Admin Panel</h1>
-        <Button onClick={loadUsers}>Refresh</Button>
-      </div> */}
       <input
         type="text"
         placeholder="Search users..."
-        defaultValue={""}
+        value={searchTerm}
         className="w-full p-3 rounded-lg bg-slate-900 border border-slate-800 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-        onChange={filterUsersOnSearch}
+        onChange={(e) => setSearchTerm(e.target.value)}
       />
 
-      {getAllUsersError && (
-        <div className="bg-red-500/10 border border-red-500/50 text-red-400 p-4 rounded-lg">
-          {getAllUsersError}
-        </div>
-      )}
+      {getAllUsersError && <ErrorDisplay error={getAllUsersError} />}
 
       <div className="grid gap-4">
         {searchedUsers.map((user) => (

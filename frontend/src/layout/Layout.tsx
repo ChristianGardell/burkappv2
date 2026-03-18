@@ -8,26 +8,29 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
 import { cn } from "@/lib/utils";
 
 export default function Layout() {
-  const { user, refresh, isAuthenticated } = useAuth();
+  const { user, isAuthenticated } = useAuth();
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
   const location = useLocation();
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
-    await refresh();
+    await queryClient.refetchQueries({ queryKey: ["auth"] });
+
     setTimeout(() => setIsRefreshing(false), 500);
   };
 
   useEffect(() => {
     if (isAuthenticated) {
-      refresh();
+      queryClient.refetchQueries({ queryKey: ["auth"] });
     }
   }, [location.pathname]);
 

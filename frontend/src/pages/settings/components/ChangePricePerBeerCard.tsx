@@ -1,46 +1,37 @@
 import { DollarSign } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-import setGroupPricePerBeer from "@/api/owner/set-price-per-beer";
 import ErrorDisplay from "@/components/errorDisplay";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/context/AuthContext";
-import useApiCall from "@/hooks/useApiCall";
-import type { PricePerBeerSetRequest, PricePerBeerSetResponse } from "@/types";
+import { useSetPricePerBeer } from "@/features/groups/hooks";
+import type { PricePerBeerSetRequest } from "@/types";
 
 import { makeBlur } from "../../../lib/utils";
 
-export function ChangePricePerBeerCard({
-  current_price_per_beer,
-}: {
-  current_price_per_beer: number;
-}) {
+export function ChangePricePerBeerCard({}: {}) {
   const { user } = useAuth();
-  const [pricePerBeerCandidate, setPricePerBeerCandidate] = useState<string>();
-  const [currentPricePerBeerVisual, setCurrentPricePerBeerVisual] =
-    useState<string>(current_price_per_beer.toString() || "Not Set");
-  const { execute: executeChangePricePerBeer, error: changePriceError } =
-    useApiCall<PricePerBeerSetResponse>(3000);
+  const [pricePerBeerCandidate, setPricePerBeerCandidate] =
+    useState<string>("");
 
-  useEffect(() => {
-    setCurrentPricePerBeerVisual(
-      user?.group.price_per_beer.toString() || "Not Set",
-    );
-  }, [user]);
+  const {
+    mutate: changePricePerBeer,
+    error: errorObj,
+    isPending,
+  } = useSetPricePerBeer();
 
-  const handlePricePerBeerChange = async () => {
+  const changePriceError = errorObj?.message || "";
+
+  const handlePricePerBeerChange = () => {
     const request: PricePerBeerSetRequest = {
       price_per_beer: pricePerBeerCandidate
         ? parseInt(pricePerBeerCandidate)
         : 10,
     };
-    const result = await executeChangePricePerBeer(() =>
-      setGroupPricePerBeer(request),
-    );
-    if (result) {
-      setCurrentPricePerBeerVisual(result.price_per_beer?.toString() || "");
-    }
+
+    changePricePerBeer(request);
+    setPricePerBeerCandidate("");
   };
 
   return (
@@ -66,20 +57,22 @@ export function ChangePricePerBeerCard({
             value={pricePerBeerCandidate || ""}
             inputMode="decimal"
             maxLength={3}
+            disabled={isPending}
             onChange={(e) => setPricePerBeerCandidate(e.target.value)}
           />
         </div>
 
         <Button
           type="submit"
-          className="w-full py-7 rounded-2xl bg-emerald-600 hover:bg-emerald-500 font-bold"
+          disabled={isPending || !pricePerBeerCandidate}
+          className="w-full py-7 rounded-2xl bg-emerald-600 hover:bg-emerald-500 font-bold disabled:opacity-50"
         >
-          Set Price Per Beer
+          {isPending ? "Saving..." : "Set Price Per Beer"}
         </Button>
         <p className="text-[10px] text-emerald-400 ml-1 italic text-center">
           Current:{" "}
-          {currentPricePerBeerVisual
-            ? `${currentPricePerBeerVisual} SEK`
+          {user?.group.price_per_beer
+            ? `${user?.group.price_per_beer} SEK`
             : "Not Set"}
         </p>
       </div>
