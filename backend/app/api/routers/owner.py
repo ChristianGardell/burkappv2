@@ -5,7 +5,16 @@ from sqlalchemy.orm import Session
 
 from app.crud import owner_crud, user_crud
 from app.db.database import get_db
-from app.schemas.schemas import *
+from app.schemas.schemas import (
+    AdminChangeRequest,
+    GroupNameChangeRequest,
+    GroupResponse,
+    PricePerBeerSetRequest,
+    PricePerBeerSetResponse,
+    SwishSetRequest,
+    SwishSetResponse,
+    UserResponse,
+)
 
 from ...models import models
 from ..deps import get_current_owner
@@ -25,6 +34,8 @@ def set_swish_number(
     )
     if not group:
         raise HTTPException(status_code=400, detail="Failed to set swish number")
+    if not group.swish_number:
+        raise HTTPException(status_code=400, detail="Swish number cannot be empty")
     return SwishSetResponse(swish_number=group.swish_number)
 
 

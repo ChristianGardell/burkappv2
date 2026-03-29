@@ -1,12 +1,7 @@
-import datetime
-import secrets
-from datetime import datetime
-
 from sqlalchemy.orm import Session
 
-from ..core.security import get_pin_hash
-from ..models.models import BeerLog, Groups, Users
-from ..schemas.schemas import *
+from ..models.models import Users
+from ..schemas.schemas import UserUpdateAdminRequest
 
 
 def update_user_beers(db: Session, userUpdate: UserUpdateAdminRequest) -> Users | None:

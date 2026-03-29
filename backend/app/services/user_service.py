@@ -6,7 +6,6 @@ from wordfreq import top_n_list
 
 from ..crud import group_crud
 from ..db.database import get_db
-from ..models.models import Groups
 
 words = top_n_list("en", 10000)
 

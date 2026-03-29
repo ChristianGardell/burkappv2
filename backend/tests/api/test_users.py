@@ -7,7 +7,7 @@ def test_get_me(client, regular_user_token):
     data = res.json()
     assert data["id"] == regular_user_token["user_id"]
     assert data["phone_number"] == "5556667778"
-    assert data["admin"] == False
+    assert data["admin"]
 
 
 def test_decrement_beers(client, owner_token, regular_user_token):

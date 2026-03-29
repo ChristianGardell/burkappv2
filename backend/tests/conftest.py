@@ -6,7 +6,6 @@ from sqlalchemy.orm import sessionmaker
 
 from app.main import app
 from app.db.database import Base, get_db
-from app.models.models import Groups, Users
 
 from app.utils.limiter import ip_limiter, phone_limiter
 

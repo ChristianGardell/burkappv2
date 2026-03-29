@@ -2,8 +2,6 @@ from sqlalchemy.orm import Session
 
 from ..models.models import Groups, Users
 
-# from ..schemas.schemas import *
-
 
 def make_user_admin(db: Session, user_id: str, group_id: str) -> Users | None:
     """Set a user's admin status."""

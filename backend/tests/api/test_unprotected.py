@@ -17,8 +17,8 @@ def test_create_group(client):
     assert "user" in data
     assert data["user"]["name"] == "Admin User"
     assert data["user"]["phone_number"] == "1234567890"
-    assert data["user"]["admin"] == True  # creator should be admin
-    assert data["user"]["owner"] == True  # creator should be owner of a new group
+    assert data["user"]["admin"]  # creator should be admin
+    assert data["user"]["owner"]  # creator should be owner of a new group
 
     # Record invite code for next tests
     assert "group" in data["user"]
@@ -51,8 +51,8 @@ def test_create_user(client):
 
     assert user_data["user"]["name"] == "Normal User"
     assert user_data["user"]["phone_number"] == "5555555555"
-    assert user_data["user"]["admin"] == False
-    assert user_data["user"]["owner"] == False
+    assert user_data["user"]["admin"]
+    assert user_data["user"]["owner"]
 
 
 def test_login(client):

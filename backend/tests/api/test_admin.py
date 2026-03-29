@@ -23,7 +23,7 @@ def test_set_beers_and_stats(client, owner_token, regular_user_token):
     payload = {"id": regular_user_token["user_id"], "beers": 5}
     res_set = client.put("/admin/setbeers", headers=headers, json=payload)
     assert res_set.status_code == 200, res_set.text
-    assert res_set.json() == True
+    assert res_set.json()
 
     # 2. Check the stats (or getall)
     res_getall = client.get("/admin/getall", headers=headers)

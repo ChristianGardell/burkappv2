@@ -1,6 +1,5 @@
 # backend/app/routers/competitors.py
 from fastapi import APIRouter, Depends, HTTPException, Request
-from slowapi.errors import RateLimitExceeded
 from sqlalchemy.orm import Session
 
 from ...core.security import (
@@ -10,7 +9,16 @@ from ...core.security import (
 from ...crud import group_crud, user_crud
 from ...db.database import get_db
 from ...models import models
-from ...schemas.schemas import *
+from ...schemas.schemas import (
+    GroupCreateRequest,
+    GroupResponse,
+    LoginResponse,
+    UserBeerResponse,
+    UserCreateRequest,
+    UserLoginRequest,
+    UserResponse,
+    ValidateGroupRequest,
+)
 from ...services import user_service
 from ...utils.limiter import ip_limiter, phone_limiter
 from ..deps import get_current_user

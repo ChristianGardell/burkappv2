@@ -1,12 +1,12 @@
 # backend/app/routers/competitors.py
-from datetime import timedelta, datetime
+from datetime import datetime, timedelta
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.crud import admin_crud
 from app.db.database import get_db
-from app.schemas.schemas import *
+from app.schemas.schemas import AdminStatsResponse, UserResponse, UserUpdateAdminRequest
 
 from ...models import models
 from ..deps import get_current_admin
