@@ -49,4 +49,4 @@ def test_make_and_remove_user_admin(client, owner_token, regular_user_token):
     # Remove admin
     res = client.put("/owner/remove-user-admin", headers=headers, json=payload)
     assert res.status_code == 200, res.text
-    assert res.json()["admin"]
+    assert not res.json()["admin"]

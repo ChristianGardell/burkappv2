@@ -51,8 +51,8 @@ def test_create_user(client):
 
     assert user_data["user"]["name"] == "Normal User"
     assert user_data["user"]["phone_number"] == "5555555555"
-    assert user_data["user"]["admin"]
-    assert user_data["user"]["owner"]
+    assert not user_data["user"]["admin"]
+    assert not user_data["user"]["owner"]
 
 
 def test_login(client):
