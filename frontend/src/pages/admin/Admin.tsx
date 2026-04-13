@@ -15,7 +15,7 @@ export default function Admin() {
     isLoading: loadingAllUsers,
     error: usersErrorObj,
   } = useAllUsers();
-  const getAllUsersError = usersErrorObj?.message || "";
+  const getAllUsersError2 = usersErrorObj?.message || "";
 
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -43,7 +43,7 @@ export default function Admin() {
         onChange={(e) => setSearchTerm(e.target.value)}
       />
 
-      {getAllUsersError && <ErrorDisplay error={getAllUsersError} />}
+      {getAllUsersError2 && <ErrorDisplay error={getAllUsersError2} />}
 
       <div className="grid gap-4">
         {searchedUsers.map((user) => (
