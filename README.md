@@ -1,19 +1,40 @@
-BeerTrack
+# BeerTrack
 
-**BeerTrack** is an app designed to track beer consumption during the LTH introductory period. The app emphasizes a **simple user interface** and **ease of access**, making it quick and intuitive to use.
+BeerTrack is an app designed to track beer consumption during the LTH introductory period. It focuses on a simple, fast, and intuitive user experience.
 
 ---
+<div align="center">
+  <table cellspacing="250">
+    <tr>
+      <td><img src="images/admin_page.png" width="250"/></td>
+      <td><img src="images/owner_home.png" width="250"/></td>
+    </tr>
+  </table>
+</div>
 
 ## Features
 
-- **24-Hour Consumption Log**: Keep track of beer consumption over the past 24 hours.
-- **Group Management**:
-  - Group owners can add admins to help manage the group.
-  - Group details such as price per beer, Swish number, and group name are fully customizable.
-- **User-Friendly Design**: Built with simplicity and accessibility in mind.
+### Group system
+
+- Join groups via invite link or invite code
+- Tiered permissions: owner, admin, user
+- Create, manage, and customize groups easily
+
+### Customization (owner only)
+
+- Set group name
+- Configure price per beer
+- Add Swish payment number
+
+### Consumption tracking
+
+- 24-hour rolling log of beer consumption
+- Admins can add beers to user accounts
 
 ---
 
 ## Roadmap
 
-- **Native Mobile Apps**: Port the app to native Android and iOS platforms for a seamless mobile experience.
+- Native Android app
+- Native iOS app
+- Attendance feature
