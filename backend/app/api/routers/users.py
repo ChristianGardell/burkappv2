@@ -43,9 +43,9 @@ async def login_user(
     """Login a user by their phone number and pin."""
     user = user_crud.get_user_by_phone_number(db, phone_number=data.phone_number)
     if not user:
-        raise HTTPException(status_code=404, detail="User does not exist")
+        raise HTTPException(status_code=401, detail="Incorrect Login")
     if not verify_pin(data.pin, user.hashed_pin):
-        raise HTTPException(status_code=401, detail="Incorrect PIN")
+        raise HTTPException(status_code=401, detail="Incorrect Login")
     token = create_access_token({"sub": user.id, "group_id": user.group_id})
     return LoginResponse(user=UserResponse.model_validate(user), access_token=token)
 

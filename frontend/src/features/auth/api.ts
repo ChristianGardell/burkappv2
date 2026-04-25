@@ -35,10 +35,10 @@ export const createUser = async (
       body: JSON.stringify(data),
     });
   } catch (error: any) {
+    if (error.response?.status === 401)
+      throw new Error("Group with invite code does not exist. ");
     if (error.response?.status === 409)
       throw new Error("User already exists. Please log in.");
-    if (error.response?.status === 404)
-      throw new Error("Group with invite code does not exist. ");
     if (error.response?.status === 429)
       throw new Error("Too many requests. Please try again later.");
     throw new Error("Failed to create user. Server error");
@@ -55,8 +55,6 @@ export const loginUser = async (
     });
   } catch (error: any) {
     if (error.response?.status === 401) throw new Error("Incorrect PIN");
-    if (error.response?.status === 404)
-      throw new Error("Incorrect phone number");
     if (error.response?.status === 429)
       throw new Error("Too many requests, try again later");
     throw new Error("Server error");
